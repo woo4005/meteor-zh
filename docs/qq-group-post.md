@@ -1,0 +1,138 @@
+# Meteor-ZH 发布文案（QQ 群用）
+
+> 用于在 Meteor / MC 插件群推广。三个版本按场景取用。
+> 发布前请先把 `meteor-zh-1.3.1.jar` 传到**群文件**，因为群里不少人打不开 GitHub。
+
+---
+
+## 一、群聊短版（直接复制，约 200 字）
+
+```text
+【Meteor 汉化】自制的 Meteor Client 中文化插件，装上就全中文了
+
+Meteor 本体没有中文，之前那个 I18n 只翻了模块名和设置项，
+GUI 里 Bind、Modules、Reset、Chat Feedback 这些还是英文，按键名也是 Left Shift 这种，
+第三方 addon 更是完全没覆盖。
+
+这个全补上了：
+· 模块名 + 功能描述
+· 1136 条设置项名称和说明
+· 设置分组（General→通用、Render→渲染）
+· GUI 按钮和提示文字
+· 按键名（Left Shift→左Shift、None→无）
+· 顶部标签页、HUD 元素名
+· 新装的 addon 自动识别，词典没有的逐词合成中文
+
+启动自动翻译，不用点任何东西，重启照样生效。
+
+下载见群文件（或 GitHub Releases）
+源码：https://github.com/wzy080532/meteor-zh
+有问题这里提：https://github.com/wzy080532/meteor-zh/issues
+
+开源 CC0，随便改随便传。
+```
+
+---
+
+## 二、完整版（群公告 / 群精华，约 700 字）
+
+```text
+━━━━━━━━━━━━━━━━━━━━
+  Meteor-ZH · Meteor Client 全界面中文汉化
+━━━━━━━━━━━━━━━━━━━━
+
+【是什么】
+给 Minecraft 1.21.11 + Fabric + Meteor Client 用的汉化 addon。
+装上之后 Meteor 的界面基本全中文，不用改配置文件，不用手动触发。
+
+【为什么不用现成的】
+社区里的 Meteor-I18n-Support 只翻了模块名和设置项，问题是：
+· GUI 里大量硬编码英文没动：Bind、Modules、Config、Reset、Chat Feedback、Active
+· 按键名还是 Left Shift / Mouse Left / F1 这种
+· 第三方 addon（AutoElytra、Miku、Lotus 等）完全没覆盖
+
+【这个补了什么】
+· 模块名 + 描述      171 个模块全覆盖
+· 设置项名称 + 说明   1136 条
+· 设置分组标题       129 条（General→通用、Render→渲染、Colors→颜色…）
+· GUI 按钮/提示      295 条（Bind→绑定、Apply→应用、Chat Feedback→聊天反馈…）
+· 按键名            66 条（Left Shift→左Shift、Space→空格、None→无）
+· 顶部标签页         Modules→模块、Config→配置、Friends→好友…
+· HUD 元素名与分组
+· 第三方插件描述句   22 条
+
+已经自带中文的插件（比如 Miku、Lotus 的中文模块）原样保留，不会被二次翻译。
+
+【新装 addon 怎么办】
+不需要等我更新。
+插件启动时遍历 Meteor 已加载的全部附属模组，词典命不中的标识符
+会用内置的 795 词词表逐词合成中文：
+
+  chunk-render-distance   → 区块渲染距离
+  auto-totem-refill       → 自动图腾补充
+  potion-refill-threshold → 药水补充阈值
+  world-origin            → 世界原点
+
+合成不出来的保留英文，不会乱翻。
+
+【安装】
+1. 把 meteor-zh-1.3.1.jar 放进 .minecraft/mods/
+   （PCL 版本隔离的话是 PCL 目录/minecraft/versions/<版本>/mods/）
+2. 建议删掉旧的 Meteor-I18n-Support-*.jar（共存不崩，但功能重复）
+3. 启动游戏，完事
+
+要求：Fabric Loader ≥ 0.16.0，Minecraft ≥ 1.21.9，仅客户端
+不兼容问题基本没有，纯客户端 addon，不碰服务端。
+
+【命令】
+.zh         手动重新翻译一次
+.zh reload  重新读词典
+.zh info    看词典条目数
+
+【下载】
+群文件：meteor-zh-1.3.1.jar
+GitHub：https://github.com/wzy080532/meteor-zh/releases
+源码：https://github.com/wzy080532/meteor-zh
+反馈：https://github.com/wzy080532/meteor-zh/issues
+（GitHub 打不开的话直接用群文件，反馈也可以群里说）
+
+【许可】
+CC0-1.0，公共领域，随便改、随便二次分发、不用署名。
+
+作者：dsh-woo4005
+开发过程有 DeepSeek V4.1 flash 1017 协助
+━━━━━━━━━━━━━━━━━━━━
+```
+
+---
+
+## 三、一句话版（聊天里随口提）
+
+```text
+Meteor 我做了个全界面汉化插件，模块名/设置项/GUI 按钮/按键名全中文，
+装上进游戏自动翻，重启也不会退回去，新装的 addon 也能自动识别。
+群文件里有，GitHub 上开源：https://github.com/wzy080532/meteor-zh
+```
+
+---
+
+## 四、发布建议
+
+**先传群文件。** 这条最重要——国内打不开 GitHub 的人很多（我自己这次就是 DNS 解析问题折腾了半天）。
+顺序建议：
+
+1. 先把 `meteor-zh-1.3.1.jar` 传到群文件，文件名别改
+2. 发「群聊短版」
+3. 有人问细节，再贴「完整版」或直接给群公告
+4. GitHub 链接放最后，作为"想追更新/提问题"的入口
+
+**可能被问到的问题，先准备答案：**
+
+| 问 | 答 |
+|---|---|
+| 会和 I18n 冲突吗？ | 不冲突，重复翻译是幂等的，但建议只留一个 |
+| 会崩服吗？ | 纯客户端 addon，服务端不需要装 |
+| 支持 1.20 吗？ | 只做了 1.21.11，其他版本没测 |
+| 能翻 Lotus/Miku 吗？ | 它们本身有中文，原样保留；Miku 新增的英文条目会尽量翻 |
+| 怎么改翻译？ | 改 `src/main/resources/assets/meteorzh/lang/zh.json` 重新构建，或直接提 issue |
+| 收费吗？ | 免费，CC0 公共领域 |
