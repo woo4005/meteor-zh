@@ -1,0 +1,5850 @@
+{
+ "modules": {
+  "add-waypoints": {
+   "title": "添加路径点"
+  },
+  "add-y": {
+   "title": "添加 Y 坐标"
+  },
+  "aim-above": {
+   "title": "瞄准上方"
+  },
+  "air-jump": {
+   "title": "空中跳跃",
+   "desc": "让你在空中跳跃."
+  },
+  "air-place": {
+   "title": "空中放置",
+   "desc": "在你的准星指向的地方放置一个方块."
+  },
+  "ambience": {
+   "title": "氛围",
+   "desc": "改变环境中各个部分的颜色."
+  },
+  "anchor": {
+   "title": "锚点",
+   "desc": "通过在洞上完全停止你的移动来帮助你进入洞."
+  },
+  "anchor-aura": {
+   "title": "锚光环",
+   "desc": "自动放置和破坏重生锚来伤害实体."
+  },
+  "anti-afk": {
+   "title": "防AFK",
+   "desc": "执行不同的动作以防止在AFK时被踢出."
+  },
+  "anti-anvil": {
+   "title": "反铁砧",
+   "desc": "自动通过在你和铁砧之间放置来防止自动铁砧."
+  },
+  "anti-bed": {
+   "title": "反床",
+   "desc": "放置绳索来防止在你身上放置床."
+  },
+  "anti-hunger": {
+   "title": "反饥饿",
+   "desc": "减少（不是移除）饥饿消耗."
+  },
+  "anti-packet-kick": {
+   "title": "反数据包踢出",
+   "desc": "尝试防止你因为大数据包而被断开连接."
+  },
+  "anti-void": {
+   "title": "防虚空",
+   "desc": "尝试防止你掉入虚空."
+  },
+  "arrival-range": {
+   "title": "抵达范围"
+  },
+  "arrive-distance": {
+   "title": "抵达距离"
+  },
+  "arrive-height": {
+   "title": "抵达高度"
+  },
+  "arrow-dodge": {
+   "title": "箭矢躲避",
+   "desc": "尝试躲避朝你飞来的箭矢."
+  },
+  "attribute-swap": {
+   "title": "快切",
+   "desc": "攻击时切换到目标槽位。"
+  },
+  "auto-anvil": {
+   "title": "自动铁砧",
+   "desc": "自动在玩家头上放置铁砧来破坏头盔."
+  },
+  "auto-armor": {
+   "title": "自动护甲",
+   "desc": "自动装备护甲."
+  },
+  "auto-breed": {
+   "title": "自动繁殖",
+   "desc": "自动繁殖指定的动物."
+  },
+  "auto-brewer": {
+   "title": "自动酿造器",
+   "desc": "自动酿造指定的药水."
+  },
+  "auto-city": {
+   "title": "自动挖脚",
+   "desc": "自动挖掘目标脚边的方块."
+  },
+  "auto-clicker": {
+   "title": "自动点击者",
+   "desc": "可以自动完成鼠标点击的操作"
+  },
+  "auto-eat": {
+   "title": "自动吃",
+   "desc": "自动吃食物."
+  },
+  "auto-exp": {
+   "title": "自动经验",
+   "desc": "在PVP中自动修复你的护甲和工具."
+  },
+  "auto-firework": {
+   "title": "自动烟花"
+  },
+  "auto-fish": {
+   "title": "自动钓鱼",
+   "desc": "自动为你钓鱼."
+  },
+  "auto-gap": {
+   "title": "自动Gap",
+   "desc": "自动吃Gap或E-Gap."
+  },
+  "auto-jump": {
+   "title": "自动跳跃",
+   "desc": "自动跳跃."
+  },
+  "auto-log": {
+   "title": "自动断开",
+   "desc": "当满足某些要求时自动断开连接."
+  },
+  "auto-mend": {
+   "title": "自动修复",
+   "desc": "当完全修复时,自动用有经验修补附魔的物品替换副手中的物品."
+  },
+  "auto-mount": {
+   "title": "自动骑乘",
+   "desc": "自动骑乘实体."
+  },
+  "auto-nametag": {
+   "title": "自动命名",
+   "desc": "自动对没有命名的实体使用命名牌.将命名指定距离内的所有实体."
+  },
+  "auto-reconnect": {
+   "title": "自动重连",
+   "desc": "自动重连到上一次服务器."
+  },
+  "auto-replenish": {
+   "title": "自动补充",
+   "desc": "自动补充你的快捷栏、主手或副手中的物品."
+  },
+  "auto-respawn": {
+   "title": "自动重生",
+   "desc": "死亡后自动重生."
+  },
+  "auto-shearer": {
+   "title": "自动剪毛器",
+   "desc": "自动剪毛绵羊."
+  },
+  "auto-sign": {
+   "title": "自动签名",
+   "desc": "自动书写告示牌。将使用第一个告示牌的文本内容。"
+  },
+  "auto-smelter": {
+   "title": "自动熔炼器",
+   "desc": "自动从你的背包中熔炼物品"
+  },
+  "auto-tool": {
+   "title": "自动工具",
+   "desc": "当执行一个动作时,自动切换到最有效的工具."
+  },
+  "auto-totem": {
+   "title": "自动图腾",
+   "desc": "自动将图腾装备在副手."
+  },
+  "auto-trap": {
+   "title": "自动困住",
+   "desc": "把人困在一个箱子里,防止他们移动."
+  },
+  "auto-walk": {
+   "title": "自动行走",
+   "desc": "自动向前行走."
+  },
+  "auto-wasp": {
+   "title": "自动wasp",
+   "desc": "为你召唤wasp。无法绕过障碍物，默认目标间存在直线路径。"
+  },
+  "auto-weapon": {
+   "title": "自动武器",
+   "desc": "在你的快捷栏中找到最好的武器."
+  },
+  "auto-web": {
+   "title": "自动蜘蛛网",
+   "desc": "自动在其他玩家身上放置蜘蛛网."
+  },
+  "beam-color": {
+   "title": "光束颜色"
+  },
+  "beam-max-y": {
+   "title": "光束最大 Y"
+  },
+  "beam-min-y": {
+   "title": "光束最小 Y"
+  },
+  "beam-width": {
+   "title": "光束宽度"
+  },
+  "bed-aura": {
+   "title": "床光环",
+   "desc": "在下界和末地自动放置和引爆床."
+  },
+  "better-beacons": {
+   "title": "更好的信标",
+   "desc": "选择不受信标等级影响的效果."
+  },
+  "better-chat": {
+   "title": "更好的聊天",
+   "desc": "以各种方式改善你的聊天体验."
+  },
+  "better-tab": {
+   "title": "更好的tablist",
+   "desc": "对tablist的各种改进."
+  },
+  "better-tooltips": {
+   "title": "更好的提示框",
+   "desc": "为某些物品显示更有用的提示框."
+  },
+  "blink": {
+   "title": "闪现",
+   "desc": "允许你在暂停运动更新的同时基本上进行传送（其实就是停止向服务器发送移动数据包）."
+  },
+  "block-esp": {
+   "title": "方块透视",
+   "desc": "可以让你隔着墙看到特定的方块"
+  },
+  "block-selection": {
+   "title": "方块指标",
+   "desc": "修改你的方块选择的渲染方式."
+  },
+  "blur": {
+   "title": "高斯模糊",
+   "desc": "在GUI屏幕中模糊背景."
+  },
+  "boat-fly": {
+   "title": "飞船",
+   "desc": "被神鹰哥祝福过的船，可以飞起来"
+  },
+  "book-bot": {
+   "title": "书籍机器人",
+   "desc": "自动在书中写字."
+  },
+  "boss-stack": {
+   "title": "更好的boss条",
+   "desc": "堆叠boss条,使你的HUD更清爽."
+  },
+  "bow-aimbot": {
+   "title": "弓箭自瞄",
+   "desc": "自动为你瞄准弓箭."
+  },
+  "bow-spam": {
+   "title": "弓箭连射",
+   "desc": "连射箭矢."
+  },
+  "box-name": {
+   "title": "方框名称"
+  },
+  "breadcrumbs": {
+   "title": "足迹",
+   "desc": "显示你走过的地方的轨迹."
+  },
+  "break-delay": {
+   "title": "破坏延迟",
+   "desc": "改变破坏方块之间的延迟."
+  },
+  "break-indicators": {
+   "title": "破坏进度条",
+   "desc": "渲染一个方块被破坏的进度."
+  },
+  "build-height": {
+   "title": "建筑高度",
+   "desc": "允许你在建筑限制处与物体互动."
+  },
+  "burrow": {
+   "title": "埋身",
+   "desc": "尝试将你卡进方块里."
+  },
+  "camera-tweaks": {
+   "title": "相机微调",
+   "desc": "允许修改第三人称相机."
+  },
+  "center-x": {
+   "title": "中心 X"
+  },
+  "center-z": {
+   "title": "中心 Z"
+  },
+  "chams": {
+   "title": "变色渲染",
+   "desc": "调整实体的渲染."
+  },
+  "chest-swap": {
+   "title": "胸甲切换",
+   "desc": "自动在胸甲和鞘翅之间切换."
+  },
+  "city-color": {
+   "title": "城市颜色"
+  },
+  "city-esp": {
+   "title": "挖脚-ESP",
+   "desc": "显示可以被破坏另一个玩家脚底的方块."
+  },
+  "clear-cache": {
+   "title": "清除缓存"
+  },
+  "clear-waypoints": {
+   "title": "清除路径点"
+  },
+  "click-tp": {
+   "title": "点击传送",
+   "desc": "将你传送到你点击的方块上."
+  },
+  "collisions": {
+   "title": "碰撞",
+   "desc": "给某些方块/区域添加碰撞箱."
+  },
+  "corridor-width-w": {
+   "title": "走廊宽度 W"
+  },
+  "count-color": {
+   "title": "计数颜色"
+  },
+  "criticals": {
+   "title": "刀爆",
+   "desc": "当你击中目标时执行暴击攻击."
+  },
+  "crystal-aura": {
+   "title": "水晶光环",
+   "desc": "自动放置和攻击水晶."
+  },
+  "custom-path": {
+   "title": "自定义路径"
+  },
+  "descend-height": {
+   "title": "下降高度"
+  },
+  "descend-radius": {
+   "title": "下降半径"
+  },
+  "discord-presence": {
+   "title": "discord状态显示",
+   "desc": "在Discord上显示Meteor作为你的状态."
+  },
+  "dive-angle": {
+   "title": "俯冲角度"
+  },
+  "dive-target-speed": {
+   "title": "俯冲目标速度"
+  },
+  "dive-transition-speed": {
+   "title": "俯冲转换速度"
+  },
+  "done-early": {
+   "title": "提前结束"
+  },
+  "echest-farmer": {
+   "title": "末影箱农场",
+   "desc": "放置和破坏末影箱来挖掘黑曜石."
+  },
+  "elytra-boost": {
+   "title": "鞘翅助推",
+   "desc": "增强你的鞘翅,就像你使用了烟花一样."
+  },
+  "elytra-finder": {
+   "title": "鞘翅搜寻器"
+  },
+  "elytra-fly": {
+   "title": "鞘翅飞行",
+   "desc": "让你对鞘翅有更多的控制."
+  },
+  "elytra-infinite-flight": {
+   "title": "鞘翅无限飞行"
+  },
+  "enable-fd": {
+   "title": "启用食物"
+  },
+  "enable-fw": {
+   "title": "启用烟花"
+  },
+  "enable-rp": {
+   "title": "启用修复"
+  },
+  "enable-tt": {
+   "title": "启用图腾"
+  },
+  "enderman-look": {
+   "title": "末影人观察",
+   "desc": "要么观察所有末影人,要么防止你看向末影人."
+  },
+  "entity-control": {
+   "title": "实体控制",
+   "desc": "让你在没有鞍的情况下控制可骑乘的实体."
+  },
+  "entity-owner": {
+   "title": "实体拥有者",
+   "desc": "显示你所查看实体的所有者玩家名称。"
+  },
+  "entity-speed": {
+   "title": "实体速度",
+   "desc": "骑乘实体时让你更快."
+  },
+  "esp": {
+   "desc": "透过墙壁渲染实体."
+  },
+  "exp-thrower": {
+   "title": "经验投掷器",
+   "desc": "自动从你的快捷栏扔经验瓶."
+  },
+  "fake-player": {
+   "title": "假玩家",
+   "desc": "生成一个客户端的假玩家用于测试用途.无需激活."
+  },
+  "fast-climb": {
+   "title": "快速爬行",
+   "desc": "让你更快地爬行."
+  },
+  "fast-use": {
+   "title": "快速使用",
+   "desc": "允许你以非常高的速度使用物品."
+  },
+  "fd-supply": {
+   "title": "食物补给"
+  },
+  "find-brewing-stand": {
+   "title": "搜寻酿造台"
+  },
+  "firework-interval": {
+   "title": "烟花间隔"
+  },
+  "flamethrower": {
+   "title": "火焰喷射器",
+   "desc": "点燃每一只活着的食物."
+  },
+  "flight": {
+   "title": "飞行",
+   "desc": "飞吧！建议与此模块一起使用无坠落."
+  },
+  "frame-color": {
+   "title": "展示框颜色"
+  },
+  "free-look": {
+   "title": "自由视角",
+   "desc": "在第三人称中允许更多的旋转选项."
+  },
+  "freecam": {
+   "title": "自由视角",
+   "desc": "让摄像机从玩家分离."
+  },
+  "fullbright": {
+   "title": "全亮",
+   "desc": "照亮你的世界！"
+  },
+  "fw-supply": {
+   "title": "烟花补给"
+  },
+  "ghost-hand": {
+   "title": "幽灵手",
+   "desc": "通过墙壁打开容器."
+  },
+  "gui-move": {
+   "title": "界面移动",
+   "desc": "在界面中允许你执行各种动作."
+  },
+  "hand-view": {
+   "title": "手部视图",
+   "desc": "改变你手中物品的渲染方式."
+  },
+  "high-jump": {
+   "title": "高跳",
+   "desc": "让你比正常跳得更高."
+  },
+  "highway-builder": {
+   "title": "高速公路建造者",
+   "desc": "自动建造高速公路."
+  },
+  "hitboxes": {
+   "title": "碰撞箱",
+   "desc": "拓展实体碰撞箱的大小."
+  },
+  "hold-ticks": {
+   "title": "保持tick数"
+  },
+  "hole-esp": {
+   "title": "洞穴ESP",
+   "desc": "显示你会受到更少伤害的洞穴."
+  },
+  "hole-filler": {
+   "title": "填洞高手",
+   "desc": "用指定的方块填充洞."
+  },
+  "include-empty": {
+   "title": "包含空槽位"
+  },
+  "instant-rebreak": {
+   "title": "瞬时破坏",
+   "desc": "在相同位置瞬间重新破坏方块."
+  },
+  "inventory-tweaks": {
+   "title": "物品栏调整",
+   "desc": "各种与物品栏相关的实用工具."
+  },
+  "item-frame-search": {
+   "title": "物品展示框搜寻"
+  },
+  "item-highlight": {
+   "title": "物品高亮",
+   "desc": "在GUI中高亮选中的物品."
+  },
+  "item-physics": {
+   "title": "物品物理",
+   "desc": "为地面上的物品应用物理效果."
+  },
+  "jesus": {
+   "title": "耶稣",
+   "desc": "像耶稣一样在液体和粉雪上行走."
+  },
+  "kill-aura": {
+   "title": "杀戮光环",
+   "desc": "攻击你周围的指定实体."
+  },
+  "ladder-finder": {
+   "title": "梯子搜寻器"
+  },
+  "lead-step-multiplier": {
+   "title": "引导步长倍数"
+  },
+  "light-overlay": {
+   "title": "光照覆盖",
+   "desc": "显示怪物可以生成的方块."
+  },
+  "liquid-filler": {
+   "title": "液体填充器",
+   "desc": "在你周围的范围内,将方块放置在液体源方块中."
+  },
+  "liquid-interact": {
+   "title": "液体交互",
+   "desc": "允许你与液体交互."
+  },
+  "lock-end": {
+   "title": "锁定终点"
+  },
+  "lock-pitch": {
+   "title": "锁定俯仰角"
+  },
+  "lock-start": {
+   "title": "锁定起点"
+  },
+  "logout-spots": {
+   "title": "登出点",
+   "desc": "在其他玩家登出的位置显示标记框。"
+  },
+  "long-jump": {
+   "title": "远跳",
+   "desc": "让你跳得比正常更远."
+  },
+  "lookahead-l": {
+   "title": "前瞻长度 L"
+  },
+  "marker": {
+   "title": "标记",
+   "desc": "渲染形状.适用于大规模的项目"
+  },
+  "max-advance-steps": {
+   "title": "最大前进步数"
+  },
+  "max-yaw-rate-deg-per-tick": {
+   "title": "每tick最大偏航速率"
+  },
+  "message-aura": {
+   "title": "消息灵光",
+   "desc": "给进入渲染距离的任何玩家发送指定的消息."
+  },
+  "middle-click-extra": {
+   "title": "中键额外动作",
+   "desc": "当你中键点击时,执行各种动作."
+  },
+  "min-dur": {
+   "title": "最低耐久度"
+  },
+  "min-fd": {
+   "title": "最少食物"
+  },
+  "min-fw": {
+   "title": "最少烟花"
+  },
+  "min-height-log": {
+   "title": "最低高度记录"
+  },
+  "min-length": {
+   "title": "最小长度"
+  },
+  "min-totem": {
+   "title": "最少图腾"
+  },
+  "min-y": {
+   "title": "最小 Y"
+  },
+  "mount-bypass": {
+   "title": "坐骑绕过",
+   "desc": "允许你绕过IllegalStacks插件,将箱子放在实体上."
+  },
+  "multitask": {
+   "title": "多任务",
+   "desc": "允许同时使用物品和攻击."
+  },
+  "name-protect": {
+   "title": "名称保护",
+   "desc": "隐藏玩家的名称和皮肤."
+  },
+  "nametags": {
+   "title": "姓名标签",
+   "desc": "在玩家上方显示可定制的名称标签."
+  },
+  "nearest-samples": {
+   "title": "最近采样数"
+  },
+  "no-fall": {
+   "title": "无摔伤",
+   "desc": "试图防止你受到摔落伤害."
+  },
+  "no-ghost-blocks": {
+   "title": "无幽灵方块",
+   "desc": "尝试防止幽灵方块出现."
+  },
+  "no-interact": {
+   "title": "无交互",
+   "desc": "阻止你与某些类型的输入交互."
+  },
+  "no-mining-trace": {
+   "title": "不挖掘痕迹",
+   "desc": "允许你通过实体挖掘方块."
+  },
+  "no-render": {
+   "title": "不渲染",
+   "desc": "禁用某些动画或覆盖的渲染."
+  },
+  "no-rotate": {
+   "title": "无旋转",
+   "desc": "尝试阻止服务器发送到客户端的旋转."
+  },
+  "no-slow": {
+   "title": "无缓慢",
+   "desc": "让你在使用会减慢你的物品时正常移动."
+  },
+  "no-status-effects": {
+   "title": "阻止药水效果",
+   "desc": "阻止指定的状态效果."
+  },
+  "notebot": {
+   "title": "音符机器人",
+   "desc": "优美地播放音符块"
+  },
+  "notifier": {
+   "title": "通知器",
+   "desc": "通知你不同的事件."
+  },
+  "nuker": {
+   "title": "核爆",
+   "desc": "破坏你周围的方块."
+  },
+  "offhand": {
+   "title": "副手",
+   "desc": "让你在副手持有指定的物品."
+  },
+  "offhand-crash": {
+   "title": "副手崩溃",
+   "desc": "一个利用漏洞,通过在主手和副手之间切换来崩溃其他玩家的功能."
+  },
+  "packet-canceller": {
+   "title": "数据包取消器",
+   "desc": "让你可以取消某些数据包."
+  },
+  "packet-logger": {
+   "title": "数据包记录器",
+   "desc": "允许你记录特定数据包。"
+  },
+  "packet-mine": {
+   "title": "渲染方块",
+   "desc": "发送包来挖掘方块,无需挖掘动画."
+  },
+  "parkour": {
+   "title": "跑酷",
+   "desc": "在方块的边缘自动跳跃."
+  },
+  "pop-chams": {
+   "title": "图腾幽灵",
+   "desc": "在玩家爆图腾的地方渲染幽灵."
+  },
+  "portals": {
+   "title": "传送门",
+   "desc": "允许你在下界传送门里正常使用GUI."
+  },
+  "potion-saver": {
+   "title": "药水冻结",
+   "desc": "当你站着不动时停止药水效果的计时."
+  },
+  "pull-up-angle": {
+   "title": "拉升角度"
+  },
+  "pull-up-stall-speed": {
+   "title": "拉升失速速度"
+  },
+  "pull-up-transition-speed": {
+   "title": "拉升转换速度"
+  },
+  "quiver": {
+   "title": "射箭",
+   "desc": "给自己射箭."
+  },
+  "reach": {
+   "title": "长臂猿",
+   "desc": "赋予你超长的手臂."
+  },
+  "read-xaero": {
+   "title": "读取 Xaero"
+  },
+  "refine-iters": {
+   "title": "细化迭代次数"
+  },
+  "render-box-size": {
+   "title": "渲染框大小"
+  },
+  "render-chunks": {
+   "title": "渲染区块数"
+  },
+  "render-trail": {
+   "title": "渲染轨迹"
+  },
+  "report-short": {
+   "title": "简短报告"
+  },
+  "require-ship": {
+   "title": "需要船只"
+  },
+  "reverse-step": {
+   "title": "反向步行",
+   "desc": "让你以更快的速度下落方块."
+  },
+  "rotation": {
+   "title": "旋转",
+   "desc": "改变/锁定你的偏航和俯仰."
+  },
+  "safe-walk": {
+   "title": "安全行走",
+   "desc": "防止你从方块上走下来."
+  },
+  "save-to-file": {
+   "title": "保存到文件"
+  },
+  "scaffold": {
+   "title": "脚手架",
+   "desc": "自动在你下方放置方块."
+  },
+  "search-now": {
+   "title": "立即搜索"
+  },
+  "search-window-rad": {
+   "title": "搜索窗口半径"
+  },
+  "self-anvil": {
+   "title": "自动铁砧",
+   "desc": "自动在你头上放置一个铁砧,防止其他玩家进入你的洞."
+  },
+  "self-trap": {
+   "title": "自我困住",
+   "desc": "在你头上放置方块."
+  },
+  "self-web": {
+   "title": "自我网",
+   "desc": "自动在你身上放置网."
+  },
+  "server-spoof": {
+   "title": "服务器欺骗",
+   "desc": "欺骗客户端版本、资源包和频道."
+  },
+  "ship-color": {
+   "title": "船只颜色"
+  },
+  "short-color": {
+   "title": "短途颜色"
+  },
+  "show-beam": {
+   "title": "显示光束"
+  },
+  "show-render": {
+   "title": "显示渲染"
+  },
+  "show-route": {
+   "title": "显示路线"
+  },
+  "show-slot-type": {
+   "title": "显示槽位类型"
+  },
+  "show-ui": {
+   "title": "显示界面"
+  },
+  "slippy": {
+   "title": "滑溜溜",
+   "desc": "改变方块的基础摩擦水平."
+  },
+  "snap-to-player": {
+   "title": "对齐到玩家"
+  },
+  "sneak": {
+   "title": "潜行",
+   "desc": "为你潜行."
+  },
+  "sound-blocker": {
+   "title": "声音屏蔽器",
+   "desc": "取消选中的声音."
+  },
+  "spam": {
+   "title": "垃圾邮件",
+   "desc": "在聊天中发送指定的垃圾邮件消息."
+  },
+  "spawn-proofer": {
+   "title": "防止生成",
+   "desc": "自动防止未照明的区域生成怪物."
+  },
+  "speed": {
+   "title": "速度",
+   "desc": "在地面上移动时修改你的移动速度."
+  },
+  "speed-mine": {
+   "title": "速度开采",
+   "desc": "允许你快速开采方块."
+  },
+  "spider": {
+   "title": "蜘蛛",
+   "desc": "让你像蜘蛛一样爬墙."
+  },
+  "spiral-flight": {
+   "title": "螺旋飞行"
+  },
+  "sprint": {
+   "title": "冲刺",
+   "desc": "自动冲刺."
+  },
+  "stash-finder": {
+   "title": "储藏点寻找器",
+   "desc": "在已加载区块中搜索储物方块，并将结果保存至<你的Minecraft文件夹>/meteor-client目录下"
+  },
+  "step": {
+   "title": "步高",
+   "desc": "让你可以立刻走上整个方块."
+  },
+  "storage-esp": {
+   "title": "存储ESP",
+   "desc": "渲染所有指定的存储方块."
+  },
+  "store-resupply": {
+   "title": "仓储补给"
+  },
+  "stow-delay": {
+   "title": "收纳延迟"
+  },
+  "stow-elytra": {
+   "title": "收纳鞘翅"
+  },
+  "surround": {
+   "title": "包围",
+   "desc": "用方块包围你,以防止水晶造成巨大的伤害."
+  },
+  "swarm": {
+   "title": "远程控制",
+   "desc": "让你从一个中心主机控制多个Meteor实例."
+  },
+  "target-height": {
+   "title": "目标高度"
+  },
+  "time-changer": {
+   "title": "时间改变",
+   "desc": "让你能够设置自定义时间."
+  },
+  "timer": {
+   "title": "变速齿轮",
+   "desc": "改变你游戏中所有事物的速度."
+  },
+  "title-color": {
+   "title": "标题颜色"
+  },
+  "totem-supply": {
+   "title": "图腾补给"
+  },
+  "tracers": {
+   "title": "追踪线",
+   "desc": "向指定的实体画追踪线."
+  },
+  "trail": {
+   "title": "拖尾",
+   "desc": "在你的玩家后面渲染一个可自定义的拖尾."
+  },
+  "trail-color": {
+   "title": "轨迹颜色"
+  },
+  "trail-max-points": {
+   "title": "轨迹最大点数"
+  },
+  "trail-spacing": {
+   "title": "轨迹间距"
+  },
+  "trail-width": {
+   "title": "轨迹宽度"
+  },
+  "trajectories": {
+   "title": "轨迹",
+   "desc": "预测可投掷物品的轨迹."
+  },
+  "trident-boost": {
+   "title": "三叉戟提升",
+   "desc": "使用三叉戟的激流时提升你."
+  },
+  "tunnel-esp": {
+   "title": "隧道esp",
+   "desc": "高亮隧道."
+  },
+  "use-custom-path": {
+   "title": "使用自定义路径"
+  },
+  "use-fixed-center": {
+   "title": "使用固定中心"
+  },
+  "vein-miner": {
+   "title": "脉冲挖掘",
+   "desc": "挖掘附近所有相同类型的方块"
+  },
+  "velocity": {
+   "title": "反击退",
+   "desc": "防止你被外力移动."
+  },
+  "void-esp": {
+   "title": "虚空ESP",
+   "desc": "渲染通向虚空的基岩层的洞穴."
+  },
+  "wall-hack": {
+   "title": "透视墙壁",
+   "desc": "使方块半透明."
+  },
+  "waypoint-lock": {
+   "title": "路径点锁定"
+  },
+  "waypoint-reader": {
+   "title": "路径点读取"
+  },
+  "waypoints": {
+   "title": "创建路标",
+   "desc": "允许你创建路标."
+  },
+  "world-origin": {
+   "title": "世界原点"
+  },
+  "world-seed": {
+   "title": "世界种子"
+  },
+  "xp-delay": {
+   "title": "经验瓶延迟"
+  },
+  "xp-supply": {
+   "title": "经验瓶补给"
+  },
+  "xray": {
+   "title": "透视",
+   "desc": "只渲染指定的方块.适合挖矿."
+  },
+  "zoom": {
+   "title": "缩放",
+   "desc": "缩放你的视野."
+  },
+  "关于汉化插件": {
+   "title": "关于汉化插件"
+  }
+ },
+ "settings": {
+  "1.12-placement": {
+   "title": "1.12版放置",
+   "desc": "使用1.12的水晶放置."
+  },
+  "32K": {
+   "desc": "当附近的玩家能够瞬间击杀你时断开连接."
+  },
+  "C2S-packets": {
+   "title": "C2S-数据包",
+   "desc": "要取消的客户端到服务器的数据包."
+  },
+  "S2C-packets": {
+   "title": "S2C-数据包",
+   "desc": "要取消的服务器到客户端的数据包."
+  },
+  "Scrollbar-color": {
+   "title": "滑块颜色",
+   "desc": "滑块颜色"
+  },
+  "TPS-sync": {
+   "title": "TPS同步",
+   "desc": "尝试与服务器的垃圾TPS同步."
+  },
+  "acceleration": {
+   "title": "加速"
+  },
+  "acceleration-start": {
+   "title": "加速开始"
+  },
+  "acceleration-step": {
+   "title": "加速步长"
+  },
+  "accent-color": {
+   "title": "强调色",
+   "desc": "GUI的主要颜色."
+  },
+  "accurate": {
+   "title": "精确",
+   "desc": "是否要计算更精确的."
+  },
+  "accurate-latency": {
+   "title": "准确延迟",
+   "desc": "在Tab列表中以数字显示延迟."
+  },
+  "action-on-target-loss": {
+   "title": "丢失策略",
+   "desc": "如果失去目标该怎么办."
+  },
+  "active-when": {
+   "title": "激活条件",
+   "desc": "当你满足这些条件时,步高才会激活."
+  },
+  "add-waypoints": {
+   "title": "添加路径点"
+  },
+  "add-y": {
+   "title": "添加 Y 坐标"
+  },
+  "additional-height": {
+   "title": "额外高度",
+   "desc": "要伪装的额外高度.更多高度意味着更多伤害."
+  },
+  "advanced": {
+   "title": "轮廓",
+   "desc": "在不同类型的形状方块上显示更高级的轮廓."
+  },
+  "ahead-distance": {
+   "title": "前方距离",
+   "desc": "放置方块的前方距离."
+  },
+  "aim-above": {
+   "title": "瞄准上方"
+  },
+  "air-only": {
+   "title": "仅空气",
+   "desc": "只检查基岩层的空气方块."
+  },
+  "air-place": {
+   "title": "空中放置",
+   "desc": "允许空中放置.这也允许你修改脚手架半径."
+  },
+  "air-place-mode": {
+   "title": "放置模式",
+   "desc": "放置模式是在你死亡前还是在你受伤前放置."
+  },
+  "air-strict": {
+   "title": "空中严格",
+   "desc": "会尝试绕过类似2b2t的反作弊系统。仅在悬空状态下生效。"
+  },
+  "alignment": {
+   "title": "对齐方式",
+   "desc": "水平对齐方式。"
+  },
+  "all-projectiles": {
+   "title": "所有投射物",
+   "desc": "躲避所有投射物,不仅仅是箭矢."
+  },
+  "allow-egap": {
+   "title": "允许吃E-Gap",
+   "desc": "如果找到的话,允许吃E-Gap而不是普通Gap."
+  },
+  "allowed-blocks": {
+   "title": "允许的方块",
+   "desc": "决定哪些方块会滑动"
+  },
+  "always": {
+   "title": "始终",
+   "desc": "是否应始终吃."
+  },
+  "always-gap-on-sword": {
+   "title": "剑总是金苹果",
+   "desc": "拿着剑时总是持有附魔金苹果."
+  },
+  "always-pot-on-sword": {
+   "title": "剑总是药水",
+   "desc": "拿着剑时切换到药水"
+  },
+  "ambient-color": {
+   "title": "环境颜色",
+   "desc": "环境的颜色."
+  },
+  "amount": {
+   "title": "数量",
+   "desc": "要挖掘的黑曜石数量."
+  },
+  "anchor": {
+   "title": "锚点",
+   "desc": "在使用水桶或空中放置模式时,将玩家居中并减少移动."
+  },
+  "animals-color": {
+   "title": "动物颜色",
+   "desc": "动物的颜色。"
+  },
+  "annoy": {
+   "title": "讨厌",
+   "desc": "让你的消息变得很烦人."
+  },
+  "anti-bounce": {
+   "title": "禁用弹跳",
+   "desc": "禁用在粘液块和床上着陆时的弹跳."
+  },
+  "anti-break": {
+   "title": "防破",
+   "desc": "防止打火石被损坏."
+  },
+  "anti-break-percentage": {
+   "title": "防止损坏百分比",
+   "desc": "停止使用工具的耐久度百分比."
+  },
+  "anti-clear": {
+   "title": "反清除",
+   "desc": "防止服务器清除聊天."
+  },
+  "anti-consume": {
+   "title": "反消耗",
+   "desc": "在使用鞘翅助推时防止烟花被消耗."
+  },
+  "anti-crash": {
+   "title": "防崩溃",
+   "desc": "尝试防止你崩溃自己."
+  },
+  "anti-drop-items": {
+   "title": "防止丢弃物品",
+   "desc": "禁止丢弃指定物品（在创造模式物品栏界面无效）"
+  },
+  "anti-fly-kick": {
+   "title": "防飞行踢出",
+   "desc": "是否防止服务器因飞行而踢出你。"
+  },
+  "anti-spam": {
+   "title": "反垃圾邮件",
+   "desc": "阻止重复消息充斥聊天."
+  },
+  "anti-suicide": {
+   "title": "防止自杀",
+   "desc": "水晶对自己造成的最大伤害."
+  },
+  "anti-weakness": {
+   "title": "防虚弱",
+   "desc": "切换到工具,以便在有虚弱效果时可以破坏水晶."
+  },
+  "append-count": {
+   "title": "附加计数",
+   "desc": "是否在标题中附加书籍的编号."
+  },
+  "armor": {
+   "title": "盔甲",
+   "desc": "禁用实体盔甲的渲染."
+  },
+  "arrival-range": {
+   "title": "抵达范围"
+  },
+  "arrive-distance": {
+   "title": "抵达距离"
+  },
+  "arrive-height": {
+   "title": "抵达高度"
+  },
+  "arrow-speed": {
+   "title": "箭头速度",
+   "desc": "用箭头键旋转的速度."
+  },
+  "arrows-control-opposite": {
+   "title": "箭头控制相反",
+   "desc": "允许你用箭头键控制其他实体的旋转."
+  },
+  "arrows-rotate": {
+   "title": "箭头旋转",
+   "desc": "在界面中允许你用箭头键旋转."
+  },
+  "ascii-only": {
+   "title": "仅限ASCII",
+   "desc": "仅使用ASCII字符集中的字符."
+  },
+  "attack-frequency": {
+   "title": "攻击频率",
+   "desc": "每秒可以做的最大击打次数."
+  },
+  "attack-when-holding": {
+   "title": "手持时攻击",
+   "desc": "仅当手中持有指定物品时才攻击实体。"
+  },
+  "attacking-entities": {
+   "title": "攻击实体",
+   "desc": "允许在使用物品时攻击实体."
+  },
+  "auto-cast": {
+   "title": "自动投掷",
+   "desc": "自动抛出钓鱼竿"
+  },
+  "auto-disable": {
+   "title": "自动禁用",
+   "desc": "跳跃后自动禁用模块."
+  },
+  "auto-drop-items": {
+   "title": "自动丢弃物品",
+   "desc": "要丢弃的物品."
+  },
+  "auto-dump": {
+   "title": "自动倾倒",
+   "desc": "当你打开一个容器时自动倾倒所有可能的物品."
+  },
+  "auto-firework": {
+   "title": "自动烟花"
+  },
+  "auto-hover": {
+   "title": "自动悬停",
+   "desc": "当你按住shift时,自动悬停在地面上0.3方块的高度."
+  },
+  "auto-jump": {
+   "title": "自动跳跃",
+   "desc": "自动为你跳跃."
+  },
+  "auto-move": {
+   "title": "自动移动",
+   "desc": "将床移动到一个选定的物品栏槽."
+  },
+  "auto-move-slot": {
+   "title": "自动移动槽",
+   "desc": "自动移动将床移动到的槽."
+  },
+  "auto-pilot": {
+   "title": "自动驾驶",
+   "desc": "鞘翅飞行时向前移动."
+  },
+  "auto-play": {
+   "title": "自动播放",
+   "desc": "自动播放随机歌曲"
+  },
+  "auto-rotate": {
+   "title": "自动旋转",
+   "desc": "客户端是否应该查看音符块,当它想要击打它时"
+  },
+  "auto-split-messages": {
+   "title": "自动拆分消息",
+   "desc": "在一定长度后自动拆分大消息"
+  },
+  "auto-steal": {
+   "title": "自动偷取",
+   "desc": "当你打开一个容器时自动移除所有可能的物品."
+  },
+  "auto-switch": {
+   "title": "自动切换",
+   "desc": "当方块可以瞬间被挖掘时,自动切换到最佳工具."
+  },
+  "auto-take-off": {
+   "title": "自动起飞",
+   "desc": "当你按住跳跃键时,自动起飞,无需双跳."
+  },
+  "auto-toggle": {
+   "title": "自动切换",
+   "desc": "放置网后切换关闭."
+  },
+  "automatic": {
+   "title": "自动",
+   "desc": "激活后自动埋身而不是等待跳跃."
+  },
+  "avoid-landing": {
+   "title": "蜻蜓点水",
+   "desc": "如果您的目标在地面上,将尝试避免着陆."
+  },
+  "avoided-enchantments": {
+   "title": "避免的附魔",
+   "desc": "应该避免的附魔."
+  },
+  "axe": {
+   "title": "斧",
+   "desc": "手持斧时启用。"
+  },
+  "babies": {
+   "title": "幼体",
+   "desc": "婴儿实体取消模式."
+  },
+  "back": {
+   "title": "后",
+   "desc": "破坏范围."
+  },
+  "background": {
+   "title": "背景",
+   "desc": "显示背景。"
+  },
+  "background-color": {
+   "title": "背景颜色",
+   "desc": "设置你背景的颜色."
+  },
+  "bane-of-arthropods": {
+   "title": "节肢杀手",
+   "desc": "切换到带有节肢杀手的物品以增加对节肢动物的伤害。"
+  },
+  "banners": {
+   "title": "旗帜",
+   "desc": "更改旗帜的渲染."
+  },
+  "bar-spacing": {
+   "desc": "每个boss条之间的间距减少."
+  },
+  "barrel": {
+   "title": "桶",
+   "desc": "桶的颜色."
+  },
+  "barrier-invisibility": {
+   "title": "屏障隐形",
+   "desc": "禁用当没有持有时屏障隐形."
+  },
+  "beacon-beams": {
+   "title": "信标光束",
+   "desc": "禁用信标光束的渲染."
+  },
+  "beam-color": {
+   "title": "光束颜色"
+  },
+  "beam-max-y": {
+   "title": "光束最大 Y"
+  },
+  "beam-min-y": {
+   "title": "光束最小 Y"
+  },
+  "beam-width": {
+   "title": "光束宽度"
+  },
+  "bedrock-bottom": {
+   "title": "基岩底部",
+   "desc": "完全是基岩的洞穴的底部颜色."
+  },
+  "bedrock-top": {
+   "title": "基岩顶部",
+   "desc": "完全是基岩的洞穴的顶部颜色."
+  },
+  "before-expiry": {
+   "title": "到期前",
+   "desc": "是否在药水效果到期前进食。"
+  },
+  "below": {
+   "title": "下方",
+   "desc": "渲染你下方的方块."
+  },
+  "berry-bush": {
+   "title": "浆果丛",
+   "desc": "浆果丛是否不会减慢你."
+  },
+  "bind": {
+   "title": "滚动灵敏度"
+  },
+  "blacklist": {
+   "title": "黑名单",
+   "desc": "设置你不想吃的玩意."
+  },
+  "blacklisted-entities": {
+   "title": "黑名单实体",
+   "desc": "你将正常互动的实体."
+  },
+  "blacklisted-support-blocks": {
+   "title": "黑名单支撑方块",
+   "desc": "阻止计算存储方块实体时，其下方的方块。"
+  },
+  "blast-prot-leggings": {
+   "title": "爆炸保护护腿",
+   "desc": "无论首选保护如何,都使用爆炸保护的护腿."
+  },
+  "blindness": {
+   "title": "失明",
+   "desc": "禁用失明的渲染."
+  },
+  "blink-offscreen": {
+   "title": "屏幕外闪烁",
+   "desc": "使屏幕外标记产生闪烁效果"
+  },
+  "blink-offscreen-speed": {
+   "title": "屏幕外闪烁速度",
+   "desc": "屏幕外标记的闪烁速度"
+  },
+  "block-break-overlay": {
+   "title": "方块破坏覆盖",
+   "desc": "禁用方块破坏覆盖的渲染."
+  },
+  "block-break-particles": {
+   "title": "方块破坏粒子",
+   "desc": "禁用方块破坏粒子的渲染."
+  },
+  "block-channels": {
+   "title": "封锁频道",
+   "desc": "是否封锁某些频道."
+  },
+  "block-configs": {
+   "title": "方块配置",
+   "desc": "每个方块的配置."
+  },
+  "block-entities": {
+   "title": "方块实体",
+   "desc": "禁用方块实体（箱子、末影箱等）的渲染."
+  },
+  "block-interact": {
+   "title": "方块交互",
+   "desc": "取消方块交互."
+  },
+  "block-interact-hand": {
+   "title": "方块交互手",
+   "desc": "如果是这只手,取消方块交互."
+  },
+  "block-interact-mode": {
+   "title": "方块交互模式",
+   "desc": "方块交互的列表模式."
+  },
+  "block-mine": {
+   "title": "方块挖掘",
+   "desc": "取消方块挖掘."
+  },
+  "block-mine-mode": {
+   "title": "方块挖掘模式",
+   "desc": "方块挖掘的列表模式."
+  },
+  "block-to-use": {
+   "title": "使用方块",
+   "desc": "用于埋身的方块."
+  },
+  "blocked-effects": {
+   "title": "禁止的效果",
+   "desc": "选择你要禁止的效果"
+  },
+  "blocks": {
+   "title": "方块",
+   "desc": "要选择的方块."
+  },
+  "blocks-filter": {
+   "title": "方块过滤器",
+   "desc": "如何使用方块列表设置"
+  },
+  "blocks-per-tick": {
+   "title": "每刻放置",
+   "desc": "每刻放置的方块数量."
+  },
+  "blocks-to-mine-line-color": {
+   "title": "待挖方块的线条颜色",
+   "desc": "待挖掘方块的颜色."
+  },
+  "blocks-to-mine-shape-mode": {
+   "title": "待挖方块的渲染模式",
+   "desc": "待挖掘方块的渲染方式."
+  },
+  "blocks-to-mine-side-color": {
+   "title": "待挖方块的侧面颜色",
+   "desc": "待挖掘方块的颜色."
+  },
+  "blocks-to-place": {
+   "title": "可放置方块",
+   "desc": "允许放置的方块."
+  },
+  "blocks-to-place-line-color": {
+   "title": "待放置方块的线条颜色",
+   "desc": "待放置方块的颜色."
+  },
+  "blocks-to-place-shape-mode": {
+   "title": "待放置方块的渲染模式",
+   "desc": "待放置方块的渲染方式."
+  },
+  "blocks-to-place-side-color": {
+   "title": "待放置方块的侧面颜色",
+   "desc": "待放置方块的颜色."
+  },
+  "books": {
+   "title": "书籍",
+   "desc": "当将鼠标悬停在书籍上时,在物品栏中显示书籍的内容."
+  },
+  "boost": {
+   "title": "提升",
+   "desc": "使用激流时你的速度乘以多少."
+  },
+  "border": {
+   "title": "边距",
+   "desc": "文本周围添加的间距。"
+  },
+  "boss-bar": {
+   "title": "Boss条",
+   "desc": "禁用Boss条的渲染."
+  },
+  "bottom-blocks": {
+   "title": "底部方块",
+   "desc": "放置在目标下半部的方块."
+  },
+  "bottom-mode": {
+   "title": "下半部模式",
+   "desc": "要在你下半身放置的位置."
+  },
+  "bottom-quad": {
+   "title": "底部四边形",
+   "desc": "是否在洞穴的底部渲染一个四边形."
+  },
+  "bounce": {
+   "title": "反弹",
+   "desc": "水晶的反弹高度."
+  },
+  "bounding-box": {
+   "title": "包围盒",
+   "desc": "为立方体和均匀立方体启用包围盒渲染."
+  },
+  "box-name": {
+   "title": "方框名称"
+  },
+  "brand": {
+   "title": "版本",
+   "desc": "指定将发送到服务器的版本."
+  },
+  "breach": {
+   "title": "破甲",
+   "desc": "切换到带有破甲附魔的钉锤，降低目标的护甲效果。"
+  },
+  "break": {
+   "title": "破坏",
+   "desc": "是否应该破坏水晶."
+  },
+  "break-attempts": {
+   "title": "破坏尝试",
+   "desc": "在停止目标之前,可以击中一个水晶的次数."
+  },
+  "break-delay": {
+   "title": "破坏延迟",
+   "desc": "破坏方块之间的延迟."
+  },
+  "break-line-color": {
+   "title": "破坏线颜色",
+   "desc": "要破坏的锚的线颜色."
+  },
+  "break-mode": {
+   "title": "破坏模式",
+   "desc": "锚被允许在你附近破坏的方式."
+  },
+  "break-range": {
+   "title": "破坏范围",
+   "desc": "破坏水晶的范围."
+  },
+  "break-side-color": {
+   "title": "破坏侧颜色",
+   "desc": "要破坏的锚的侧颜色."
+  },
+  "break-time": {
+   "title": "破坏时间",
+   "desc": "渲染破坏的时间."
+  },
+  "breaking": {
+   "title": "破坏",
+   "desc": "是否适用于方块破坏行为."
+  },
+  "breeding-interval": {
+   "title": "繁殖间隔",
+   "desc": "确定同一动物被喂养的频率（游戏刻）。"
+  },
+  "broken-blocks": {
+   "title": "破坏的方块",
+   "desc": "为立方体和均匀立方体启用包围盒渲染."
+  },
+  "bundles": {
+   "title": "收纳袋",
+   "desc": "在背包中悬停收纳袋时显示其内容预览。"
+  },
+  "burst-boost-factor": {
+   "title": "爆发加速因子",
+   "desc": "加速跳跃的程度."
+  },
+  "burst-initial-speed": {
+   "title": "爆发初始速度",
+   "desc": "跑步的初始速度."
+  },
+  "bypass": {
+   "title": "绕过",
+   "desc": "在消息末尾添加随机文本,以尝试绕过反垃圾邮件."
+  },
+  "byte-size": {
+   "title": "字节大小",
+   "desc": "在物品提示框中显示该物品的字节大小。"
+  },
+  "byte-size-format": {
+   "title": "字节大小格式",
+   "desc": "用于显示物品字节大小的格式。"
+  },
+  "camera-distance": {
+   "title": "相机距离",
+   "desc": "第三人称相机距离玩家的距离."
+  },
+  "camera-sensitivity": {
+   "title": "摄像机灵敏度",
+   "desc": "摄像机模式下摄像机移动的速度."
+  },
+  "cancel-blink": {
+   "title": "取消闪现",
+   "desc": "取消发送数据包并将你送回原始位置."
+  },
+  "cancel-jump-in-hole": {
+   "title": "取消洞中跳跃",
+   "desc": "当锚点激活并且达到最小俯仰角时,阻止你跳跃."
+  },
+  "cancel-server-packets": {
+   "title": "取消服务器数据包",
+   "desc": "取消进来的船只移动数据包."
+  },
+  "cast-delay": {
+   "title": "抛竿间隔",
+   "desc": "当浮标未能落入水中时，重新抛竿的等待时间"
+  },
+  "cast-delay-variance": {
+   "title": "投掷延迟变化",
+   "desc": "投掷延迟的最大随机变化量。"
+  },
+  "catch-delay": {
+   "title": "捕捉延迟",
+   "desc": "钩住鱼后收竿前的等待时长"
+  },
+  "catch-delay-variance": {
+   "title": "捕获延迟变化",
+   "desc": "捕获延迟的最大随机变化量。"
+  },
+  "catch-exceptions": {
+   "title": "捕获异常",
+   "desc": "丢弃损坏的数据包."
+  },
+  "category-icons": {
+   "title": "类别图标",
+   "desc": "为模块类别添加项目图标."
+  },
+  "cave-culling": {
+   "title": "洞穴剔除",
+   "desc": "禁用Minecraft的洞穴剔除算法。"
+  },
+  "center": {
+   "title": "居中",
+   "desc": "将你传送到方块的中心."
+  },
+  "center-x": {
+   "title": "中心 X"
+  },
+  "center-z": {
+   "title": "中心 Z"
+  },
+  "channels": {
+   "title": "频道",
+   "desc": "如果频道包含关键词,则此出站频道将被封锁."
+  },
+  "charge": {
+   "title": "蓄力",
+   "desc": "释放弓箭前的刻蓄力时间."
+  },
+  "charge-delay": {
+   "title": "充能延迟",
+   "desc": "为锚点充能所需的游戏刻延迟。"
+  },
+  "chat": {
+   "title": "聊天栏",
+   "desc": "在你死亡时发送一个带有你位置的聊天消息"
+  },
+  "chat-feedback": {
+   "title": "聊天反馈",
+   "desc": "当Meteor执行某些操作时,发送聊天反馈."
+  },
+  "chat-info": {
+   "title": "聊天信息",
+   "desc": "在聊天中发送射箭检查的信息."
+  },
+  "check-effects": {
+   "title": "检查效果",
+   "desc": "不会在你已经拥有效果的时候射箭."
+  },
+  "check-noteblocks-again-delay": {
+   "title": "检查音符块再次延迟",
+   "desc": "调整和检查之间的延迟时间"
+  },
+  "check-saddle": {
+   "title": "检查鞍",
+   "desc": "在骑乘之前检查实体是否有鞍."
+  },
+  "checkbox-color": {
+   "title": "复选框的颜色",
+   "desc": "复选框的颜色."
+  },
+  "chest": {
+   "title": "箱子",
+   "desc": "箱子的颜色."
+  },
+  "chest-swap": {
+   "title": "胸甲切换",
+   "desc": "在切换这个模块时,启用胸甲切换."
+  },
+  "chestplate": {
+   "title": "胸甲",
+   "desc": "要切换到哪种类型的胸甲."
+  },
+  "chunk-column-color": {
+   "title": "区块柱颜色",
+   "desc": "藏匿点追踪柱体的颜色。"
+  },
+  "cinematic": {
+   "title": "电影模式",
+   "desc": "启用电影模式摄像机."
+  },
+  "city-color": {
+   "title": "城市颜色"
+  },
+  "clear-cache": {
+   "title": "清除缓存"
+  },
+  "clear-traces-bind": {
+   "title": "清除追踪键位",
+   "desc": "清除所有藏匿点追踪的键位。"
+  },
+  "clear-waypoints": {
+   "title": "清除路径点"
+  },
+  "click-to-path": {
+   "title": "点击寻路",
+   "desc": "将寻路目标设置为你点击的任何方块/实体。"
+  },
+  "climb-speed": {
+   "title": "爬行速度",
+   "desc": "你上方块的速度."
+  },
+  "clip": {
+   "title": "剪辑",
+   "desc": "允许相机穿透方块."
+  },
+  "close-inventory": {
+   "title": "关闭库存",
+   "desc": "在切换后发送库存关闭."
+  },
+  "closest-block-range": {
+   "title": "最近方块范围",
+   "desc": "当你在空中时,脚手架可以放置方块的距离."
+  },
+  "cloud-color": {
+   "title": "云彩颜色",
+   "desc": "云彩的颜色."
+  },
+  "color": {
+   "title": "颜色",
+   "desc": "标记的颜色."
+  },
+  "color-mode": {
+   "title": "着色模式",
+   "desc": "活动模块的着色模式。"
+  },
+  "column-height": {
+   "title": "列高度",
+   "desc": "每列显示的玩家数."
+  },
+  "combined-entity-threshold": {
+   "title": "组合实体阈值",
+   "desc": "在断开连接之前,必须有足够多的选定实体靠近你."
+  },
+  "compact-shulker-tooltip": {
+   "title": "紧凑的末影箱提示",
+   "desc": "紧凑化末影箱提示框中的行."
+  },
+  "concurrent-tune-blocks": {
+   "title": "并发音符块",
+   "desc": "同一时间可以调整多少个音符块.在Paper上建议设置为1以避免出现bug."
+  },
+  "condition": {
+   "title": "条件",
+   "desc": "当显示条件非'始终'时需检查的条件。"
+  },
+  "connected": {
+   "title": "连接",
+   "desc": "是否连接相邻的洞."
+  },
+  "containers": {
+   "title": "容器",
+   "desc": "当将鼠标悬停在容器上时,在物品栏中显示该容器的预览."
+  },
+  "continuous-breeding": {
+   "title": "连续繁殖",
+   "desc": "是否在一定时间后再次喂养同一动物。"
+  },
+  "cooldown": {
+   "title": "冷却",
+   "desc": "快速使用的冷却时间,以刻为单位."
+  },
+  "coords-protection": {
+   "title": "坐标保护",
+   "desc": "防止你发送可能包含坐标的聊天消息."
+  },
+  "copy-inv": {
+   "title": "复制物品栏",
+   "desc": "复制你的物品栏到假玩家."
+  },
+  "corner-support-block": {
+   "title": "角落支撑块",
+   "desc": "在栏杆下放置支撑块,防止空中放置."
+  },
+  "corridor-width-w": {
+   "title": "走廊宽度 W"
+  },
+  "count-color": {
+   "title": "计数颜色"
+  },
+  "crash-look-ahead": {
+   "title": "撞车预测",
+   "desc": "飞行时向前看的距离."
+  },
+  "crossbow-delay": {
+   "title": "弩发射延迟",
+   "desc": "弩发射之间的延迟（游戏刻）。"
+  },
+  "crosshair": {
+   "title": "十字准星",
+   "desc": "禁用十字准星的渲染."
+  },
+  "crystal-color": {
+   "title": "水晶颜色",
+   "desc": "水晶的颜色."
+  },
+  "crystals": {
+   "title": "水晶",
+   "desc": "启用水晶模型调整."
+  },
+  "culling": {
+   "title": "剔除",
+   "desc": "仅在一定距离内渲染一定数量的名称标签."
+  },
+  "culling-count": {
+   "title": "剔除数量",
+   "desc": "仅渲染这么多的名称标签."
+  },
+  "culling-range": {
+   "title": "剔除范围",
+   "desc": "仅渲染在此距离内的名称标签."
+  },
+  "custom-cloud-color": {
+   "title": "自定义云彩颜色",
+   "desc": "是否应该改变云彩的颜色."
+  },
+  "custom-delay": {
+   "title": "自定义延迟",
+   "desc": "使用自定义的延迟而不是原版的冷却."
+  },
+  "custom-fog-color": {
+   "title": "自定义雾颜色",
+   "desc": "是否要更改雾的颜色。"
+  },
+  "custom-foliage-color": {
+   "title": "自定义树叶颜色",
+   "desc": "是否应该改变树叶的颜色."
+  },
+  "custom-font": {
+   "title": "自定义字体",
+   "desc": "文字将使用自定义字体.（因为Meteor框架问题，无法直接渲染非英文文字。等待插件后续更新（或者根本不更新哈哈哈哈））"
+  },
+  "custom-grass-color": {
+   "title": "自定义草色",
+   "desc": "是否应该改变草的颜色."
+  },
+  "custom-lava-color": {
+   "title": "自定义岩浆颜色",
+   "desc": "是否应该改变岩浆的颜色."
+  },
+  "custom-lightning-color": {
+   "title": "自定义闪电颜色",
+   "desc": "是否应该改变闪电的颜色."
+  },
+  "custom-path": {
+   "title": "自定义路径"
+  },
+  "custom-range": {
+   "title": "自定义范围",
+   "desc": "使用自定义范围进行空气放置."
+  },
+  "custom-scale": {
+   "title": "自定义缩放",
+   "desc": "为HUD元素应用自定义缩放。"
+  },
+  "custom-sky-color": {
+   "title": "自定义天空颜色",
+   "desc": "是否应该改变天空的颜色."
+  },
+  "custom-water-color": {
+   "title": "自定义水色",
+   "desc": "是否应该改变水的颜色."
+  },
+  "custom-window-title": {
+   "title": "自定义窗口标题",
+   "desc": "在窗口标题中显示自定义文本."
+  },
+  "damage": {
+   "desc": "在方块覆盖中渲染水晶伤害文本."
+  },
+  "damage-color": {
+   "title": "伤害颜色",
+   "desc": "伤害文本的颜色."
+  },
+  "damage-scale": {
+   "title": "伤害比例",
+   "desc": "伤害文本的大小."
+  },
+  "darkness": {
+   "title": "黑暗",
+   "desc": "禁用黑暗的渲染."
+  },
+  "dead-entities": {
+   "title": "死亡实体",
+   "desc": "禁用死亡实体的渲染."
+  },
+  "default-block-config": {
+   "title": "默认方块配置",
+   "desc": "默认方块配置."
+  },
+  "delay": {
+   "title": "延迟",
+   "desc": "指定消息之间的延迟,单位为tick."
+  },
+  "delay-left": {
+   "title": "左键点击延迟",
+   "desc": "左键点击之间的延迟时间（以tick为单位）."
+  },
+  "delay-right": {
+   "title": "右键点击延迟",
+   "desc": "右键点击之间的延迟时间（以tick为单位）."
+  },
+  "delete-chat-feedback": {
+   "title": "删除聊天反馈",
+   "desc": "删除之前匹配的聊天反馈,以保持聊天清晰."
+  },
+  "density": {
+   "title": "密度",
+   "desc": "切换到带有密度附魔的钉锤，在下落时造成额外伤害。"
+  },
+  "depth": {
+   "title": "深度",
+   "desc": "要过滤的消息数量."
+  },
+  "descend-height": {
+   "title": "下降高度"
+  },
+  "descend-radius": {
+   "title": "下降半径"
+  },
+  "destroy-crystal-traps": {
+   "title": "摧毁水晶陷阱",
+   "desc": "使用弓箭从远处安全解除水晶陷阱,推荐使用无限弓."
+  },
+  "dip-fall-height": {
+   "title": "摔落高度",
+   "desc": "你会进入岩浆中的摔落高度."
+  },
+  "dip-if-burning": {
+   "title": "燃烧时下沉",
+   "desc": "当你着火时让你进入水中."
+  },
+  "dip-if-resistant": {
+   "title": "有抗火时下沉",
+   "desc": "如果你有抗火效果,就让你进入岩浆中."
+  },
+  "dip-on-fall": {
+   "title": "摔落时下沉",
+   "desc": "当你从一定高度摔落时让你进入岩浆中."
+  },
+  "dip-on-sneak": {
+   "title": "潜行时下沉",
+   "desc": "当你按住潜行键时让你进入岩浆中."
+  },
+  "disable-eating-animation": {
+   "title": "禁用进食动画",
+   "desc": "禁用进食动画.如果它会超出屏幕,可能是你想要的."
+  },
+  "disable-in-creative": {
+   "title": "创造模式禁用",
+   "desc": "在创造模式下禁用物品栏整理功能"
+  },
+  "disable-on-disconnect": {
+   "title": "断开时禁用",
+   "desc": "从服务器断开时禁用垃圾邮件."
+  },
+  "disable-on-input": {
+   "title": "输入时禁用",
+   "desc": "在手动移动输入时禁用该模块"
+  },
+  "disable-on-leave": {
+   "title": "离开时禁用",
+   "desc": "离开服务器时禁用垃圾邮件."
+  },
+  "disable-on-rubberband": {
+   "title": "橡皮筋检测",
+   "desc": "当你被拉回时禁用模块."
+  },
+  "disable-on-y-change": {
+   "title": "垂直移动时禁用",
+   "desc": "当玩家垂直移动时禁用该模块"
+  },
+  "disable-when-out-of-items": {
+   "title": "当物品用完时禁用",
+   "desc": "当你的物品用完时禁用模块"
+  },
+  "disconnect-on-toggle": {
+   "title": "切换时断开连接",
+   "desc": "当模块关闭时自动断开连接,例如当没有足够的方块时."
+  },
+  "display-enchants": {
+   "title": "显示附魔",
+   "desc": "显示物品上的附魔."
+  },
+  "display-when": {
+   "title": "显示时机",
+   "desc": "何时显示预览."
+  },
+  "distance": {
+   "title": "距离",
+   "desc": "动物要被烤的最大距离."
+  },
+  "distance-check": {
+   "title": "距离检测",
+   "desc": "限制检测弹出的距离."
+  },
+  "distance-color": {
+   "title": "距离颜色",
+   "desc": "名称标签距离的颜色."
+  },
+  "distance-color-mode": {
+   "title": "距离颜色模式",
+   "desc": "名称标签距离的着色模式."
+  },
+  "distance-colors": {
+   "title": "距离颜色",
+   "desc": "根据距离改变追踪线的颜色."
+  },
+  "distance-offscreen": {
+   "title": "屏幕外距离",
+   "desc": "屏幕外标记与中心点的距离"
+  },
+  "dive-angle": {
+   "title": "俯冲角度"
+  },
+  "dive-target-speed": {
+   "title": "俯冲目标速度"
+  },
+  "dive-transition-speed": {
+   "title": "俯冲转换速度"
+  },
+  "do-crash": {
+   "title": "崩溃",
+   "desc": "每刻向服务器发送X个副手切换声音包."
+  },
+  "done-early": {
+   "title": "提前结束"
+  },
+  "dont-break-tools": {
+   "title": "不损坏工具",
+   "desc": "工具快坏的时候停用"
+  },
+  "double-click": {
+   "title": "双击",
+   "desc": "需要两次点击以开始寻路。"
+  },
+  "double-height": {
+   "title": "双重高度",
+   "desc": "在原始包围方块的上方放置黑曜石,以防止人们对着你放置."
+  },
+  "double-mine": {
+   "title": "双重挖矿",
+   "desc": "是否在适用时进行双重挖矿（同时进行普通挖矿和数据包挖矿）."
+  },
+  "double-place": {
+   "title": "双重放置",
+   "desc": "也在你的上部碰撞箱放置网."
+  },
+  "doubles": {
+   "title": "双重",
+   "desc": "高亮可以横跨的双洞."
+  },
+  "down": {
+   "title": "下",
+   "desc": "破坏范围."
+  },
+  "drop-backwards": {
+   "title": "向后丢弃",
+   "desc": "将物品丢到你身后."
+  },
+  "drop-spawn-packets": {
+   "title": "掉落生成数据包",
+   "desc": "警告！掉落所有在上述列表中选择的实体生成数据包."
+  },
+  "dump-filter": {
+   "title": "倾倒过滤",
+   "desc": "倾倒模式."
+  },
+  "dump-items": {
+   "title": "倾倒物品",
+   "desc": "要倾倒的物品."
+  },
+  "durability": {
+   "title": "耐久度",
+   "desc": "以总数、百分比或不显示显示物品耐久度."
+  },
+  "durability-percentage": {
+   "title": "耐久度百分比",
+   "desc": "停止使用工具的耐久度百分比."
+  },
+  "durability-saver": {
+   "title": "耐久保护",
+   "desc": "切换到不可损坏的物品以保护主武器的耐久度。"
+  },
+  "eating-particles": {
+   "title": "吃东西粒子",
+   "desc": "禁用吃东西粒子的渲染."
+  },
+  "echest-blockade-type": {
+   "title": "末影箱封锁类型",
+   "desc": "使用哪种封锁类型（挖掘末影箱时放置的结构）."
+  },
+  "echests": {
+   "title": "末影箱",
+   "desc": "当将鼠标悬停在末影箱上时,在物品栏中显示末影箱的预览."
+  },
+  "edge-distance": {
+   "title": "边缘距离",
+   "desc": "到达边缘前的距离偏移量。"
+  },
+  "effects": {
+   "title": "效果",
+   "desc": "要保留的效果."
+  },
+  "eject-useless-shulkers": {
+   "title": "弹出无用的箱子",
+   "desc": "是否丢弃无用的潜影盒。警告：会丢弃所有不含可放置方块、镐类工具或食物的潜影盒，请注意保管您的装备组合。"
+  },
+  "elytra": {
+   "title": "鞘翅",
+   "desc": "飞行时总是持有图腾."
+  },
+  "elytra-finder": {
+   "title": "鞘翅搜寻器"
+  },
+  "elytra-infinite-flight": {
+   "title": "鞘翅无限飞行"
+  },
+  "elytra-replace": {
+   "title": "鞘翅替换",
+   "desc": "用新的鞘翅替换破损的鞘翅."
+  },
+  "enable-fd": {
+   "title": "启用食物"
+  },
+  "enable-fw": {
+   "title": "启用烟花"
+  },
+  "enable-rp": {
+   "title": "启用修复"
+  },
+  "enable-tt": {
+   "title": "启用图腾"
+  },
+  "enabled": {
+   "title": "启用",
+   "desc": "启用手部渲染调整."
+  },
+  "enchant-name-length": {
+   "title": "附魔名称长度",
+   "desc": "附魔名称的修剪长度."
+  },
+  "enchant-text-scale": {
+   "title": "附魔文本比例",
+   "desc": "附魔文本的比例."
+  },
+  "enchantment-glint": {
+   "title": "附魔闪光",
+   "desc": "禁用附魔闪光的渲染."
+  },
+  "enchantment-position": {
+   "title": "附魔位置",
+   "desc": "附魔的渲染位置."
+  },
+  "enchantment-table-book": {
+   "title": "附魔桌书籍",
+   "desc": "禁用附魔桌上方的书籍渲染."
+  },
+  "end-color": {
+   "title": "结束破坏方块的颜色",
+   "desc": "完全破坏方块的颜色."
+  },
+  "end-sky": {
+   "title": "末地天空",
+   "desc": "使天空像末地一样."
+  },
+  "end-sky-color": {
+   "title": "末地天空颜色",
+   "desc": "末地天空的颜色."
+  },
+  "ender-chest": {
+   "title": "末影箱",
+   "desc": "末影箱的颜色."
+  },
+  "entities": {
+   "title": "实体",
+   "desc": "要通知的实体."
+  },
+  "entities-in-buckets": {
+   "title": "桶中的实体",
+   "desc": "当将鼠标悬停在桶中时,显示桶里的实体."
+  },
+  "entity-hit": {
+   "title": "实体攻击",
+   "desc": "取消实体攻击."
+  },
+  "entity-hit-mode": {
+   "title": "实体攻击模式",
+   "desc": "实体攻击的列表模式."
+  },
+  "entity-interact": {
+   "title": "实体交互",
+   "desc": "取消实体交互."
+  },
+  "entity-interact-hand": {
+   "title": "实体交互手",
+   "desc": "如果是这只手,取消实体交互."
+  },
+  "entity-interact-mode": {
+   "title": "实体交互模式",
+   "desc": "实体交互的列表模式."
+  },
+  "entity-push": {
+   "title": "实体推动",
+   "desc": "修改你被实体推动的量."
+  },
+  "entity-push-amount": {
+   "title": "实体推动量",
+   "desc": "你将被推动多少."
+  },
+  "event": {
+   "title": "事件",
+   "desc": "何时记录实体."
+  },
+  "exclude-equipped": {
+   "title": "排除装备",
+   "desc": "是否丢弃装备在盔甲槽中的物品."
+  },
+  "exclude-hotbar": {
+   "title": "排除物品栏",
+   "desc": "是否丢弃物品栏中的物品."
+  },
+  "exclude-lunge-from-hitbox": {
+   "title": "命中框排除突刺",
+   "desc": "不使用带有突刺附魔的长矛进行命中框延伸。"
+  },
+  "excluded-items": {
+   "title": "排除物品",
+   "desc": "不会被补充的物品。"
+  },
+  "exp-slot": {
+   "title": "经验槽",
+   "desc": "要补充经验的槽."
+  },
+  "expand": {
+   "title": "扩展",
+   "desc": "要扩展的实体的碰撞箱的大小."
+  },
+  "expiry-threshold": {
+   "title": "到期阈值",
+   "desc": "药水效果到期前开始进食的时间（游戏刻）。"
+  },
+  "explosion": {
+   "title": "爆炸",
+   "desc": "当爆炸伤害可能致死时持有图腾."
+  },
+  "explosions": {
+   "title": "爆炸",
+   "desc": "修改你从爆炸中受到的击退."
+  },
+  "explosions-horizontal": {
+   "title": "爆炸水平",
+   "desc": "你将从爆炸中水平承受多少速度."
+  },
+  "explosions-vertical": {
+   "title": "爆炸垂直",
+   "desc": "你将从爆炸中垂直承受多少速度."
+  },
+  "exposed-only": {
+   "title": "仅暴露",
+   "desc": "仅显示暴露的矿石."
+  },
+  "extra-block-reach": {
+   "title": "额外方块触及",
+   "desc": "增加到你方块触及的距离.."
+  },
+  "extra-entity-reach": {
+   "title": "额外实体触及",
+   "desc": "增加到你实体触及的距离.."
+  },
+  "extra-lines": {
+   "title": "额外行数",
+   "desc": "额外聊天行数."
+  },
+  "face-place": {
+   "title": "面向放置",
+   "desc": "当目标低于一定的生命值或护甲耐久度阈值时,会面向放置."
+  },
+  "face-place-durability": {
+   "title": "面向放置耐久度",
+   "desc": "能够面向放置的耐久度阈值百分比."
+  },
+  "face-place-health": {
+   "title": "面向放置生命值",
+   "desc": "目标的生命值必须低于多少才能开始面向放置."
+  },
+  "face-place-missing-armor": {
+   "title": "面向放置缺少护甲",
+   "desc": "当目标缺少一件护甲时,自动开始面向放置."
+  },
+  "fade-distance": {
+   "title": "淡出距离",
+   "desc": "颜色将淡出的距离."
+  },
+  "fade-out": {
+   "title": "淡出",
+   "desc": "淡出颜色."
+  },
+  "fade-time": {
+   "title": "出入时间",
+   "desc": "淡入淡出的持续时间,以毫秒为单位."
+  },
+  "fall": {
+   "title": "坠落",
+   "desc": "当坠落伤害可能致死时持有图腾."
+  },
+  "fall-distance": {
+   "title": "下落距离",
+   "desc": "这个设置会在最大下落距离时激活."
+  },
+  "fall-multiplier": {
+   "title": "下降倍数",
+   "desc": "控制你自然下降的速度."
+  },
+  "fall-speed": {
+   "title": "下落速度",
+   "desc": "以每秒多少方块的速度下落."
+  },
+  "falling": {
+   "title": "下落",
+   "desc": "如果摔落伤害能杀死你,就持有图腾."
+  },
+  "falling-blocks": {
+   "title": "掉落方块",
+   "desc": "禁用掉落方块的渲染."
+  },
+  "fancy-chat": {
+   "title": "花式聊天",
+   "desc": "让你的消息变得很花哨！"
+  },
+  "fast-break": {
+   "title": "快速破坏",
+   "desc": "在双重挖矿时,是否比正常情况下更快地完成破坏方块."
+  },
+  "fast-tower": {
+   "title": "快速塔",
+   "desc": "是否更快地向上搭建脚手架."
+  },
+  "favorite-color": {
+   "title": "选中收藏按钮的颜色",
+   "desc": "选中收藏按钮的颜色."
+  },
+  "fd-supply": {
+   "title": "食物补给"
+  },
+  "feet-range": {
+   "title": "脚部范围",
+   "desc": "玩家双脚必须距离坑洞多远才能进行填埋操作"
+  },
+  "fill-color": {
+   "title": "填充颜色",
+   "desc": "填充虚空洞穴的颜色."
+  },
+  "fill-opacity": {
+   "title": "填充不透明度",
+   "desc": "形状填充的不透明度."
+  },
+  "filter-regex": {
+   "title": "正则过滤",
+   "desc": "过滤掉与正则表达式匹配的聊天消息."
+  },
+  "find-brewing-stand": {
+   "title": "搜寻酿造台"
+  },
+  "fire-aspect": {
+   "title": "火焰附加",
+   "desc": "切换到带有火焰附加的物品以点燃目标（如果目标尚未着火）。"
+  },
+  "fire-overlay": {
+   "title": "火焰覆盖",
+   "desc": "禁用火焰覆盖的渲染."
+  },
+  "fired-projectiles": {
+   "title": "已发射的投射物",
+   "desc": "计算已经发射的投射物的轨迹."
+  },
+  "firework-delay": {
+   "title": "烟花延迟",
+   "desc": "如果 使用烟花 启用,使用烟花之间的延迟秒数."
+  },
+  "firework-duration": {
+   "title": "烟花持续时间",
+   "desc": "烟花的持续时间."
+  },
+  "firework-explosions": {
+   "title": "烟花爆炸",
+   "desc": "禁用烟花爆炸的渲染."
+  },
+  "firework-interval": {
+   "title": "烟花间隔"
+  },
+  "fishing": {
+   "title": "钓鱼",
+   "desc": "防止你被钓鱼竿拉动."
+  },
+  "flat-color": {
+   "title": "平摊颜色",
+   "desc": "纯色模式使用的颜色。"
+  },
+  "floor": {
+   "title": "地板",
+   "desc": "使用哪种楼层放置模式."
+  },
+  "fluid-drag": {
+   "title": "流体阻力",
+   "desc": "流体阻力是否不会减慢你."
+  },
+  "flush-interval": {
+   "title": "刷新间隔",
+   "desc": "将日志刷新到磁盘的频率（秒）。"
+  },
+  "fly": {
+   "title": "飞行",
+   "desc": "允许你与实体一起飞行。"
+  },
+  "fog": {
+   "title": "雾气",
+   "desc": "禁用雾气的渲染."
+  },
+  "fog-color": {
+   "title": "雾颜色",
+   "desc": "雾的显示颜色。"
+  },
+  "foliage-color": {
+   "title": "树叶颜色",
+   "desc": "树叶的颜色."
+  },
+  "font": {
+   "title": "字体",
+   "desc": "使用的自定义字体."
+  },
+  "food-info": {
+   "title": "食物信息",
+   "desc": "显示食物的饥饿值和饱和度值。"
+  },
+  "food-priority": {
+   "title": "食物优先级",
+   "desc": "优先选择食物的哪个方面。"
+  },
+  "force": {
+   "title": "强制",
+   "desc": "即使副手中有其他不可修复的物品,也替换副手中的物品."
+  },
+  "force-face-place": {
+   "title": "强制面向放置",
+   "desc": "按下这个按钮时开始面向放置."
+  },
+  "force-fill": {
+   "title": "强制填充",
+   "desc": "无视目标检测,填充你周围的所有洞."
+  },
+  "fortune-for-ores-and-crops": {
+   "title": "时运矿石和作物",
+   "desc": "只用时运附魔来挖矿石和作物."
+  },
+  "forward": {
+   "title": "前",
+   "desc": "破坏范围."
+  },
+  "frame-color": {
+   "title": "展示框颜色"
+  },
+  "frame-input-handling": {
+   "title": "帧输入处理",
+   "desc": "将输入处理更改为每帧而不是每刻工作。效果非常轻微，但可能使输入感觉更平滑，尤其是在延迟环境中。会触发检查数据包顺序的反作弊（Grim）。"
+  },
+  "friction": {
+   "title": "摩擦",
+   "desc": "基础摩擦水平."
+  },
+  "friend-color": {
+   "title": "朋友颜色",
+   "desc": "用于显示朋友的颜色."
+  },
+  "friends": {
+   "title": "朋友",
+   "desc": "好友取消模式."
+  },
+  "fuel-items": {
+   "title": "燃料物品",
+   "desc": "用作燃料的物品"
+  },
+  "full-height": {
+   "title": "全高",
+   "desc": "以玩家的完整高度显示高度值。"
+  },
+  "fw-supply": {
+   "title": "烟花补给"
+  },
+  "gamemode": {
+   "title": "游戏模式",
+   "desc": "显示玩家模式."
+  },
+  "gamemode-color": {
+   "title": "游戏模式颜色",
+   "desc": "名称标签游戏模式的颜色."
+  },
+  "glide-multiplier": {
+   "title": "滑翔倍数",
+   "desc": "滑翔速度的乘数."
+  },
+  "glow-multiplier": {
+   "title": "发光倍数",
+   "desc": "发光效果的倍数."
+  },
+  "glowing": {
+   "title": "发光",
+   "desc": "禁用发光效果的渲染."
+  },
+  "grass-color": {
+   "title": "草色",
+   "desc": "草的颜色."
+  },
+  "grim-bypass": {
+   "title": "格林绕过",
+   "desc": "绕过Grim的快速破坏检测，适用于2.3.58及以上版本"
+  },
+  "ground-check": {
+   "title": "地面检测",
+   "desc": "尝试防止你坠落致死."
+  },
+  "gui-background": {
+   "title": "GUI背景",
+   "desc": "禁用GUI背景覆盖的渲染."
+  },
+  "guis": {
+   "title": "界面",
+   "desc": "可以在其中移动的界面."
+  },
+  "hand-color": {
+   "title": "手部颜色",
+   "desc": "你手的颜色."
+  },
+  "hand-for-breeding": {
+   "title": "繁殖用的手",
+   "desc": "用于繁殖的手."
+  },
+  "haste-amplifier": {
+   "title": "急迫放大器",
+   "desc": "给你的急迫值.不推荐超过2."
+  },
+  "health": {
+   "title": "生命值",
+   "desc": "显示玩家生命值"
+  },
+  "health-enabled": {
+   "title": "健康启用",
+   "desc": "健康低于阈值时,是否应该吃东西."
+  },
+  "health-threshold": {
+   "title": "健康阈值",
+   "desc": "吃东西的健康阈值.包括吸收效果."
+  },
+  "height": {
+   "title": "高度",
+   "desc": "高速公路的高度."
+  },
+  "held-item-name": {
+   "title": "持有物品名称",
+   "desc": "禁用持有物品名称的渲染."
+  },
+  "hidden-modules": {
+   "title": "隐藏模块",
+   "desc": "列表中不显示的模块。"
+  },
+  "hide-HUD": {
+   "title": "隐藏HUD",
+   "desc": "是否隐藏Minecraft的HUD."
+  },
+  "hide-buttons": {
+   "title": "隐藏按钮",
+   "desc": "是否隐藏与自动重连相关的按钮."
+  },
+  "hide-in-menus": {
+   "title": "在菜单隐藏",
+   "desc": "在物品栏界面或游戏菜单中隐藏Meteor HUD。"
+  },
+  "hide-name": {
+   "title": "隐藏名字",
+   "desc": "隐藏boss条的名字."
+  },
+  "hide-opened": {
+   "title": "隐藏打开的",
+   "desc": "隐藏已打开的容器."
+  },
+  "hide-when-inside-block": {
+   "title": "隐藏于内",
+   "desc": "当在目标方块内时隐藏选择."
+  },
+  "highlight-friends": {
+   "title": "高亮好友",
+   "desc": "在Tab列表中高亮好友."
+  },
+  "highlight-self": {
+   "title": "高亮自己",
+   "desc": "在Tab列表中高亮自己."
+  },
+  "highlight-target": {
+   "title": "高亮目标",
+   "desc": "以不同方式高亮当前目标实体"
+  },
+  "hit-delay": {
+   "title": "攻击延迟",
+   "desc": "以刻为单位的攻击实体的速度."
+  },
+  "hit-line-color": {
+   "title": "击打线条颜色",
+   "desc": "音符块击打时渲染的线条颜色."
+  },
+  "hit-side-color": {
+   "title": "击打侧边颜色",
+   "desc": "音符块击打时渲染的侧边颜色."
+  },
+  "hitbox": {
+   "title": "命中框",
+   "desc": "当目标较远时，切换到长矛以延长攻击距离。"
+  },
+  "hoe": {
+   "title": "锄",
+   "desc": "手持锄时启用。"
+  },
+  "hold-ticks": {
+   "title": "保持tick数"
+  },
+  "hole-height": {
+   "title": "洞穴高度",
+   "desc": "需要渲染的洞穴的最小高度."
+  },
+  "honey-block": {
+   "title": "蜂蜜块",
+   "desc": "蜂蜜块是否不会减慢你."
+  },
+  "horizontal-radius": {
+   "title": "水平搜索范围",
+   "desc": "水平方向上搜索洞的半径."
+  },
+  "horizontal-range": {
+   "title": "水平范围",
+   "desc": "水平范围（以方块为单位）."
+  },
+  "horizontal-speed": {
+   "title": "水平速度",
+   "desc": "你前后移动的速度."
+  },
+  "hostile-mob-age-filter": {
+   "title": "敌对生物年龄过滤器",
+   "desc": "确定要攻击的敌对生物年龄（僵尸、猪灵、疣猪兽、僵尸疣猪兽）。"
+  },
+  "hotbar": {
+   "title": "物品栏",
+   "desc": "是否使用物品栏中的物品."
+  },
+  "hovered-Scrollbar-color": {
+   "title": "悬停滚动条颜色",
+   "desc": "鼠标悬停时滚动条的颜色"
+  },
+  "hovered-background-color": {
+   "title": "鼠标悬浮背景颜色",
+   "desc": "当鼠标悬浮上时他背景的颜色."
+  },
+  "hovered-outline-color": {
+   "title": "悬浮外框颜色",
+   "desc": "悬浮外框颜色"
+  },
+  "hovered-slider-handle-color": {
+   "title": "悬停滑块手柄颜色",
+   "desc": "鼠标悬停时滑块手柄的颜色"
+  },
+  "hunger": {
+   "title": "饥饿",
+   "desc": "饥饿是否不会减慢你."
+  },
+  "hunger-threshold": {
+   "title": "饥饿阈值",
+   "desc": "吃东西时的饥饿水平."
+  },
+  "ignore-border": {
+   "title": "忽略边界",
+   "desc": "移除世界边界的碰撞."
+  },
+  "ignore-bots": {
+   "title": "忽略机器人",
+   "desc": "仅渲染非机器人的名称标签."
+  },
+  "ignore-elytra": {
+   "title": "忽略鞘翅",
+   "desc": "如果你装备了鞘翅,就不会替换它."
+  },
+  "ignore-empty-slots": {
+   "title": "忽略空槽",
+   "desc": "不显示空物品栏位的间距。"
+  },
+  "ignore-existing": {
+   "title": "忽略现有",
+   "desc": "忽略你背包里已有的黑曜石,挖掘总目标数量."
+  },
+  "ignore-fake-players": {
+   "title": "忽略假玩家",
+   "desc": "忽略假玩家."
+  },
+  "ignore-friends": {
+   "title": "忽略好友",
+   "desc": "忽略朋友的末影珍珠."
+  },
+  "ignore-nakeds": {
+   "title": "防自杀",
+   "desc": "如果水晶会杀死你,就不会放置和破坏水晶."
+  },
+  "ignore-named": {
+   "title": "忽略命名",
+   "desc": "是否攻击有名字的生物."
+  },
+  "ignore-others": {
+   "title": "忽略其他",
+   "desc": "忽略其他玩家的图腾弹出."
+  },
+  "ignore-own": {
+   "title": "忽略自己",
+   "desc": "忽略你自己的末影珍珠."
+  },
+  "ignore-passive": {
+   "title": "忽略被动",
+   "desc": "只在有时被动的生物攻击你时攻击它们."
+  },
+  "ignore-rendering-first-ticks": {
+   "title": "忽略渲染前几刻",
+   "desc": "忽略渲染前几个游戏刻，以使路径的其余部分更可见。"
+  },
+  "ignore-safe": {
+   "title": "忽略安全",
+   "desc": "忽略在安全洞里的玩家."
+  },
+  "ignore-self": {
+   "title": "忽略自己",
+   "desc": "在灵魂出窍的时候不会渲染你自己."
+  },
+  "ignore-tamed": {
+   "title": "忽略驯服",
+   "desc": "会避免攻击你驯服的生物."
+  },
+  "ignore-wither-skulls": {
+   "title": "忽略凋零骷髅头",
+   "desc": "是否忽略发射的凋零骷髅头。"
+  },
+  "ignored-blocks": {
+   "title": "忽略的方块",
+   "desc": "决定哪些方块不会滑动"
+  },
+  "impaling": {
+   "title": "穿刺",
+   "desc": "切换到带有穿刺附魔的物品以增加对水生生物的伤害。"
+  },
+  "in-liquids": {
+   "title": "在液体中",
+   "desc": "在岩浆或水中使用速度."
+  },
+  "in-wall-overlay": {
+   "title": "墙内覆盖",
+   "desc": "禁用在方块内部时的覆盖渲染."
+  },
+  "in-water": {
+   "title": "在水中",
+   "desc": "在水中时使用速度."
+  },
+  "include-empty": {
+   "title": "包含空槽位"
+  },
+  "include-uppercase-characters": {
+   "title": "包含大写字符",
+   "desc": "绕过文本是否应包含大写字符."
+  },
+  "individual-entity-threshold": {
+   "title": "单个实体阈值",
+   "desc": "在断开连接之前,必须有足够多的单个实体靠近你."
+  },
+  "infinite-chat-box": {
+   "title": "无限聊天框",
+   "desc": "允许你输入无限长度的消息."
+  },
+  "initial-delay": {
+   "title": "初始延迟",
+   "desc": "偷取前的初始毫秒延迟. 0表示使用正常延迟."
+  },
+  "insta-drop": {
+   "title": "瞬间下降",
+   "desc": "让你立刻退出飞行."
+  },
+  "instamine": {
+   "title": "即时开采",
+   "desc": "在某些条件下是否立即开采方块."
+  },
+  "instant": {
+   "title": "瞬间",
+   "desc": "用数据包跳跃而不是原版跳跃."
+  },
+  "instantly-rebreak-echests": {
+   "title": "即时重破末影箱",
+   "desc": "是否使用即时重破漏洞来打破末影箱."
+  },
+  "instrument-detect-mode": {
+   "title": "乐器检测模式",
+   "desc": "选择一个乐器检测模式.当服务器有修改音符块状态的插件时（例如ItemsAdder）,但音符块仍能播放正确的音符时,这个设置可能有用"
+  },
+  "interact": {
+   "title": "交互",
+   "desc": "与方块交互而非挖掘"
+  },
+  "inventories": {
+   "title": "背包",
+   "desc": "对物品栏的屏幕应用模糊."
+  },
+  "inventory-buttons": {
+   "title": "物品栏按钮",
+   "desc": "在容器界面中显示偷取和倾倒按钮."
+  },
+  "inventory-delay": {
+   "title": "库存延迟",
+   "desc": "库存交互的延迟（以刻为单位）."
+  },
+  "invisibility": {
+   "title": "隐形",
+   "desc": "显示隐形实体."
+  },
+  "ip": {
+   "desc": "主机服务器的IP地址."
+  },
+  "item": {
+   "desc": "要在副手持有的物品."
+  },
+  "item-frame-search": {
+   "title": "物品展示框搜寻"
+  },
+  "item-frames": {
+   "title": "物品展示框防护",
+   "desc": "防止受保护的物品被放入展示框或花盆"
+  },
+  "item-spacing": {
+   "title": "物品间距",
+   "desc": "物品之间的间隔距离。"
+  },
+  "item-switch-delay": {
+   "title": "物品切换延迟",
+   "desc": "槽位移动之间的刻延迟."
+  },
+  "items": {
+   "title": "物品",
+   "desc": "要显示轨迹的物品."
+  },
+  "jump": {
+   "desc": "在界面中允许你跳跃."
+  },
+  "jump-if": {
+   "title": "跳跃条件",
+   "desc": "跳跃条件."
+  },
+  "jump-multiplier": {
+   "title": "跳跃倍数",
+   "desc": "跳跃高度的倍数."
+  },
+  "keep-history": {
+   "title": "保留历史",
+   "desc": "防止断开连接时清除聊天历史."
+  },
+  "keep-sprint": {
+   "title": "跳跃修复",
+   "desc": "是否修正跳跃方向."
+  },
+  "keybind": {
+   "title": "快捷键",
+   "desc": "按键绑定模式的绑定键."
+  },
+  "knockback": {
+   "title": "击退",
+   "desc": "修改你从攻击中受到的击退量."
+  },
+  "knockback-horizontal": {
+   "title": "水平击退",
+   "desc": "你将承受多少水平击退."
+  },
+  "knockback-vertical": {
+   "title": "垂直击退",
+   "desc": "你将承受多少垂直击退."
+  },
+  "ladder-finder": {
+   "title": "梯子搜寻器"
+  },
+  "lava-color": {
+   "title": "岩浆颜色",
+   "desc": "岩浆的颜色."
+  },
+  "lead-step-multiplier": {
+   "title": "引导步长倍数"
+  },
+  "left": {
+   "title": "左",
+   "desc": "破坏范围."
+  },
+  "length": {
+   "title": "长度",
+   "desc": "用于绕过反垃圾邮件的字符数."
+  },
+  "light-level": {
+   "title": "光照等级",
+   "desc": "生成保护所需的光照等级。旧版生成光照等级：7。"
+  },
+  "light-type": {
+   "title": "光源类型",
+   "desc": "Luminance模式使用的光源类型."
+  },
+  "lightning-color": {
+   "title": "闪电颜色",
+   "desc": "闪电的颜色."
+  },
+  "line-1-messages": {
+   "title": "第一行的消息",
+   "desc": "用于第一行的消息."
+  },
+  "line-1-select-mode": {
+   "title": "第一行选择模式",
+   "desc": "选择第一行消息的方式."
+  },
+  "line-1-update-delay": {
+   "title": "第一行更新延迟",
+   "desc": "以刻为单位更新第一行的速度."
+  },
+  "line-2-messages": {
+   "title": "第二行消息",
+   "desc": "用于第二行的消息."
+  },
+  "line-2-select-mode": {
+   "title": "第二行显示模式",
+   "desc": "选择第二行消息的方式."
+  },
+  "line-2-update-delay": {
+   "title": "第二行更新延迟",
+   "desc": "以刻为单位更新第二行的速度."
+  },
+  "line-color": {
+   "title": "线条颜色",
+   "desc": "要渲染的方块的线颜色."
+  },
+  "liquid-overlay": {
+   "title": "液体覆盖",
+   "desc": "禁用液体覆盖的渲染."
+  },
+  "liquids": {
+   "title": "液体",
+   "desc": "修改你被流动液体推动的量."
+  },
+  "liquids-horizontal": {
+   "title": "液体水平",
+   "desc": "你将从液体中水平承受多少速度."
+  },
+  "liquids-vertical": {
+   "title": "液体垂直",
+   "desc": "你将从液体中垂直承受多少速度."
+  },
+  "list-mode": {
+   "title": "列表模式",
+   "desc": "选择模式."
+  },
+  "lock-end": {
+   "title": "锁定终点"
+  },
+  "lock-pitch": {
+   "title": "锁定俯仰角"
+  },
+  "lock-start": {
+   "title": "锁定起点"
+  },
+  "lock-yaw": {
+   "title": "锁定偏航角",
+   "desc": "锁定实体的偏航角。"
+  },
+  "log-exceptions": {
+   "title": "记录异常",
+   "desc": "记录捕获的异常."
+  },
+  "log-to-chat": {
+   "title": "记录到聊天",
+   "desc": "将数据包记录到聊天。"
+  },
+  "log-to-file": {
+   "title": "记录到文件",
+   "desc": "将数据包日志保存到meteor-client文件夹中的文件。"
+  },
+  "logged-in-text-color": {
+   "title": "登录账户名称的颜色",
+   "desc": "登录账户名称的颜色."
+  },
+  "longer-chat-history": {
+   "title": "更长聊天历史",
+   "desc": "扩展聊天长度."
+  },
+  "look-mode": {
+   "title": "观察模式",
+   "desc": "此模块的行为方式."
+  },
+  "lookahead-l": {
+   "title": "前瞻长度 L"
+  },
+  "looting": {
+   "title": "抢夺",
+   "desc": "切换到带有抢夺的物品以获得更好的掉落物或更多经验。仅优先对生物生效（但火焰附加优先级更高）。"
+  },
+  "lunge": {
+   "title": "突刺",
+   "desc": "切换到带有突刺附魔的长矛用于移动。"
+  },
+  "mace": {
+   "title": "钉锤",
+   "desc": "手持钉锤时启用。"
+  },
+  "mace-swapping": {
+   "title": "钉锤切换",
+   "desc": "启用钉锤附魔的智能切换。"
+  },
+  "magma": {
+   "title": "岩浆",
+   "desc": "防止你走在岩浆方块上."
+  },
+  "main-hand-progress": {
+   "title": "主手进度",
+   "desc": "你主手的挥动进度."
+  },
+  "maintain-level": {
+   "title": "保持高度",
+   "desc": "按住跳跃键时保持你当前的Y轴高度."
+  },
+  "manual-takeoff": {
+   "title": "手动起飞",
+   "desc": "不自动进行起飞操作。"
+  },
+  "map-contents": {
+   "title": "地图内容",
+   "desc": "禁用地图的渲染."
+  },
+  "map-markers": {
+   "title": "地图标记",
+   "desc": "禁用地图上的标记."
+  },
+  "map-scale": {
+   "title": "地图缩放",
+   "desc": "地图预览的缩放比例."
+  },
+  "maps": {
+   "title": "地图",
+   "desc": "当将鼠标悬停在地图上时,在物品栏中显示地图的预览."
+  },
+  "max-advance-steps": {
+   "title": "最大前进步数"
+  },
+  "max-blocks-per-tick": {
+   "title": "每刻最大放置方块数",
+   "desc": "每刻尝试破坏的最大方块数.在瞬间挖掘时有用."
+  },
+  "max-damage": {
+   "title": "最小伤害",
+   "desc": "水晶对目标造成的最小伤害."
+  },
+  "max-death-positions": {
+   "title": "最大死亡位置",
+   "desc": "保存的死亡位置数量, 0表示禁用"
+  },
+  "max-distance": {
+   "title": "最大距离",
+   "desc": "追踪线显示的最大距离."
+  },
+  "max-file-size-mb": {
+   "title": "最大文件大小MB",
+   "desc": "每个日志文件的最大大小（MB）。超过时创建新文件。"
+  },
+  "max-height": {
+   "title": "最大高度",
+   "desc": "锚点能够工作的最大高度."
+  },
+  "max-jump": {
+   "title": "最大跳跃",
+   "desc": "将跳跃力设为最大."
+  },
+  "max-sections": {
+   "title": "最大段数",
+   "desc": "最大的段数."
+  },
+  "max-self-damage": {
+   "title": "最大自伤",
+   "desc": "对你自己造成的最大伤害."
+  },
+  "max-targets": {
+   "title": "最大目标",
+   "desc": "一次可以目标的实体数量."
+  },
+  "max-threshold": {
+   "title": "最大阈值",
+   "desc": "修复物品的最大耐久度百分比."
+  },
+  "max-total-logs-mb": {
+   "title": "最大总日志大小MB",
+   "desc": "所有数据包日志的最大磁盘空间（MB）。超过时删除最旧的。"
+  },
+  "max-yaw-rate-deg-per-tick": {
+   "title": "每tick最大偏航速率"
+  },
+  "message": {
+   "title": "消息",
+   "desc": "发送给玩家的指定消息."
+  },
+  "message-signature-indicator": {
+   "title": "聊天消息签名指示器",
+   "desc": "禁用消息左侧的聊天签名指示器."
+  },
+  "message-to-send": {
+   "title": "要发送的消息",
+   "desc": "将玩家添加为好友时发送的消息（使用%player表示玩家名称）"
+  },
+  "messages": {
+   "desc": "用于垃圾邮件的消息."
+  },
+  "meteor": {
+   "desc": "对Meteor的屏幕应用模糊."
+  },
+  "middle-click-open": {
+   "title": "中键点击打开",
+   "desc": "当你中键点击物品时,打开一个带有存储方块或书籍物品栏的GUI窗口."
+  },
+  "min-count": {
+   "title": "最小数量",
+   "desc": "当物品数量达到此值时补充槽位。"
+  },
+  "min-damage": {
+   "title": "最小伤害",
+   "desc": "如果地形可以被末影水晶炸毁,就完全忽略它."
+  },
+  "min-dur": {
+   "title": "最低耐久度"
+  },
+  "min-fd": {
+   "title": "最少食物"
+  },
+  "min-fw": {
+   "title": "最少烟花"
+  },
+  "min-health": {
+   "title": "最低生命值",
+   "desc": "你必须有多少生命值才能射箭."
+  },
+  "min-height": {
+   "title": "最低高度",
+   "desc": "需要渲染的洞穴的最低高度."
+  },
+  "min-height-log": {
+   "title": "最低高度记录"
+  },
+  "min-length": {
+   "title": "最小长度"
+  },
+  "min-pitch": {
+   "title": "最小俯仰角",
+   "desc": "锚点能够工作的最小俯仰角."
+  },
+  "min-threshold": {
+   "title": "最小阈值",
+   "desc": "一个物品的耐久度百分比需要降到多少才能被修复."
+  },
+  "min-totem": {
+   "title": "最少图腾"
+  },
+  "min-y": {
+   "title": "最小 Y"
+  },
+  "mine-above-railings": {
+   "title": "在栏杆上挖矿",
+   "desc": "挖掘栏杆上方的方块."
+  },
+  "mine-ender-chests": {
+   "title": "挖掘末影箱",
+   "desc": "挖掘末影箱以获得黑曜石."
+  },
+  "minimum-distance": {
+   "title": "最小距离",
+   "desc": "你必须离出生点多远才能记录某个区块."
+  },
+  "minimum-empty-slots": {
+   "title": "最小空槽",
+   "desc": "在挖掘黑曜石后希望剩余的最小空槽数."
+  },
+  "minimum-fall-distance": {
+   "title": "最小坠落距离",
+   "desc": "模块激活前预期坠落的最小方块数。"
+  },
+  "minimum-height": {
+   "title": "最小高度",
+   "desc": "自动驾驶的最小高度."
+  },
+  "minimum-light-level": {
+   "title": "最低光照等级",
+   "desc": "使用Luminance模式时的最低光照等级."
+  },
+  "minimum-storage-count": {
+   "title": "最小存储数量",
+   "desc": "一个区块中需要有的最小存储方块数量才能记录该区块."
+  },
+  "minus-color": {
+   "title": "减号按钮的颜色",
+   "desc": "减号按钮的颜色."
+  },
+  "misc-color": {
+   "title": "杂项颜色",
+   "desc": "杂项的颜色."
+  },
+  "mixed-bottom": {
+   "title": "混合底部",
+   "desc": "有混合基岩和黑曜石的洞穴的底部颜色."
+  },
+  "mixed-top": {
+   "title": "混合顶部",
+   "desc": "有混合基岩和黑曜石的洞穴的顶部颜色."
+  },
+  "mob-age-filter": {
+   "title": "忽略幼体",
+   "desc": "是否攻击实体的幼体变种."
+  },
+  "mode": {
+   "title": "模式",
+   "desc": "要运行的客户端的类型."
+  },
+  "mode-left": {
+   "title": "左键点击模式",
+   "desc": "左键点击的方法."
+  },
+  "mode-right": {
+   "title": "右键点击模式",
+   "desc": "右键点击的方法."
+  },
+  "modifier": {
+   "title": "修饰符",
+   "desc": "挖掘速度修正值。每增加0.2相当于一级急迫效果（1.2 = 急迫1级）。"
+  },
+  "module-alignment": {
+   "title": "模块对齐",
+   "desc": "模块标题的对齐方式."
+  },
+  "module-background-color": {
+   "title": "模块背景色",
+   "desc": "模块激活时的背景颜色."
+  },
+  "module-info": {
+   "title": "模块信息",
+   "desc": "在活动模块列表中显示模块信息（显示在名称旁）。"
+  },
+  "module-info-color": {
+   "title": "模块信息颜色",
+   "desc": "模块信息文本的颜色。"
+  },
+  "module-search-count": {
+   "title": "模块搜索数量",
+   "desc": "在模块搜索栏中显示的模块和设置的数量."
+  },
+  "modules": {
+   "desc": "激活时要禁用的模块."
+  },
+  "monsters-color": {
+   "title": "怪物颜色",
+   "desc": "怪物的颜色。"
+  },
+  "mouse-drag-item-move": {
+   "title": "鼠标拖动物品移动",
+   "desc": "按住shift并移动鼠标到物品上会将它转移到另一个容器."
+  },
+  "move-speed": {
+   "title": "移动速度",
+   "desc": "躲避箭矢时的速度."
+  },
+  "move-type": {
+   "title": "移动类型",
+   "desc": "这个模块移动你的方式."
+  },
+  "multi-place": {
+   "title": "多重放置",
+   "desc": "一次性放置多个铁砧"
+  },
+  "multiplier": {
+   "title": "倍数",
+   "desc": "timer的倍数."
+  },
+  "name": {
+   "desc": "你想给你的书起的名字."
+  },
+  "name-background-color": {
+   "title": "名字背景颜色",
+   "desc": "名字的背景颜色."
+  },
+  "name-color": {
+   "title": "名字颜色",
+   "desc": "名称标签名称的颜色."
+  },
+  "name-protect": {
+   "title": "名称保护",
+   "desc": "客户端隐藏你的名称."
+  },
+  "nametagged": {
+   "title": "命名",
+   "desc": "命名实体取消模式."
+  },
+  "nametags": {
+   "desc": "禁用实体名称标签的渲染."
+  },
+  "nausea": {
+   "title": "恶心",
+   "desc": "禁用恶心覆盖的渲染."
+  },
+  "ncp-bypass": {
+   "title": "NCP绕过",
+   "desc": "是否应用NCP绕过。"
+  },
+  "nearest-samples": {
+   "title": "最近采样数"
+  },
+  "nether-roof": {
+   "title": "下界屋顶",
+   "desc": "检查下界屋顶的洞穴."
+  },
+  "nether-sky-color": {
+   "title": "下界天空颜色",
+   "desc": "下界天空的颜色."
+  },
+  "next-line-color": {
+   "title": "下一个线条颜色",
+   "desc": "下一个要放置的方块的线条颜色."
+  },
+  "next-side-color": {
+   "title": "下一个侧面颜色",
+   "desc": "下一个要放置的方块的侧面颜色."
+  },
+  "no-bow-switch": {
+   "title": "无弓切换",
+   "desc": "持弓不会切换"
+  },
+  "no-crash": {
+   "title": "无撞车",
+   "desc": "阻止你撞到墙壁."
+  },
+  "no-gap-switch": {
+   "title": "无金苹果切换",
+   "desc": "手持金苹果时不会切换."
+  },
+  "no-insta-break": {
+   "title": "无瞬间破坏",
+   "desc": "防止你瞬间破坏方块."
+  },
+  "no-sneak": {
+   "title": "无潜行",
+   "desc": "防止你在飞行时潜行."
+  },
+  "no-unloaded-chunks": {
+   "title": "无未加载区块",
+   "desc": "阻止你进入未加载的区块."
+  },
+  "non-living-entity-color": {
+   "title": "非生物实体颜色",
+   "desc": "用于非生物实体（如掉落物）的颜色。"
+  },
+  "normal-line-color": {
+   "title": "正常线颜色",
+   "desc": "正常方块的线条颜色."
+  },
+  "normal-side-color": {
+   "title": "正常侧颜色",
+   "desc": "正常方块的侧面颜色."
+  },
+  "not-on-use": {
+   "title": "不在使用时",
+   "desc": "当您正在使用物品时不会自动切换"
+  },
+  "note-text-scale": {
+   "title": "音符文本缩放",
+   "desc": "缩放."
+  },
+  "notification-delay": {
+   "title": "通知延迟",
+   "desc": "等待多少tick后再发布下一条加入/离开通知到你的聊天."
+  },
+  "notification-mode": {
+   "title": "通知模式",
+   "desc": "通知使用的模式."
+  },
+  "notifications": {
+   "title": "通知",
+   "desc": "当发现新的储藏点时,发送Minecraft通知."
+  },
+  "notify": {
+   "title": "通知",
+   "desc": "当你在你的快捷栏里没有指定的物品时,通知你."
+  },
+  "nuke-block-mode": {
+   "title": "核爆方块模式",
+   "desc": "破坏的方块的形状渲染方式."
+  },
+  "nuke-box-mode": {
+   "title": "核爆盒模式",
+   "desc": "包围盒的形状渲染方式."
+  },
+  "obfuscation": {
+   "title": "字符模糊",
+   "desc": "禁用字符的模糊样式."
+  },
+  "obscure-breaking-progress": {
+   "title": "隐藏挖掘进度",
+   "desc": "发送中止挖掘数据包以向其他玩家隐藏方块挖掘进度。无法完美隐藏。"
+  },
+  "obsidian-bottom": {
+   "title": "黑曜石底部",
+   "desc": "完全是黑曜石的洞穴的底部颜色."
+  },
+  "obsidian-top": {
+   "title": "黑曜石顶部",
+   "desc": "完全是黑曜石的洞穴的顶部颜色."
+  },
+  "occlude-chunks": {
+   "title": "遮挡区块",
+   "desc": "是否让洞穴遮挡地下（开启时可能看起来很奇怪）."
+  },
+  "off-hand-progress": {
+   "title": "副手进度",
+   "desc": "你副手的挥动进度."
+  },
+  "off-time": {
+   "title": "关闭时间",
+   "desc": "稍微下降一点以重置浮动tick的延迟时间,以毫秒为单位."
+  },
+  "offhand": {
+   "title": "副手",
+   "desc": "是否补充副手中的物品。"
+  },
+  "offset": {
+   "title": "偏移量",
+   "desc": "与目标之间的偏移量是多少."
+  },
+  "old-animations": {
+   "title": "旧动画",
+   "desc": "将击打动画改为类似1.8的动画"
+  },
+  "on-ground": {
+   "title": "在地面上",
+   "desc": "伪装onGround标志."
+  },
+  "on-jump": {
+   "title": "跳跃",
+   "desc": "玩家是否需要先跳跃."
+  },
+  "only-friends": {
+   "title": "好人",
+   "desc": "只会跟随朋友."
+  },
+  "only-full-stacks": {
+   "title": "只丢满堆",
+   "desc": "只有当物品堆满时才丢弃物品."
+  },
+  "only-in-hole": {
+   "title": "只在洞里",
+   "desc": "只有当你站在一个洞里时才起作用."
+  },
+  "only-in-holes": {
+   "title": "只在洞里",
+   "desc": "仅当玩家处于坑洞中时触发快速掩埋"
+  },
+  "only-killaura": {
+   "title": "仅Killaura",
+   "desc": "仅在使用Killaura时执行暴击."
+  },
+  "only-moving": {
+   "title": "仅移动",
+   "desc": "移动时才填洞"
+  },
+  "only-on-click": {
+   "title": "仅点击",
+   "desc": "仅在按住右键时放置方块."
+  },
+  "only-on-ground": {
+   "title": "只在地面上",
+   "desc": "只在站在方块上时使用速度."
+  },
+  "only-on-look": {
+   "title": "仅注视",
+   "desc": "只在注视实体时攻击."
+  },
+  "only-on-weapon": {
+   "title": "仅在武器",
+   "desc": "只在手持武器时修改碰撞箱."
+  },
+  "only-one": {
+   "title": "仅一",
+   "desc": "每个玩家只允许一个幽灵."
+  },
+  "only-own": {
+   "title": "只破坏自己的",
+   "desc": "只破坏自己的水晶."
+  },
+  "only-pick": {
+   "title": "仅用镐",
+   "desc": "仅在拿着镐时尝试开采方块."
+  },
+  "only-suitable-tools": {
+   "title": "仅适用工具",
+   "desc": "仅当使用适合该方块的工具时才会进行挖掘"
+  },
+  "only-trusted": {
+   "title": "仅信任",
+   "desc": "当渲染距离内出现未在朋友列表中的玩家时断开连接."
+  },
+  "only-when-holding-a-pickaxe": {
+   "title": "仅持有镐时",
+   "desc": "是否仅在持有镐时工作."
+  },
+  "only-when-stationary": {
+   "title": "仅静止时",
+   "desc": "仅在你傻站着的时候冻结药水效果."
+  },
+  "opacity": {
+   "title": "不透明度",
+   "desc": "所有其他方块的不透明度."
+  },
+  "open-contents": {
+   "title": "打开内容",
+   "desc": "点击物品时打开一个GUI窗口，显示存储方块或书的库存。"
+  },
+  "opened-color": {
+   "title": "打开的颜色",
+   "desc": "可选设置,用于更改已打开箱子的颜色,而不是不渲染.在零不透明度时禁用."
+  },
+  "other": {
+   "title": "其他",
+   "desc": "熔炉、发射器、投掷器和漏斗的颜色."
+  },
+  "other-players": {
+   "title": "其他玩家",
+   "desc": "计算其他玩家的轨迹."
+  },
+  "other-swapping": {
+   "title": "其他切换",
+   "desc": "启用其他附魔（如穿刺）的智能切换。"
+  },
+  "out-of-water": {
+   "title": "离水",
+   "desc": "是否让激流在水外也能工作"
+  },
+  "outline-color": {
+   "title": "外边框颜色",
+   "desc": "外边框的颜色"
+  },
+  "outline-width": {
+   "title": "轮廓宽度",
+   "desc": "外轮廓的宽度"
+  },
+  "outlines": {
+   "title": "外轮廓线",
+   "desc": "是否渲染轮廓线"
+  },
+  "override-bind": {
+   "title": "强制覆盖快捷键",
+   "desc": "按住此快捷键可临时绕过防丢弃保护"
+  },
+  "overworld-sky-color": {
+   "title": "主世界天空颜色",
+   "desc": "主世界天空的颜色."
+  },
+  "packet-mine": {
+   "title": "渲染方块",
+   "desc": "尝试一次性瞬间挖掘所有方块."
+  },
+  "pages": {
+   "title": "页数",
+   "desc": "每本书要写的页数."
+  },
+  "particles": {
+   "title": "粒子",
+   "desc": "要绘制的粒子."
+  },
+  "passive-mob-age-filter": {
+   "title": "被动生物年龄过滤器",
+   "desc": "确定要攻击的被动生物年龄（动物、村民）。"
+  },
+  "pause-auras": {
+   "title": "暂停光环",
+   "desc": "吃东西时暂停所有光环."
+  },
+  "pause-baritone": {
+   "title": "暂停巴音",
+   "desc": "吃东西时暂停Baritone."
+  },
+  "pause-health": {
+   "title": "暂停生命值",
+   "desc": "当你的生命值低于一定值时暂停."
+  },
+  "pause-in-creative": {
+   "title": "创意模式暂停",
+   "desc": "当玩家处于创意模式时,暂停中键点击打开."
+  },
+  "pause-modules": {
+   "title": "暂停模块",
+   "desc": "当选中的任何模块激活时暂停."
+  },
+  "pause-on-CA": {
+   "title": "暂停CA",
+   "desc": "CA放置时不攻击."
+  },
+  "pause-on-combat": {
+   "title": "战斗时暂停",
+   "desc": "暂时冻结Baritone,直到你释放弓."
+  },
+  "pause-on-drink": {
+   "title": "喝药水时暂停",
+   "desc": "喝药水时暂停."
+  },
+  "pause-on-eat": {
+   "title": "吃东西时暂停",
+   "desc": "吃东西时暂停."
+  },
+  "pause-on-lag": {
+   "title": "卡顿时暂停",
+   "desc": "当服务器停止响应时,暂停当前过程."
+  },
+  "pause-on-mace": {
+   "title": "使用重锤时暂停",
+   "desc": "使用重锤时暂停防摔落功能。"
+  },
+  "pause-on-mine": {
+   "title": "挖掘方块时暂停",
+   "desc": "挖掘方块时应该暂停的过程."
+  },
+  "pause-on-use": {
+   "title": "使用时暂停",
+   "desc": "使用物品时不攻击."
+  },
+  "pause-when-stationary": {
+   "title": "静止时暂停",
+   "desc": "当你不移动时是否添加粒子."
+  },
+  "pearl": {
+   "title": "珍珠",
+   "desc": "当玩家使用末影珍珠传送时通知你."
+  },
+  "pickaxe": {
+   "title": "镐",
+   "desc": "手持镐时启用。"
+  },
+  "ping": {
+   "title": "延迟",
+   "desc": "显示玩家的网络延迟(ping值)。"
+  },
+  "ping-color": {
+   "title": "延迟颜色",
+   "desc": "名称标签延迟的颜色."
+  },
+  "pitch": {
+   "title": "俯仰角",
+   "desc": "使用弹跳模式时,要看的俯仰角."
+  },
+  "pitch-angle": {
+   "title": "俯仰角度",
+   "desc": "俯仰角度,以度为单位."
+  },
+  "pitch-lock": {
+   "title": "俯仰角锁定",
+   "desc": "是否锁定你的俯仰视角角度。"
+  },
+  "pitch-lock-mode": {
+   "title": "俯仰锁定模式",
+   "desc": "锁定你的俯仰的方式."
+  },
+  "pitch40-lower-bounds": {
+   "title": "pitch40-下界界限",
+   "desc": "pitch40的下界界限."
+  },
+  "pitch40-rotate-speed": {
+   "title": "pitch40-旋转速度",
+   "desc": "pitch旋转的速度（每刻的角度）."
+  },
+  "pitch40-rotate-speed-down": {
+   "title": "俯仰40度向下旋转速度",
+   "desc": "俯仰向下旋转的速度（度/游戏刻）。"
+  },
+  "pitch40-rotate-speed-up": {
+   "title": "俯仰40度向上旋转速度",
+   "desc": "俯仰向上旋转的速度（度/游戏刻）。"
+  },
+  "pitch40-upper-bounds": {
+   "title": "pitch40-上界界限",
+   "desc": "pitch40的上界界限."
+  },
+  "place": {
+   "title": "放置",
+   "desc": "是否应该放置水晶."
+  },
+  "place-at-feet": {
+   "title": "放在脚下",
+   "desc": "自动在目标的脚下放置一个按钮或压力板来打破铁砧."
+  },
+  "place-delay": {
+   "title": "放置延迟"
+  },
+  "place-in": {
+   "title": "放置于",
+   "desc": "要放置于的液体类型."
+  },
+  "place-line-color": {
+   "title": "放置线颜色",
+   "desc": "要放置的位置的线颜色."
+  },
+  "place-mode": {
+   "title": "放置模式",
+   "desc": "锚被允许在你附近放置的方式."
+  },
+  "place-range": {
+   "title": "放置范围",
+   "desc": "离玩家多远可以放置方块."
+  },
+  "place-side-color": {
+   "title": "放置侧颜色",
+   "desc": "要放置的位置的侧颜色."
+  },
+  "place-string-bottom": {
+   "title": "放置绳索-底部",
+   "desc": "在你的脚下放置绳索."
+  },
+  "place-string-middle": {
+   "title": "放置绳索-中部",
+   "desc": "在你的上部碰撞箱放置绳索."
+  },
+  "place-string-top": {
+   "title": "放置绳索-顶部",
+   "desc": "在你上方放置绳索."
+  },
+  "place-time": {
+   "title": "放置时间",
+   "desc": "渲染放置的时间."
+  },
+  "placed-item": {
+   "title": "放置方块",
+   "desc": "要放置的方块."
+  },
+  "placeholder-color": {
+   "title": "占位符文本的颜色",
+   "desc": "占位符文本的颜色."
+  },
+  "placement-positions": {
+   "title": "放置位置",
+   "desc": "锚在实体上的放置位置."
+  },
+  "placements-per-tick": {
+   "title": "每个刻放置方块数",
+   "desc": "每个刻中最多可以放置的方块数量."
+  },
+  "placing": {
+   "title": "放置",
+   "desc": "是否适用于方块放置行为."
+  },
+  "play-sound": {
+   "title": "播放声音",
+   "desc": "在触发助推时播放烟花声音."
+  },
+  "player-heads": {
+   "title": "玩家头像",
+   "desc": "在玩家消息旁显示玩家头像."
+  },
+  "player-joins-leaves": {
+   "title": "玩家加入离开",
+   "desc": "如何处理玩家加入/离开通知."
+  },
+  "player-radius": {
+   "title": "玩家半径",
+   "desc": "记录图腾弹出的半径."
+  },
+  "players": {
+   "title": "玩家",
+   "desc": "启用玩家模型调整."
+  },
+  "players-color": {
+   "title": "玩家颜色",
+   "desc": "其他玩家的颜色。"
+  },
+  "players-colors": {
+   "title": "玩家颜色",
+   "desc": "玩家标记的显示颜色"
+  },
+  "plus-color": {
+   "title": "加号按钮的颜色",
+   "desc": "加号按钮的颜色."
+  },
+  "polyphonic": {
+   "title": "复音",
+   "desc": "是否允许同时播放多个音符"
+  },
+  "port": {
+   "title": "端口",
+   "desc": "用于连接的端口."
+  },
+  "portal-overlay": {
+   "title": "传送门覆盖",
+   "desc": "禁用下界传送门覆盖的渲染."
+  },
+  "position": {
+   "title": "位置"
+  },
+  "position-box-size": {
+   "title": "位置盒大小",
+   "desc": "在模拟位置绘制的盒子的大小."
+  },
+  "position-line-color": {
+   "title": "位置线条颜色",
+   "desc": "线条的颜色."
+  },
+  "position-side-color": {
+   "title": "位置边侧颜色",
+   "desc": "侧面的颜色."
+  },
+  "potential-color": {
+   "title": "潜在颜色",
+   "desc": "怪物可能生成区域的颜色（例如夜晚时）。"
+  },
+  "potion": {
+   "title": "药水",
+   "desc": "要酿造的药水类型."
+  },
+  "potion-icons": {
+   "title": "药水图标",
+   "desc": "禁用状态效果图标的渲染."
+  },
+  "potions-absorption": {
+   "title": "药水吸收",
+   "desc": "当吸收药水耗尽时,是否应该吃东西.需要E-Gap."
+  },
+  "potions-fire-resistance": {
+   "title": "药水抗火",
+   "desc": "当抗火药水耗尽时,是否应该吃东西.需要E-Gap."
+  },
+  "potions-regeneration": {
+   "title": "药水再生",
+   "desc": "当再生药水耗尽时,是否应该吃东西."
+  },
+  "powder-snow": {
+   "title": "粉雪",
+   "desc": "在粉雪上行走."
+  },
+  "powdered-snow-overlay": {
+   "title": "粉雪覆盖",
+   "desc": "禁用粉雪覆盖的渲染."
+  },
+  "predict-incoming-damage": {
+   "title": "预测即将受到的伤害",
+   "desc": "当检测到即将受到足以使生命值低于设定阈值的伤害时自动断开连接"
+  },
+  "predict-movement": {
+   "title": "预测移动",
+   "desc": "尝试根据目标的移动预测目标位置."
+  },
+  "prefer": {
+   "title": "偏好",
+   "desc": "选择偏好精准采集、时运、或者无."
+  },
+  "preferred-protection": {
+   "title": "首选保护",
+   "desc": "哪种类型的保护更优先."
+  },
+  "prefix": {
+   "title": "前缀",
+   "desc": "前缀."
+  },
+  "pressed-Scrollbar-color": {
+   "title": "按下滚动条颜色",
+   "desc": "鼠标按下时滚动条的颜色"
+  },
+  "pressed-background-color": {
+   "title": "按下时的背景颜色",
+   "desc": "按下时的背景颜色."
+  },
+  "pressed-outline-color": {
+   "title": "按下外框颜色",
+   "desc": "按下外框颜色"
+  },
+  "pressed-slider-handle-color": {
+   "title": "按下滑块手柄颜色",
+   "desc": "鼠标按下时滑块手柄的颜色"
+  },
+  "priority": {
+   "title": "优先级",
+   "desc": "优先级排序"
+  },
+  "protect": {
+   "title": "保护",
+   "desc": "尝试破坏包围位置周围的水晶,以防止包围被破坏."
+  },
+  "prune-by-latency": {
+   "title": "按延迟清理",
+   "desc": "清理延迟达到或高于此值的代理（毫秒）。0表示禁用。"
+  },
+  "prune-dead": {
+   "title": "清理死亡代理",
+   "desc": "是否清理死亡代理。"
+  },
+  "prune-to-count": {
+   "title": "清理至数量",
+   "desc": "如果超出，将代理数量清理至此值。0表示禁用。按延迟优先清理。"
+  },
+  "pull": {
+   "title": "拉力",
+   "desc": "锚点的拉力."
+  },
+  "pull-speed": {
+   "title": "拉速",
+   "desc": "以每秒方块数为单位向洞拉近的速度."
+  },
+  "pull-up-angle": {
+   "title": "拉升角度"
+  },
+  "pull-up-stall-speed": {
+   "title": "拉升失速速度"
+  },
+  "pull-up-transition-speed": {
+   "title": "拉升转换速度"
+  },
+  "pulse-delay": {
+   "title": "脉冲延迟",
+   "desc": "经过指定的tick时长后发送所有数据包并重新开始闪现。设为0可禁用此功能。"
+  },
+  "pumpkin-overlay": {
+   "title": "南瓜头覆盖",
+   "desc": "禁用南瓜头覆盖的渲染."
+  },
+  "put-out-fire": {
+   "title": "扑灭火焰",
+   "desc": "当动物生命值较低时尝试灭火，以防止物品被烧毁。"
+  },
+  "quick-swap": {
+   "title": "快速切换",
+   "desc": "允许你通过模拟快捷栏按键来使用你物品栏里的物品.可能会被反作弊检测."
+  },
+  "radius": {
+   "title": "半径",
+   "desc": "脚手架半径."
+  },
+  "railings": {
+   "title": "栏杆",
+   "desc": "在高速公路旁建造栏杆."
+  },
+  "rainbow-brightness": {
+   "title": "彩虹亮度"
+  },
+  "rainbow-saturation": {
+   "title": "彩虹饱和度"
+  },
+  "rainbow-speed": {
+   "title": "彩虹速度",
+   "desc": "彩虹模式启动时,彩虹变换的速度"
+  },
+  "rainbow-spread": {
+   "title": "彩虹分布",
+   "desc": "彩虹色模式的色彩分布范围。"
+  },
+  "random": {
+   "title": "随机",
+   "desc": "随机增加一个最多指定时间的毫秒延迟."
+  },
+  "random-rotation": {
+   "title": "随机旋转",
+   "desc": "为每个物品添加一个随机旋转."
+  },
+  "randomise": {
+   "title": "随机",
+   "desc": "从垃圾邮件消息列表中选择一条随机消息."
+  },
+  "range": {
+   "title": "范围",
+   "desc": "破坏范围."
+  },
+  "read-xaero": {
+   "title": "读取 Xaero"
+  },
+  "ready-line-color": {
+   "title": "准备好的线条颜色",
+   "desc": "可以被破坏的方块的线条颜色."
+  },
+  "ready-side-color": {
+   "title": "准备好的侧面颜色",
+   "desc": "可以被破坏的方块的侧面颜色."
+  },
+  "rebreak-delay": {
+   "title": "重破延迟",
+   "desc": "重破尝试之间的延迟."
+  },
+  "refine-iters": {
+   "title": "细化迭代次数"
+  },
+  "regex-filter": {
+   "title": "正则过滤器",
+   "desc": "用于过滤聊天消息的正则表达式过滤器."
+  },
+  "regular-mace": {
+   "title": "普通钉锤",
+   "desc": "如果没有更好的选择，下落时切换到普通钉锤。"
+  },
+  "reload-chunks": {
+   "title": "重载区块",
+   "desc": "关闭洞穴剔除."
+  },
+  "renametag": {
+   "title": "重命名",
+   "desc": "允许已经命名的实体被重命名."
+  },
+  "render": {
+   "desc": "是否渲染正在挖掘的方块."
+  },
+  "render-block": {
+   "title": "渲染破坏中的方块",
+   "desc": "是否渲染被破坏的方块."
+  },
+  "render-blocks-to-mine": {
+   "title": "渲染待挖方块",
+   "desc": "渲染待挖掘的方块."
+  },
+  "render-blocks-to-place": {
+   "title": "渲染待放置方块",
+   "desc": "渲染待放置的方块."
+  },
+  "render-box-size": {
+   "title": "渲染框大小"
+  },
+  "render-boxes": {
+   "title": "渲染盒子",
+   "desc": "是否渲染音符块周围的轮廓."
+  },
+  "render-break": {
+   "title": "渲染破坏",
+   "desc": "在水晶破坏的方块上渲染一个方块覆盖."
+  },
+  "render-chunk-column": {
+   "title": "渲染区块柱",
+   "desc": "在追踪区块的中心渲染一个垂直柱体。"
+  },
+  "render-chunks": {
+   "title": "渲染区块数"
+  },
+  "render-mode": {
+   "title": "渲染模式",
+   "desc": "渲染的模式."
+  },
+  "render-original": {
+   "title": "渲染原始位置",
+   "desc": "在原始位置渲染你的玩家模型."
+  },
+  "render-place": {
+   "title": "渲染放置",
+   "desc": "在水晶放置的方块上渲染一个方块覆盖."
+  },
+  "render-player-box": {
+   "title": "显示玩家碰撞箱",
+   "desc": "显示玩家碰撞箱辅助框。"
+  },
+  "render-position-boxes": {
+   "title": "渲染位置盒",
+   "desc": "渲染投射物在飞行轨迹中每一刻的实际位置框。"
+  },
+  "render-text": {
+   "title": "渲染文本",
+   "desc": "是否渲染音符块上方的文本."
+  },
+  "render-time": {
+   "title": "渲染时间",
+   "desc": "以秒为单位的幽灵渲染时间."
+  },
+  "render-tracer": {
+   "title": "渲染追踪线",
+   "desc": "渲染一条指向最后找到的藏匿点的追踪线。"
+  },
+  "render-trail": {
+   "title": "渲染轨迹"
+  },
+  "replace-durability": {
+   "title": "替换耐久度",
+   "desc": "你的鞘翅会在这个耐久度时被替换."
+  },
+  "replenish": {
+   "title": "补充",
+   "desc": "自动将经验补充到选定的热键槽."
+  },
+  "replenish-fireworks": {
+   "title": "补充烟花",
+   "desc": "把烟花移动到一个选定的快捷栏位置."
+  },
+  "replenish-slot": {
+   "title": "补充位置",
+   "desc": "自动移动把烟花移动到的位置."
+  },
+  "report-short": {
+   "title": "简短报告"
+  },
+  "require-ship": {
+   "title": "需要船只"
+  },
+  "resource-pack": {
+   "title": "资源包",
+   "desc": "欺骗接受服务器资源包."
+  },
+  "restart": {
+   "title": "重启",
+   "desc": "当橡皮筋时,重启鞘翅飞行."
+  },
+  "restart-delay": {
+   "title": "重启延迟",
+   "desc": "橡皮筋后再次重启鞘翅的等待刻数."
+  },
+  "retries-on-timeout": {
+   "title": "超时重试次数",
+   "desc": "如果检查超时，额外检查代理的次数。"
+  },
+  "right": {
+   "title": "右",
+   "desc": "破坏范围."
+  },
+  "right-gapple": {
+   "title": "右键金苹果",
+   "desc": "按住右键时切换到金苹果.(不要和药水开启时一起使用)"
+  },
+  "rotate": {
+   "title": "旋转",
+   "desc": "挖掘时向服务器发送旋转包."
+  },
+  "rotate-speed": {
+   "title": "旋转速度",
+   "desc": "在界面中的旋转速度."
+  },
+  "rotation": {
+   "title": "旋转",
+   "desc": "旋转模式."
+  },
+  "rotation-hold": {
+   "title": "旋转保持",
+   "desc": "长按以保持服务器端旋转,当不发送任何数据包时."
+  },
+  "rotation-mode": {
+   "title": "旋转模式",
+   "desc": "服务器端旋转你的模式."
+  },
+  "rotation-speed": {
+   "title": "旋转速度",
+   "desc": "水晶旋转速度的倍数."
+  },
+  "round-out-of-range": {
+   "title": "超出范围四舍五入",
+   "desc": "将超出范围的音符四舍五入"
+  },
+  "rubberband-height": {
+   "title": "rubberband高度",
+   "desc": "尝试造成rubberband的距离."
+  },
+  "safe-line-color": {
+   "title": "安全线颜色",
+   "desc": "安全方块的线条颜色."
+  },
+  "safe-side-color": {
+   "title": "安全侧颜色",
+   "desc": "安全方块的侧面颜色."
+  },
+  "safe-sneak": {
+   "title": "安全潜行",
+   "desc": "在潜行未正确触发时防止坠落。"
+  },
+  "safe-step": {
+   "title": "安全步高",
+   "desc": "当生命值较低或附近存在水晶时，阻止你从坑洞中迈出。"
+  },
+  "same-enchants": {
+   "title": "相同附魔",
+   "desc": "仅用具有相同附魔的物品替换不可堆叠物品。"
+  },
+  "save-ender-chests": {
+   "title": "保存末影箱",
+   "desc": "确保保存多少个末影箱.达到这个数量时,库存会触发补充或模块关闭."
+  },
+  "save-pickaxes": {
+   "title": "保存镐子",
+   "desc": "确保保存多少把镐子.达到这个数量时,库存会触发补充或模块关闭."
+  },
+  "save-to-file": {
+   "title": "保存到文件"
+  },
+  "scale": {
+   "title": "比例"
+  },
+  "scale-modifier": {
+   "title": "比例-修正",
+   "desc": "幽灵的比例每秒改变的量."
+  },
+  "scanned-noteblock-line-color": {
+   "title": "扫描音符块线条颜色",
+   "desc": "扫描音符块渲染的线条颜色."
+  },
+  "scanned-noteblock-side-color": {
+   "title": "扫描音符块侧边颜色",
+   "desc": "扫描音符块渲染的侧边颜色."
+  },
+  "scoreboard": {
+   "title": "计分板",
+   "desc": "禁用计分板的渲染."
+  },
+  "scroll-sensitivity": {
+   "title": "滚动灵敏度",
+   "desc": "允许您使用滚动轮来改变缩放值.0 表示禁用."
+  },
+  "scrolling": {
+   "title": "滚动启用",
+   "desc": "允许你滚动来改变相机距离."
+  },
+  "search-ender-chest": {
+   "title": "搜索末影箱",
+   "desc": "搜索你的末影箱以找到可用的物品.使用时小心,尤其是让它搜索末影箱时."
+  },
+  "search-hotbar": {
+   "title": "搜索快捷栏",
+   "desc": "最后手段时合并快捷栏/副手中的堆叠物品。"
+  },
+  "search-inventory": {
+   "title": "搜索背包",
+   "desc": "在整个背包中搜索食物，而不仅仅是快捷栏。"
+  },
+  "search-module-aliases": {
+   "title": "搜索模块别名",
+   "desc": "是否在模块搜索栏中使用模块别名."
+  },
+  "search-now": {
+   "title": "立即搜索"
+  },
+  "search-radius": {
+   "title": "搜索半径",
+   "desc": "水平方向上搜索洞的半径."
+  },
+  "search-shulkers": {
+   "title": "搜索末影箱",
+   "desc": "在末影箱中搜索以找到可用的物品."
+  },
+  "search-window-rad": {
+   "title": "搜索窗口半径"
+  },
+  "section-length": {
+   "title": "每段长度",
+   "desc": "每段的长度,以方块为单位."
+  },
+  "see-through-blocks": {
+   "title": "透视方块",
+   "desc": "允许你透过方块看到线条."
+  },
+  "select-block-bind": {
+   "title": "选择方块绑定键",
+   "desc": "按下此按钮时将目标方块添加到列表中"
+  },
+  "selected-weapon-types": {
+   "title": "选定武器类型",
+   "desc": "使用哪些类型的武器进行攻击（如果选择钻石剑，则可能使用任何类型的剑进行攻击）。"
+  },
+  "self-color": {
+   "title": "自己颜色",
+   "desc": "高亮自己的名字的颜色."
+  },
+  "self-toggle": {
+   "title": "自动关闭",
+   "desc": "当你达到期望的黑曜石数量时禁用."
+  },
+  "send-message": {
+   "title": "发送消息",
+   "desc": "将玩家添加为好友时发送消息。"
+  },
+  "send-messages": {
+   "title": "发送消息",
+   "desc": "发送消息以防止因为AFK而被踢出."
+  },
+  "sensitivity": {
+   "title": "滚动按键绑定",
+   "desc": "需要按下一个按键才能使滚动生效."
+  },
+  "separator-center-color": {
+   "title": "分隔符中心颜色",
+   "desc": "分隔符的中心颜色."
+  },
+  "separator-edges-color": {
+   "title": "分隔符边缘颜色",
+   "desc": "分隔符边缘的颜色."
+  },
+  "separator-text-color": {
+   "title": "分隔符文本颜色",
+   "desc": "分隔符文本的颜色."
+  },
+  "server-rotations": {
+   "title": "服务器旋转",
+   "desc": "使你的手跟随你的服务器端旋转."
+  },
+  "shader": {
+   "title": "着色器",
+   "desc": "在实体上渲染着色器."
+  },
+  "shadow": {
+   "title": "阴影",
+   "desc": "在文本后方渲染阴影。"
+  },
+  "shape": {
+   "title": "形状",
+   "desc": "核爆算法的形状."
+  },
+  "shape-mode": {
+   "title": "形状模式",
+   "desc": "形状的渲染方式."
+  },
+  "sharpness": {
+   "title": "锋利",
+   "desc": "切换到带有锋利的物品以增加对所有实体的伤害。"
+  },
+  "shield-breaker": {
+   "title": "破盾者",
+   "desc": "如果目标正在格挡，自动切换到斧头。"
+  },
+  "shield-mode": {
+   "title": "盾牌模式",
+   "desc": "会尝试用斧头破坏目标的盾牌."
+  },
+  "ship-color": {
+   "title": "船只颜色"
+  },
+  "short-color": {
+   "title": "短途颜色"
+  },
+  "shovel": {
+   "title": "锹",
+   "desc": "手持锹时启用。"
+  },
+  "show-beam": {
+   "title": "显示光束"
+  },
+  "show-count": {
+   "title": "显示数量",
+   "desc": "显示堆叠物品的数量."
+  },
+  "show-friend-colors": {
+   "title": "显示好友颜色",
+   "desc": "是否用好友颜色覆盖好友的距离颜色."
+  },
+  "show-hands": {
+   "title": "显示手",
+   "desc": "是否显示您的手."
+  },
+  "show-invisible": {
+   "title": "显示隐形",
+   "desc": "显示隐形实体."
+  },
+  "show-keybind": {
+   "title": "显示按键绑定",
+   "desc": "在模块名称旁显示其快捷键绑定。"
+  },
+  "show-packet-data": {
+   "title": "显示数据包数据",
+   "desc": "显示数据包的toString()数据用于调试。"
+  },
+  "show-render": {
+   "title": "显示渲染"
+  },
+  "show-route": {
+   "title": "显示路线"
+  },
+  "show-scanned-noteblocks": {
+   "title": "显示扫描音符块",
+   "desc": "显示扫描的音符块"
+  },
+  "show-seconds": {
+   "title": "显示秒数",
+   "desc": "在聊天消息时间戳中显示秒数"
+  },
+  "show-slot-type": {
+   "title": "显示槽位类型"
+  },
+  "show-summary": {
+   "title": "显示摘要",
+   "desc": "模块停用时显示最终数据包计数摘要。"
+  },
+  "show-timestamp": {
+   "title": "显示时间戳",
+   "desc": "为每个记录的数据包显示时间戳。"
+  },
+  "show-ui": {
+   "title": "显示界面"
+  },
+  "shown": {
+   "title": "时机",
+   "desc": "该文本元素的显示时机。"
+  },
+  "shown-enchantments": {
+   "title": "显示附魔",
+   "desc": "在名称标签上显示的附魔."
+  },
+  "shulker": {
+   "title": "潜影盒",
+   "desc": "潜影盒的颜色."
+  },
+  "side-color": {
+   "title": "侧面颜色",
+   "desc": "要渲染的方块的侧颜色."
+  },
+  "sign": {
+   "title": "签名",
+   "desc": "是否签署书籍."
+  },
+  "sign-text": {
+   "title": "告示牌文字",
+   "desc": "禁用告示牌上的文字渲染."
+  },
+  "silent-bow": {
+   "title": "无声弓",
+   "desc": "从你的物品栏拿出一把弓来射箭."
+  },
+  "silk-touch-for-ender-chest": {
+   "title": "精准采集末影箱",
+   "desc": "只用精准采集附魔来挖末影箱."
+  },
+  "simple-direction": {
+   "title": "简单方向",
+   "desc": "简单模式中行走的方向."
+  },
+  "simple-notifications": {
+   "title": "简化通知",
+   "desc": "不带前缀显示加入/离开通知,以减少聊天杂乱."
+  },
+  "simulation-steps": {
+   "title": "模拟步数",
+   "desc": "模拟投射物的步数.零表示没有限制"
+  },
+  "single-side": {
+   "title": "优化渲染",
+   "desc": "只渲染你正在看的一面."
+  },
+  "sinking": {
+   "title": "沉没",
+   "desc": "防止你在液体中沉没."
+  },
+  "size-offscreen": {
+   "title": "屏幕外大小",
+   "desc": "屏幕外标记的尺寸"
+  },
+  "skin-protect": {
+   "title": "皮肤保护",
+   "desc": "让玩家变成史蒂夫."
+  },
+  "skip-swapping-animation": {
+   "title": "跳过物品切换动画",
+   "desc": "是否跳过物品切换时的动画效果"
+  },
+  "skylight-updates": {
+   "title": "天光更新",
+   "desc": "禁用天光更新的渲染."
+  },
+  "slider-handle-color": {
+   "title": "滑块手柄颜色",
+   "desc": "滑块手柄的默认颜色"
+  },
+  "slider-left-color": {
+   "title": "滑块左侧颜色",
+   "desc": "滑块左侧部分的颜色."
+  },
+  "slider-right-color": {
+   "title": "滑块右侧颜色",
+   "desc": "滑块右侧部分的颜色"
+  },
+  "slime-block": {
+   "title": "粘液块",
+   "desc": "粘液块是否不会减慢你."
+  },
+  "slow-down": {
+   "title": "减速",
+   "desc": "进一步的运动选项以尝试绕过NCP。"
+  },
+  "slowness": {
+   "title": "缓慢",
+   "desc": "缓慢是否不会减慢你."
+  },
+  "small-caps": {
+   "title": "小型大写",
+   "desc": "在后缀中使用小型大写字母."
+  },
+  "smart": {
+   "title": "智能",
+   "desc": "在填充洞之前考虑更多的因素."
+  },
+  "smart-delay": {
+   "title": "智能延迟",
+   "desc": "只有当目标可以受到伤害时才破坏水晶."
+  },
+  "smart-toggle": {
+   "title": "智能切换",
+   "desc": "在低健康退出后禁用自动登录.恢复健康后将重新启用."
+  },
+  "smash-attack": {
+   "title": "猛击攻击",
+   "desc": "使用重锤时将始终进行猛击."
+  },
+  "smeltable-items": {
+   "title": "可熔炼物品",
+   "desc": "要熔炼的物品"
+  },
+  "smite": {
+   "title": "亡灵杀手",
+   "desc": "切换到带有亡灵杀手的物品以增加对亡灵生物的伤害。"
+  },
+  "smooth": {
+   "title": "平滑过渡",
+   "desc": "平滑的过渡效果."
+  },
+  "smoothness": {
+   "title": "平滑度",
+   "desc": "渲染应该如何平滑地移动."
+  },
+  "snap-to-player": {
+   "title": "对齐到玩家"
+  },
+  "snapping-range": {
+   "title": "自动吸附范围",
+   "desc": "编辑器中的吸附范围。"
+  },
+  "sneak": {
+   "title": "潜行",
+   "desc": "靠近方块边缘时潜行"
+  },
+  "sneak-on-sprint": {
+   "title": "冲刺时潜行",
+   "desc": "在方块边缘冲刺时仍保持潜行状态。"
+  },
+  "sneak-time": {
+   "title": "潜行时间",
+   "desc": "保持潜行的刻数."
+  },
+  "sneaking": {
+   "title": "潜行",
+   "desc": "潜行是否不会减慢你."
+  },
+  "sort": {
+   "title": "排序方式",
+   "desc": "已经启动的模块的排序方式。"
+  },
+  "sort-by-latency": {
+   "title": "按延迟排序",
+   "desc": "是否按延迟对代理列表排序。"
+  },
+  "sort-mode": {
+   "title": "排序模式",
+   "desc": "你想要先挖掘的方块."
+  },
+  "sorting-delay": {
+   "title": "排序延迟",
+   "desc": "排序时移动物品之间的刻延迟."
+  },
+  "sorting-enabled": {
+   "title": "排序开启",
+   "desc": "自动在物品栏中排序物品堆."
+  },
+  "sorting-key": {
+   "title": "排序键",
+   "desc": "触发排序的键."
+  },
+  "soul-sand": {
+   "title": "灵魂沙",
+   "desc": "灵魂沙是否不会减慢你."
+  },
+  "sound": {
+   "title": "声音",
+   "desc": "进入/离开时发出声音效果"
+  },
+  "sounds": {
+   "title": "声音",
+   "desc": "要屏蔽的声音."
+  },
+  "spam-crossbows": {
+   "title": "连发弩",
+   "desc": "是否连发已装填的弩；优先级高于蓄力弓。"
+  },
+  "spawner-entities": {
+   "title": "生成器实体",
+   "desc": "禁用生成器中的旋转怪物的渲染."
+  },
+  "spear": {
+   "title": "长矛",
+   "desc": "手持长矛时启用。"
+  },
+  "spear-swapping": {
+   "title": "长矛切换",
+   "desc": "启用长矛附魔的智能切换。"
+  },
+  "speed": {
+   "title": "速度",
+   "desc": "在自由视角中的速度."
+  },
+  "speed-limit": {
+   "title": "速度限制",
+   "desc": "在有非常严格的反作弊的服务器上限制你的速度."
+  },
+  "speed-scroll-sensitivity": {
+   "title": "速度滚轮灵敏度",
+   "desc": "允许你用滚轮改变速度值.0为关闭."
+  },
+  "spin": {
+   "title": "旋转",
+   "desc": "在原地旋转玩家."
+  },
+  "spin-mode": {
+   "title": "旋转模式",
+   "desc": "旋转的方法."
+  },
+  "spiral-flight": {
+   "title": "螺旋飞行"
+  },
+  "split-delay": {
+   "title": "拆分延迟",
+   "desc": "拆分消息之间的延迟,单位为tick."
+  },
+  "split-length": {
+   "title": "拆分长度",
+   "desc": "拆分聊天消息的长度"
+  },
+  "spoof-brand": {
+   "title": "欺骗版本",
+   "desc": "是否欺骗版本."
+  },
+  "spoof-saddle*": {
+   "title": "伪装鞍*",
+   "desc": "允许你控制可骑乘实体而无需装备鞍。仅适用于较旧的服务器版本。"
+  },
+  "sprint": {
+   "title": "冲刺",
+   "desc": "在界面中允许你冲刺."
+  },
+  "sprint-constantly": {
+   "title": "持续冲刺",
+   "desc": "始终保持冲刺状态。若关闭，则仅在玩家触地时才会冲刺。"
+  },
+  "sprint-mode": {
+   "title": "冲刺模式",
+   "desc": "奔跑模式."
+  },
+  "sprint-while-stationary": {
+   "title": "水中停止冲刺",
+   "desc": "是否在水中停止冲刺."
+  },
+  "spyglass-overlay": {
+   "title": "望远镜覆盖",
+   "desc": "禁用望远镜覆盖的渲染."
+  },
+  "stack": {
+   "title": "timer",
+   "desc": "堆叠boss条并在文本中添加一个计数器."
+  },
+  "starscript-accessed-objects-color": {
+   "title": "Star script访问对象颜色",
+   "desc": "Star script代码中访问对象（点前）的颜色."
+  },
+  "starscript-braces-color": {
+   "title": "Star script大括号颜色",
+   "desc": "Star script代码中的大括号{}颜色"
+  },
+  "starscript-commas-color": {
+   "title": "Star script逗号颜色",
+   "desc": "Star script代码中的逗号,颜色"
+  },
+  "starscript-dots-color": {
+   "title": "Star script点号颜色",
+   "desc": "Star script代码中的点号.颜色"
+  },
+  "starscript-keywords-color": {
+   "title": "Star script关键字颜色",
+   "desc": "Star script代码中的关键字颜色"
+  },
+  "starscript-numbers-color": {
+   "title": "Star script数字颜色",
+   "desc": "Star script代码中的数字值颜色"
+  },
+  "starscript-operators-color": {
+   "title": "Star script运算符颜色",
+   "desc": "Star script代码中的运算符(如+-*/)颜色"
+  },
+  "starscript-parenthesis-color": {
+   "title": "Star script圆括号颜色",
+   "desc": "Star script代码中的圆括号()颜色"
+  },
+  "starscript-strings-color": {
+   "title": "Star script字符串颜色",
+   "desc": "Star script代码中的字符串值颜色"
+  },
+  "starscript-text-color": {
+   "title": "Star script文本颜色",
+   "desc": "Star script代码中的文本颜色"
+  },
+  "start-color": {
+   "title": "为破坏的方块的颜色",
+   "desc": "未破坏方块的颜色."
+  },
+  "static": {
+   "title": "静态",
+   "desc": "关闭移动视角的设置."
+  },
+  "status-effects": {
+   "title": "状态效果",
+   "desc": "在食物物品的提示框中添加状态效果列表。"
+  },
+  "stay-on": {
+   "title": "保持开启",
+   "desc": "保持开启并在你关闭时激活."
+  },
+  "stay-sneaking": {
+   "title": "保持潜行",
+   "desc": "当进入自由视角模式时，若你处于潜行状态，是否保持角色继续潜行。"
+  },
+  "steal-drop": {
+   "title": "偷取丢弃",
+   "desc": "将物品丢到地上而不是偷取它们."
+  },
+  "steal-filter": {
+   "title": "偷取过滤",
+   "desc": "偷取模式."
+  },
+  "steal-items": {
+   "title": "偷取物品",
+   "desc": "要偷取的物品."
+  },
+  "steal-screens": {
+   "title": "偷取界面",
+   "desc": "选择要显示按钮和自动偷取的界面."
+  },
+  "stem": {
+   "title": "茎",
+   "desc": "在追踪线目标的中心画一条线."
+  },
+  "step-health": {
+   "title": "步高生命值",
+   "desc": "你不能步高的生命值."
+  },
+  "stop-in-water": {
+   "title": "在水中停止",
+   "desc": "在水中停止飞行."
+  },
+  "storage-blocks": {
+   "title": "储存方块",
+   "desc": "选择要搜索的存储方块."
+  },
+  "store-resupply": {
+   "title": "仓储补给"
+  },
+  "stow-delay": {
+   "title": "收纳延迟"
+  },
+  "stow-elytra": {
+   "title": "收纳鞘翅"
+  },
+  "strafe": {
+   "title": "扫射",
+   "desc": "左右扫射."
+  },
+  "strafe-speed": {
+   "title": "扫射速度",
+   "desc": "速度."
+  },
+  "strength": {
+   "title": "强度",
+   "desc": "模糊的强度."
+  },
+  "strict-direction": {
+   "title": "严格方向",
+   "desc": "只在你面对的方向放置床."
+  },
+  "stun-hostiles": {
+   "title": "眩晕敌对生物",
+   "desc": "自动盯着敌对的末影人使它们定在原地."
+  },
+  "style": {
+   "title": "样式",
+   "desc": "应该使用什么显示模式."
+  },
+  "suffix": {
+   "title": "后缀",
+   "desc": "为你的聊天消息添加后缀."
+  },
+  "support": {
+   "title": "无中生块",
+   "desc": "如果没有找到其他位置,就在空中放置一个支撑方块."
+  },
+  "support-delay": {
+   "title": "支持延迟",
+   "desc": "放置支持方块后的刻度延迟."
+  },
+  "swap-back": {
+   "title": "切换回去",
+   "desc": "当你使用完一个物品时,切换回你原来的位置."
+  },
+  "swap-back-delay": {
+   "title": "切换回延迟",
+   "desc": "切换回之前的延迟（游戏刻）。"
+  },
+  "swap-delay": {
+   "title": "换装延迟",
+   "desc": "装备护甲的延迟."
+  },
+  "swap-on-miss": {
+   "title": "未命中时切换",
+   "desc": "是否在攻击未命中时切换。适用于用长矛快速突刺。"
+  },
+  "sweeping-edge": {
+   "title": "横扫之刃",
+   "desc": "切换到带有横扫之刃的物品以增加横扫攻击伤害。"
+  },
+  "swing": {
+   "title": "摇摆",
+   "desc": "是否在客户端挥动手."
+  },
+  "swing-arm": {
+   "title": "摆臂",
+   "desc": "击打时是否摆动手臂"
+  },
+  "swing-hand": {
+   "title": "挥手",
+   "desc": "在客户端视角挥手."
+  },
+  "swing-mode": {
+   "title": "挥动模式",
+   "desc": "调整客户端与服务端的手部摆动同步模式"
+  },
+  "swing-speed": {
+   "title": "挥动速度",
+   "desc": "你的手的挥动速度."
+  },
+  "switch-back": {
+   "title": "切换回去",
+   "desc": "当你松开攻击键时,切换你的手到之前选择的物品."
+  },
+  "switch-delay": {
+   "title": "切换延迟",
+   "desc": "切换工具前的延迟,以刻为单位."
+  },
+  "switch-mode": {
+   "title": "切换模式",
+   "desc": "如何切换到镐."
+  },
+  "sword": {
+   "title": "剑",
+   "desc": "手持剑时启用。"
+  },
+  "sword-gapple": {
+   "title": "剑金苹果",
+   "desc": "拿着剑并按住右键时切换到金苹果."
+  },
+  "sword-pot": {
+   "title": "剑药水",
+   "desc": "拿着剑并按住右键时切换到药水."
+  },
+  "sword-swapping": {
+   "title": "剑切换",
+   "desc": "启用剑附魔的智能切换。"
+  },
+  "sync-list-setting-widths": {
+   "title": "同步列表设置宽度",
+   "desc": "防止列表设置屏幕在你添加和移除元素时移动。"
+  },
+  "tablist-size": {
+   "title": "Tab列表大小",
+   "desc": "在Tab列表中显示的玩家总数."
+  },
+  "target": {
+   "title": "目标",
+   "desc": "要目标的实体的部分."
+  },
+  "target-babies": {
+   "title": "目标幼体",
+   "desc": "如果勾选,幼体也会被杀死."
+  },
+  "target-color": {
+   "title": "目标颜色",
+   "desc": "目标颜色。"
+  },
+  "target-height": {
+   "title": "目标高度"
+  },
+  "target-hitbox": {
+   "title": "目标命中框",
+   "desc": "绘制目标实体的命中框"
+  },
+  "target-hitbox-color": {
+   "title": "目标命中框颜色",
+   "desc": "目标命中框颜色。"
+  },
+  "target-priority": {
+   "title": "目标优先级",
+   "desc": "如何筛选范围内的目标."
+  },
+  "target-range": {
+   "title": "目标范围",
+   "desc": "目标玩家的距离."
+  },
+  "target-slot": {
+   "title": "目标槽位",
+   "desc": "要切换到的快捷栏槽位（1-9）。"
+  },
+  "text": {
+   "title": "文本",
+   "desc": "使用Starscript显示的文本"
+  },
+  "text-color": {
+   "title": "文本的颜色",
+   "desc": "文本的颜色."
+  },
+  "text-colors": {
+   "title": "文字颜色",
+   "desc": "文本元素使用的颜色。"
+  },
+  "text-highlight-color": {
+   "title": "文本高亮的颜色",
+   "desc": "文本高亮的颜色."
+  },
+  "text-render-distance": {
+   "title": "文本渲染距离",
+   "desc": "从屏幕中心渲染文本的最大距离."
+  },
+  "text-scale": {
+   "title": "文字缩放比",
+   "desc": "未被元素覆盖时的文本缩放比例。"
+  },
+  "text-secondary-text-color": {
+   "title": "次要文本的颜色",
+   "desc": "次要文本的颜色."
+  },
+  "texture": {
+   "title": "纹理",
+   "desc": "是否渲染手部纹理."
+  },
+  "texture-rotations": {
+   "title": "纹理旋转",
+   "desc": "更改纹理旋转和模型偏移,使其使用常数值而不是方块位置."
+  },
+  "threads": {
+   "title": "线程数",
+   "desc": "用于检查代理的并发线程数。"
+  },
+  "threshold": {
+   "title": "阈值",
+   "desc": "如果非首选武器产生的伤害达到这个值,将优先使用它而不是你的首选武器."
+  },
+  "threshold-mode": {
+   "title": "阈值模式",
+   "desc": "触发自动吃的阈值模式."
+  },
+  "tick-delay": {
+   "desc": "加载歌曲时的延迟."
+  },
+  "tick-interval": {
+   "title": "间隔刻"
+  },
+  "ticks-existed": {
+   "title": "存在刻度",
+   "desc": "水晶需要存活的刻度数量,才能被水晶光环攻击."
+  },
+  "ticks-to-predict": {
+   "title": "预测提前量（刻）",
+   "desc": "需要提前多少游戏刻进行预测计算"
+  },
+  "time": {
+   "title": "时间",
+   "desc": "要设置的自定义时间."
+  },
+  "timeout": {
+   "title": "超时"
+  },
+  "timer": {
+   "desc": "timer覆盖."
+  },
+  "timer-mode": {
+   "title": "timer模式",
+   "desc": "使用timer."
+  },
+  "timestamps": {
+   "title": "时间戳",
+   "desc": "在聊天消息前添加客户端时间戳."
+  },
+  "title": {
+   "title": "标题",
+   "desc": "禁用标题的渲染."
+  },
+  "title-color": {
+   "title": "标题颜色"
+  },
+  "title-screen-credits": {
+   "title": "标题屏幕信用",
+   "desc": "在标题屏幕上显示Meteor的致谢"
+  },
+  "title-screen-splashes": {
+   "title": "标题屏幕闪屏",
+   "desc": "在标题屏幕上显示Meteor的闪屏文本"
+  },
+  "title-text-color": {
+   "title": "标题文本的颜色",
+   "desc": "标题文本的颜色."
+  },
+  "toggle-auto-reconnect": {
+   "title": "切换自动重连",
+   "desc": "是否在退出后禁用自动重连."
+  },
+  "toggle-back-on": {
+   "title": "切换回开",
+   "desc": "当包围被停用时重新开启其他模块."
+  },
+  "toggle-modules": {
+   "title": "切换模块",
+   "desc": "当包围被激活时关闭其他模块."
+  },
+  "toggle-off": {
+   "title": "切换关闭",
+   "desc": "使用后禁用自动登录."
+  },
+  "toggle-on-break": {
+   "title": "在破坏时切换",
+   "desc": "当目标头盔栏位为空时切换状态"
+  },
+  "toggle-on-complete": {
+   "title": "切换完成",
+   "desc": "当所有方块都放置好时切换关闭."
+  },
+  "toggle-on-damage": {
+   "title": "受伤时关闭",
+   "desc": "受伤时关闭自由视角."
+  },
+  "toggle-on-death": {
+   "title": "切换死亡",
+   "desc": "死亡时关闭自由视角."
+  },
+  "toggle-on-log": {
+   "title": "断开时关闭",
+   "desc": "从服务器断开时关闭自由视角."
+  },
+  "toggle-on-y-change": {
+   "title": "切换Y变化",
+   "desc": "当你的Y级别改变时（步行,跳跃等）自动停用."
+  },
+  "toggle-perspective": {
+   "title": "切换视角",
+   "desc": "切换时改变你的视角."
+  },
+  "tooltip": {
+   "title": "提示框",
+   "desc": "当提示框被隐藏时仍显示提示信息。"
+  },
+  "tooltip-components": {
+   "title": "提示框组件",
+   "desc": "显示被隐藏的提示框组件 - 例如附魔效果、属性、物品描述等。"
+  },
+  "top-blocks": {
+   "title": "顶部方块",
+   "desc": "放置在目标上半部的方块."
+  },
+  "top-mode": {
+   "title": "上半部模式",
+   "desc": "要在你上半身放置的位置."
+  },
+  "top-quad": {
+   "title": "顶部四边形",
+   "desc": "是否在洞穴的顶部渲染一个四边形."
+  },
+  "totem-animation": {
+   "title": "图腾动画",
+   "desc": "禁用图腾弹出时的动画渲染."
+  },
+  "totem-pops": {
+   "title": "图腾弹出",
+   "desc": "当玩家弹出图腾时通知你."
+  },
+  "totem-supply": {
+   "title": "图腾补给"
+  },
+  "tower-speed": {
+   "title": "塔速度",
+   "desc": "塔的建造速度."
+  },
+  "tracer-color": {
+   "title": "追踪线颜色",
+   "desc": "藏匿点追踪线的颜色。"
+  },
+  "tracer-hide-at-distance": {
+   "title": "追踪线隐藏距离",
+   "desc": "当你距离藏匿点如此近时隐藏追踪线。"
+  },
+  "tracer-max-distance": {
+   "title": "追踪线最大距离",
+   "desc": "当你距离藏匿点超过此距离时隐藏追踪线。"
+  },
+  "tracers": {
+   "title": "追踪线",
+   "desc": "绘制到存储方块的追踪线."
+  },
+  "trail-color": {
+   "title": "轨迹颜色"
+  },
+  "trail-max-points": {
+   "title": "轨迹最大点数"
+  },
+  "trail-spacing": {
+   "title": "轨迹间距"
+  },
+  "trail-width": {
+   "title": "轨迹宽度"
+  },
+  "trapped-chest": {
+   "title": "陷阱箱",
+   "desc": "陷阱箱的颜色."
+  },
+  "trash-items": {
+   "title": "垃圾物品",
+   "desc": "被认为是垃圾的物品,可以丢弃."
+  },
+  "trident": {
+   "title": "三叉戟",
+   "desc": "手持三叉戟时启用。"
+  },
+  "trigger-height": {
+   "title": "触发高度",
+   "desc": "跳跃多高才触发rubberband."
+  },
+  "tuned-line-color": {
+   "title": "已调整线条颜色",
+   "desc": "已调整块的线条颜色."
+  },
+  "tuned-side-color": {
+   "title": "已调整侧边颜色",
+   "desc": "已调整块的侧边颜色."
+  },
+  "turn-off": {
+   "title": "关闭",
+   "desc": "放置后关闭."
+  },
+  "uncap-bundle-scrolling": {
+   "title": "取消收纳袋滚动限制",
+   "desc": "是否取消收纳袋滚动功能限制，允许你选择任何物品。"
+  },
+  "undefined": {
+   "title": "未定义"
+  },
+  "unloaded-chunks": {
+   "title": "未加载的区块",
+   "desc": "阻止你进入未加载的区块."
+  },
+  "unsafe-line-color": {
+   "title": "不安全线颜色",
+   "desc": "不安全方块的线条颜色."
+  },
+  "unsafe-side-color": {
+   "title": "不安全侧颜色",
+   "desc": "不安全方块的侧面颜色."
+  },
+  "unsprint-in-water": {
+   "title": "攻击时停止冲刺",
+   "desc": "攻击时是否停止冲刺,以确保你能获得暴击和扫射攻击."
+  },
+  "unsprint-on-hit": {
+   "title": "保持冲刺",
+   "desc": "攻击实体后是否保持冲刺状态."
+  },
+  "unstackable": {
+   "title": "不可堆叠",
+   "desc": "补充不可堆叠的物品。"
+  },
+  "untuned-line-color": {
+   "title": "未调整线条颜色",
+   "desc": "未调整块的线条颜色."
+  },
+  "untuned-side-color": {
+   "title": "未调整侧边颜色",
+   "desc": "未调整块的侧边颜色."
+  },
+  "up": {
+   "title": "上",
+   "desc": "破坏范围."
+  },
+  "update-delay": {
+   "title": "更新延迟",
+   "desc": "更新延迟（单位：游戏刻）"
+  },
+  "use-custom-path": {
+   "title": "使用自定义路径"
+  },
+  "use-fireworks": {
+   "title": "使用烟花",
+   "desc": "每隔你选择的秒数使用一次烟花."
+  },
+  "use-fixed-center": {
+   "title": "使用固定中心"
+  },
+  "use-team-color": {
+   "title": "使用队伍颜色",
+   "desc": "使用玩家队伍颜色来渲染如ESP和弹道追踪等效果。"
+  },
+  "use-total-count": {
+   "title": "使用总计数",
+   "desc": "在统计所有选定实体的总数或每个实体分别计数之间切换."
+  },
+  "vanilla-boost-factor": {
+   "title": "原版加速因子",
+   "desc": "加速跳跃的程度."
+  },
+  "vanilla-speed": {
+   "title": "原版速度",
+   "desc": "以每秒方块数为单位的速度."
+  },
+  "vehicles": {
+   "title": "载具",
+   "desc": "反向步是否影响载具。"
+  },
+  "velocity-height": {
+   "title": "速度高度",
+   "desc": "速度模式移动你的距离."
+  },
+  "vertical-radius": {
+   "title": "垂直搜索范围",
+   "desc": "垂直搜索洞穴的范围."
+  },
+  "vertical-range": {
+   "title": "垂直范围",
+   "desc": "垂直范围（以方块为单位）."
+  },
+  "vertical-speed": {
+   "title": "垂直速度",
+   "desc": "你上下移动的速度."
+  },
+  "vertical-speed-match": {
+   "title": "垂直速度匹配",
+   "desc": "将你的垂直速度匹配到你的水平速度,否则使用原版比例."
+  },
+  "vignette": {
+   "title": "暗角",
+   "desc": "禁用暗角覆盖的渲染."
+  },
+  "visual-range": {
+   "title": "视觉范围",
+   "desc": "当实体进入你的渲染范围时通知你."
+  },
+  "walls-range": {
+   "title": "墙壁范围",
+   "desc": "允许隔着墙壁在玩家身后放置方块的最远距离."
+  },
+  "water-animals-color": {
+   "title": "水生动物颜色",
+   "desc": "水生动物的颜色。"
+  },
+  "water-color": {
+   "title": "水色",
+   "desc": "水的颜色."
+  },
+  "waypoint-fade-distance": {
+   "title": "路标淡出距离",
+   "desc": "开始淡出的路标距离."
+  },
+  "waypoint-lock": {
+   "title": "路径点锁定"
+  },
+  "waypoint-reader": {
+   "title": "路径点读取"
+  },
+  "weapon": {
+   "title": "武器",
+   "desc": "只在手持指定的武器时攻击实体."
+  },
+  "weather": {
+   "title": "天气",
+   "desc": "禁用天气的渲染."
+  },
+  "web": {
+   "title": "蜘蛛网",
+   "desc": "蜘蛛网是否不会减慢你."
+  },
+  "web-timer": {
+   "title": "蜘蛛网timer",
+   "desc": "蛛网模式 Timer的timer值."
+  },
+  "webs": {
+   "title": "蜘蛛网",
+   "desc": "是否显示有蜘蛛网的洞穴."
+  },
+  "when-holding-right-click": {
+   "title": "按住右键时生效",
+   "desc": "只在按住右键时生效."
+  },
+  "when-sneaking": {
+   "title": "潜行时",
+   "desc": "潜行时使用速度."
+  },
+  "while-in-screens": {
+   "title": "在屏幕打开时点击",
+   "desc": "是否在屏幕打开时进行点击."
+  },
+  "while-moving": {
+   "title": "边移动边建造",
+   "desc": "允许你在移动时建造塔."
+  },
+  "whitelist": {
+   "title": "白名单",
+   "desc": "你想挖掘的方块."
+  },
+  "width": {
+   "title": "宽度",
+   "desc": "高速公路的宽度."
+  },
+  "wind-burst": {
+   "title": "风爆",
+   "desc": "切换到带有风爆附魔的钉锤，在下落击中时向上弹射。"
+  },
+  "window-title-text": {
+   "title": "窗口标题文本",
+   "desc": "它在窗口标题中显示的文本."
+  },
+  "word-wrap": {
+   "title": "自动换行",
+   "desc": "防止单词在行中间被切断。"
+  },
+  "world-border": {
+   "title": "世界边界",
+   "desc": "禁用世界边界的渲染显示。"
+  },
+  "world-origin": {
+   "title": "世界原点"
+  },
+  "world-seed": {
+   "title": "世界种子"
+  },
+  "xcarry": {
+   "title": "额外存储",
+   "desc": "允许你在你的合成网格中存储四个额外的物品堆."
+  },
+  "xp-delay": {
+   "title": "经验瓶延迟"
+  },
+  "xp-supply": {
+   "title": "经验瓶补给"
+  },
+  "y-modifier": {
+   "title": "y-修正",
+   "desc": "幽灵的Y轴位置每秒改变的量."
+  },
+  "yaw": {
+   "title": "偏航",
+   "desc": "使用简单旋转锁定的弹跳模式时,要看的偏航角."
+  },
+  "yaw-angle": {
+   "title": "偏航角度",
+   "desc": "偏航角度,以度为单位."
+  },
+  "yaw-lock": {
+   "title": "偏航锁定",
+   "desc": "是否启用偏航锁定."
+  },
+  "yaw-lock-mode": {
+   "title": "偏航锁定模式",
+   "desc": "锁定你的偏航的方式."
+  },
+  "yaw-steps": {
+   "title": "偏航步骤模式",
+   "desc": "何时运行偏航步骤检查."
+  },
+  "yaw-steps-mode": {
+   "title": "旋转",
+   "desc": "服务器端旋转到被击中/放置的水晶的方向."
+  },
+  "zoom": {
+   "title": "缩放",
+   "desc": "缩放的倍数."
+  }
+ },
+ "groups": {
+  "Actions": "操作",
+  "Anchors": "锚点",
+  "Anti Drop": "防丢弃",
+  "Anti Kick": "防踢出",
+  "Appearance": "外观",
+  "Arm": "手臂",
+  "Arrows": "箭",
+  "Auto Drop": "自动丢弃",
+  "Auto Steal": "自动偷取",
+  "Autopilot": "自动驾驶",
+  "Background": "背景",
+  "Base": "基地",
+  "Bind": "绑定",
+  "Block Lists": "方块列表",
+  "Blocks": "方块",
+  "Border": "边框",
+  "Break": "破坏",
+  "Chat": "聊天",
+  "Checkboxes": "复选框",
+  "Cleanup": "清理",
+  "Color": "颜色",
+  "Colors": "颜色",
+  "Combat": "战斗",
+  "Config": "配置",
+  "Control": "控制",
+  "Crossbows": "弩",
+  "Crystals": "水晶",
+  "Death Position": "死亡位置",
+  "Digging": "挖掘",
+  "Distance": "距离",
+  "Durability": "耐久",
+  "Editor": "编辑器",
+  "Enchantments": "附魔",
+  "Entities": "实体",
+  "Entity": "实体",
+  "Face Place": "面向放置",
+  "Filter": "过滤",
+  "Flight": "飞行",
+  "Friends": "好友",
+  "GUI": "GUI",
+  "General": "通用",
+  "HUD": "HUD",
+  "Hand": "手",
+  "Health": "生命",
+  "Hide Flags": "隐藏标记",
+  "Inventory": "背包",
+  "Item Lists": "物品列表",
+  "Items": "物品",
+  "Joins/Leaves": "加入/退出",
+  "Keybinding": "按键绑定",
+  "Lava": "岩浆",
+  "Line 1": "第 1 行",
+  "Line 2": "第 2 行",
+  "Longer Chat": "更长聊天",
+  "Mace": "重锤",
+  "Mace Enchants": "重锤附魔",
+  "Macros": "宏",
+  "Main Hand": "主手",
+  "Messages": "消息",
+  "Misc": "杂项",
+  "Modules": "模块",
+  "Movement": "移动",
+  "Note Map": "音符映射",
+  "Numbers": "数字",
+  "Off Hand": "副手",
+  "Opened Rendering": "打开渲染",
+  "Optional": "可选",
+  "Other": "其他",
+  "Other Enchants": "其他附魔",
+  "Outline": "轮廓",
+  "Output": "输出",
+  "Overlay": "覆盖层",
+  "Pathing": "寻路",
+  "Pause": "暂停",
+  "Paving": "铺路",
+  "Pearl": "珍珠",
+  "Ping": "延迟",
+  "Pitch": "俯仰",
+  "Place": "放置",
+  "Players": "玩家",
+  "Position": "位置",
+  "Potions": "药水",
+  "Prefix": "前缀",
+  "Previews": "预览",
+  "Profiles": "档案",
+  "Range": "范围",
+  "Refreshing": "刷新",
+  "Render": "渲染",
+  "Render Digging": "渲染挖掘",
+  "Render Paving": "渲染铺路",
+  "Rendering": "渲染",
+  "Safety": "安全",
+  "Save": "保存",
+  "Scale": "缩放",
+  "Screens": "屏幕",
+  "Scrollbar": "滚动条",
+  "Scrolling": "滚动",
+  "Separator": "分隔符",
+  "Shown": "显示",
+  "Sky": "天空",
+  "Slider": "滑块",
+  "Smart": "智能",
+  "Sorting": "排序",
+  "Spear Enchants": "长矛附魔",
+  "Speed": "速度",
+  "Steal and Dump": "偷取与丢弃",
+  "Strings": "字符串",
+  "Suffix": "后缀",
+  "Swapping Options": "切换选项",
+  "Switch": "切换",
+  "Sword Enchants": "剑附魔",
+  "Targeting": "目标",
+  "Text": "文本",
+  "Threshold": "阈值",
+  "Through Walls": "穿墙",
+  "Timing": "时机",
+  "Toggles": "开关",
+  "Totem": "图腾",
+  "Totem Pops": "图腾触发",
+  "Tracer": "追踪线",
+  "Visual": "视觉",
+  "Visual Range": "可视范围",
+  "Water": "水",
+  "Weapon Options": "武器选项",
+  "When Full": "满时",
+  "Whitelist": "白名单",
+  "Whole Numbers": "整数",
+  "World": "世界",
+  "Yaw": "偏航"
+ },
+ "ui": {
+  "Access Token: ": "访问令牌: ",
+  "Actions": "操作",
+  "Active:": "激活:",
+  "Active: ": "激活: ",
+  "Add": "添加",
+  "Align Center": "居中对齐",
+  "Ambient": "环境",
+  "Anchors": "锚点",
+  "Animals": "动物",
+  "Anti Drop": "防丢弃",
+  "Anti Kick": "防踢出",
+  "Apostrophe": "单引号",
+  "Appearance": "外观",
+  "Arm": "手臂",
+  "Arrow Down": "↓",
+  "Arrow Left": "←",
+  "Arrow Right": "→",
+  "Arrow Up": "↑",
+  "Arrows": "箭",
+  "Author": "作者",
+  "Authorization Guide": "授权指南",
+  "Auto Drop": "自动丢弃",
+  "Auto Steal": "自动偷取",
+  "Autopilot": "自动驾驶",
+  "Back": "返回",
+  "Background": "背景",
+  "Backspace": "退格",
+  "Barrels:": "木桶:",
+  "Base": "基地",
+  "Bind": "绑定",
+  "Bind: ": "绑定: ",
+  "Block Lists": "方块列表",
+  "Blocks": "方块",
+  "Border": "边框",
+  "Break": "破坏",
+  "Cancel": "取消",
+  "Caps Lock": "大写锁定",
+  "Chat": "聊天",
+  "Chat Feedback: ": "聊天反馈: ",
+  "Check proxies": "检查代理",
+  "Checkboxes": "复选框",
+  "Chests:": "箱子:",
+  "Cleanup": "清理",
+  "Clear All": "全部清除",
+  "Clear Chunks": "清除区块",
+  "Clear Rendering Cache": "清除渲染缓存",
+  "Click": "点击",
+  "Color": "颜色",
+  "Colors": "颜色",
+  "Combat": "战斗",
+  "Config": "配置",
+  "Consider using an authentication token: ": "建议使用身份验证令牌: ",
+  "Control": "控制",
+  "Copy": "复制",
+  "Copy config": "复制配置",
+  "Copy link": "复制链接",
+  "Create": "创建",
+  "Create new profile": "创建新配置",
+  "Crossbows": "弩",
+  "Crystals": "水晶",
+  "Death Position": "死亡位置",
+  "Delete": "删除",
+  "Digging": "挖掘",
+  "Dispensers and droppers:": "发射器与投掷器:",
+  "Distance": "距离",
+  "Don't show this again.": "不再显示此提示。",
+  "Done": "完成",
+  "Durability": "耐久",
+  "Edit": "编辑",
+  "Editor": "编辑器",
+  "Empty command prefix": "命令前缀为空",
+  "Enchantments": "附魔",
+  "End": "End",
+  "Ender Chests:": "末影箱:",
+  "Enter": "回车",
+  "Entities": "实体",
+  "Entity": "实体",
+  "Esc": "Esc",
+  "Export": "导出",
+  "Export profile": "导出配置",
+  "F1": "F1",
+  "F10": "F10",
+  "F11": "F11",
+  "F12": "F12",
+  "F13": "F13",
+  "F14": "F14",
+  "F15": "F15",
+  "F16": "F16",
+  "F17": "F17",
+  "F18": "F18",
+  "F19": "F19",
+  "F2": "F2",
+  "F20": "F20",
+  "F21": "F21",
+  "F22": "F22",
+  "F23": "F23",
+  "F24": "F24",
+  "F25": "F25",
+  "F3": "F3",
+  "F4": "F4",
+  "F5": "F5",
+  "F6": "F6",
+  "F7": "F7",
+  "F8": "F8",
+  "F9": "F9",
+  "Face Place": "面向放置",
+  "Failure exporting profile": "导出配置失败",
+  "Failure importing profile": "导入配置失败",
+  "Filter": "过滤",
+  "Flight": "飞行",
+  "Friends": "好友",
+  "From: ": "来自: ",
+  "Furnaces:": "熔炉:",
+  "GUI": "GUI",
+  "General": "通用",
+  "Goto": "前往",
+  "Grave Accent": "反引号",
+  "Guide": "指南",
+  "HUD": "HUD",
+  "Hand": "手",
+  "Health": "生命",
+  "Hide Flags": "隐藏标记",
+  "Home": "Home",
+  "Hoppers:": "漏斗:",
+  "If the link does not automatically open in a few seconds, copy it into your browser.": "如果链接在几秒内没有自动打开，请将其复制到浏览器中。",
+  "Import": "导入",
+  "Import profile": "导入配置",
+  "Imported proxy: ": "已导入代理: ",
+  "Importing proxies from ": "正在从以下位置导入代理 ",
+  "Info": "信息",
+  "Insert": "插入",
+  "Invalid File!": "文件无效！",
+  "Inventory": "背包",
+  "Item Lists": "物品列表",
+  "Items": "物品",
+  "Joins/Leaves": "加入/退出",
+  "Key": "按键",
+  "Keybinding": "按键绑定",
+  "Lava": "岩浆",
+  "Left Alt": "左Alt",
+  "Left Control": "左Ctrl",
+  "Left Shift": "左Shift",
+  "Left Super": "左Win",
+  "Left click - Toggle module": "左键点击 - 切换模块",
+  "Line 1": "第 1 行",
+  "Line 2": "第 2 行",
+  "Load": "加载",
+  "Log": "日志",
+  "Login": "登录",
+  "Long command prefix": "命令前缀过长",
+  "Longer Chat": "更长聊天",
+  "Mace": "重锤",
+  "Mace Enchants": "重锤附魔",
+  "Macros": "宏",
+  "Main Hand": "主手",
+  "Menu": "菜单",
+  "Messages": "消息",
+  "Misc": "杂项",
+  "Missing meteor-client/notebot folder.": "缺少 meteor-client/notebot 文件夹。",
+  "Module copied!": "模块已复制！",
+  "Modules": "模块",
+  "Monsters": "怪物",
+  "Mouse Left": "鼠标左键",
+  "Mouse Middle": "鼠标中键",
+  "Mouse Right": "鼠标右键",
+  "Movement": "移动",
+  "Name: ": "名称: ",
+  "New": "新建",
+  "No": "否",
+  "No songs found.": "未找到歌曲。",
+  "None": "无",
+  "Note Map": "音符映射",
+  "Note: on vanilla servers you may give yourself up to 4 blocks of additional reach for specific actions - ": "注意: 在原版服务器上，你可以为特定操作获得最多 4 格额外触及距离 - ",
+  "Num Lock": "数字锁定",
+  "Numbers": "数字",
+  "Numpad Enter": "小键盘回车",
+  "Off Hand": "副手",
+  "Ok": "确定",
+  "Open": "打开",
+  "Open Song GUI": "打开歌曲界面",
+  "Open documentation.": "打开文档。",
+  "Opened Rendering": "打开渲染",
+  "Optional": "可选",
+  "Other": "其他",
+  "Other Enchants": "其他附魔",
+  "Outline": "轮廓",
+  "Output": "输出",
+  "Overlay": "覆盖层",
+  "Page Down": "下一页",
+  "Page Up": "上一页",
+  "Paste config": "粘贴配置",
+  "Pathing": "寻路",
+  "Pause": "暂停",
+  "Paving": "铺路",
+  "Pearl": "珍珠",
+  "Ping": "延迟",
+  "Pitch": "俯仰",
+  "Place": "放置",
+  "Players": "玩家",
+  "Please select the account to log into in your browser.": "请在浏览器中选择要登录的账号。",
+  "Pos: ": "坐标: ",
+  "Position": "位置",
+  "Potential prefix conflict": "可能存在前缀冲突",
+  "Potions": "药水",
+  "Prefix": "前缀",
+  "Preview": "预览",
+  "Previews": "预览",
+  "Print Screen": "屏幕截图",
+  "Profiles": "档案",
+  "Proxies Config": "代理配置",
+  "Proxy already exists: ": "代理已存在: ",
+  "Rainbow: ": "彩虹: ",
+  "Random Song": "随机歌曲",
+  "Range": "范围",
+  "Refresh": "刷新",
+  "Refreshing": "刷新",
+  "Render": "渲染",
+  "Render Digging": "渲染挖掘",
+  "Render Paving": "渲染铺路",
+  "Rendering": "渲染",
+  "Reset": "重置",
+  "Reset Colors": "重置颜色",
+  "Reset Layout": "重置布局",
+  "Reset Tracers": "重置追踪线",
+  "Right Alt": "右Alt",
+  "Right Control": "右Ctrl",
+  "Right Shift": "右Shift",
+  "Right Super": "右Win",
+  "Right click - Open module settings": "右键点击 - 打开模块设置",
+  "Safety": "安全",
+  "Save": "保存",
+  "Scale": "缩放",
+  "Screens": "屏幕",
+  "Scroll Lock": "滚动锁定",
+  "Scrollbar": "滚动条",
+  "Scrolling": "滚动",
+  "Select": "选择",
+  "Select File": "选择文件",
+  "Select which profile settings to export.": "选择要导出的配置设置。",
+  "Separator": "分隔符",
+  "Set Here": "设为此处",
+  "Settings": "设置",
+  "Shown": "显示",
+  "Shulkers:": "潜影盒:",
+  "Sky": "天空",
+  "Slider": "滑块",
+  "Slot": "槽位",
+  "Smart": "智能",
+  "Sorting": "排序",
+  "Space": "空格",
+  "Spawn": "出生点",
+  "Spear Enchants": "长矛附魔",
+  "Speed": "速度",
+  "Start": "开始",
+  "Steal and Dump": "偷取与丢弃",
+  "Stop": "停止",
+  "Strings": "字符串",
+  "Suffix": "后缀",
+  "Swapping Options": "切换选项",
+  "Switch": "切换",
+  "Sword Enchants": "剑附魔",
+  "Tab": "Tab",
+  "Targeting": "目标",
+  "Text": "文本",
+  "Theme:": "主题:",
+  "Threshold": "阈值",
+  "Through Walls": "穿墙",
+  "Timing": "时机",
+  "Title": "标题",
+  "Toggle on bind release: ": "松开绑定时切换: ",
+  "Toggles": "开关",
+  "Token: ": "令牌: ",
+  "Total:": "总计:",
+  "Total: ": "总计: ",
+  "Totem": "图腾",
+  "Totem Pops": "图腾触发",
+  "Tracer": "追踪线",
+  "Unknown": "未知",
+  "Unrecognised proxy format: ": "无法识别的代理格式: ",
+  "Visual": "视觉",
+  "Visual Range": "可视范围",
+  "Warning: Due to shaders in use, opacity is overridden to 0.": "警告: 由于正在使用光影，不透明度被强制设为 0。",
+  "Water": "水",
+  "Water Animals": "水生动物",
+  "Weapon Options": "武器选项",
+  "Website": "网站",
+  "When Full": "满时",
+  "Whitelist": "白名单",
+  "Whole Numbers": "整数",
+  "World": "世界",
+  "World 1": "世界1",
+  "World 2": "世界2",
+  "Yaw": "偏航",
+  "Yes": "是",
+  "You need to be in a world.": "你需要处于世界中。"
+ },
+ "descriptions": {
+  "Arc-length spacing between trail boxes — smaller = denser line.": "轨迹框之间的弧长间距 — 越小 = 线条越密。",
+  "AutoElytraV1 HUD element.": "AutoElytraV1 HUD 元素。",
+  "AutoElytraV1 example command.": "AutoElytraV1 示例命令。",
+  "AutoElytraV1 example module — highlights world origin.": "AutoElytraV1 示例模块 — 高亮世界原点。",
+  "Color of the spiral trail boxes.": "螺旋轨迹框的颜色。",
+  "Elytra infinite flight → reaches target height → auto-switch to ElytraFly Pitch40.": "鞘翅无限飞行 → 达到目标高度 → 自动切换到 ElytraFly Pitch40。",
+  "Fixed spiral center X coordinate.": "固定的螺旋中心 X 坐标。",
+  "Fixed spiral center Z coordinate.": "固定的螺旋中心 Z 坐标。",
+  "Fly an Archimedean spiral.": "沿阿基米德螺旋飞行。",
+  "Half-width of each trail box (blocks).": "每个轨迹框的半宽 (格)。",
+  "Hard cap on rendered boxes per frame.": "每帧渲染框数量的硬性上限。",
+  "Horizontal speed (m/s) floor — when reached, transition back to dive.": "水平速度 (m/s) 下限 — 达到后切换回俯冲。",
+  "Horizontal speed (m/s) to reach before pulling up.": "拉升前需达到的水平速度 (m/s)。",
+  "Render distance around the player (chunks).": "玩家周围的渲染距离 (区块)。",
+  "Render the spiral path as connected cubes.": "将螺旋路径渲染为相连的立方体。",
+  "Set center-x / center-z to current player coordinates.": "将中心 X / 中心 Z 设为当前玩家坐标。",
+  "Target pitch (negative = up) while pulling up.": "拉升时的目标俯仰角 (负值 = 向上)。",
+  "Target pitch (positive = down) while diving.": "俯冲时的目标俯仰角 (正值 = 向下)。",
+  "The color of the marker.": "标记的颜色。",
+  "The size of the marker.": "标记的大小。",
+  "Use a fixed center point instead of resetting on each activation.": "使用固定中心点，而不是在每次激活时重置。",
+  "When the player reaches this Y level, switch to ElytraFly Pitch40 and disable this module.": "当玩家到达此 Y 高度时，切换到 ElytraFly Pitch40 并禁用本模块。"
+ }
+}
