@@ -1,6 +1,7 @@
 # Meteor-ZH · Meteor Client 全界面中文化
 
 [![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
+[![Build](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml/badge.svg)](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml)
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11-62b47a.svg)](#兼容性)
 [![Fabric](https://img.shields.io/badge/Fabric-0.19.3-dbb69b.svg)](#兼容性)
 [![Version](https://img.shields.io/badge/version-1.4.0-a855f7.svg)](CHANGELOG.md)
