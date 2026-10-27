@@ -1,0 +1,74 @@
+# Meteor-ZH 自动发布（release.yml）
+#
+# 触发：推送 v* 标签（例如 v1.4.0）
+#   git tag v1.4.0 && git push origin v1.4.0
+#
+# 注意：标签版本必须与 gradle.properties 的 mod_version 一致，
+# 否则构建出的 jar 是 meteor-zh-1.4.0.jar，而 release 标成 v1.5.0。
+#
+# ⚠️ 映射说明：本工程源码使用 Mojang 官方映射名（mojmap），
+# build.gradle 里是 `mappings loom.officialMojangMappings()`，不是 yarn。
+# 不要按社区里 yarn 版 Meteor addon 模板来改这个 workflow / build.gradle。
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # 完整历史：generate_release_notes 需要根据上一个 tag 生成变更记录
+          fetch-depth: 0
+
+      - name: Check tag matches mod_version
+        # 标签版本和 gradle.properties 的 mod_version 不一致时直接失败，
+        # 避免出现「tag 是 v1.5.0、jar 却是 meteor-zh-1.4.0.jar」的发布事故
+        run: |
+          VERSION=$(grep -E '^mod_version=' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
+          TAG="${GITHUB_REF_NAME#v}"
+          echo "tag=${TAG}  mod_version=${VERSION}"
+          if [ "${TAG}" != "${VERSION}" ]; then
+            echo "::error::tag ${TAG} 与 gradle.properties 的 mod_version ${VERSION} 不一致"
+            exit 1
+          fi
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build
+        # chmod：Windows 下创建的仓库可能没保留 gradlew 的可执行位
+        run: |
+          chmod +x gradlew
+          ./gradlew build --no-daemon
+
+      - name: Collect remapped jar
+        # 只取映射后的 meteor-zh-<version>.jar，排除 *-dev.jar 与 *-sources.jar
+        run: |
+          mkdir -p out
+          find build/libs -maxdepth 1 -name 'meteor-zh-*.jar' \
+            ! -name '*-dev.jar' ! -name '*-sources.jar' \
+            -exec cp -v {} out/ \;
+          ls -l out
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*.jar
+          fail_on_unmatched_files: true
+          generate_release_notes: true
