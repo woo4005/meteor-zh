@@ -1,0 +1,59 @@
+name: 功能请求
+description: 提议新功能、新的 addon 翻译覆盖，或修正/统一现有翻译
+title: "[Feature] "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢建议！请先搜索 [现有 issue](https://github.com/woo4005/meteor-zh/issues)，确认不是重复请求。
+
+        如果只是"某个词还是英文"或"这个词译错了"，直接用 **Bug 报告** 更快；本模板用于需要设计或开发的改动。
+
+  - type: dropdown
+    id: request-type
+    attributes:
+      label: 需求类型
+      description: 选最接近的一项
+      options:
+        - 覆盖新的 addon
+        - 修正翻译
+        - 新功能
+        - 性能
+        - 文档
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 需求描述
+      description: 你想要什么？现状是什么？
+      placeholder: 例如：希望覆盖 Miku addon 的设置项，现在这些设置项还是英文。
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望效果
+      description: 实现后界面或行为应该变成什么样？能给出具体译法/示例更好。
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 替代方案（可选）
+      description: 你试过的其它做法，或可以接受的折中方案。
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: 补充信息（可选）
+      description: 截图、addon 的下载链接、英文原串列表等。
+    validations:
+      required: false

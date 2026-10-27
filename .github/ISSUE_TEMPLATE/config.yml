@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 已知边界与安装说明（README）
+    url: https://github.com/woo4005/meteor-zh/blob/main/README.md#已知边界
+    about: 先看这里：设置分组内部名、按键名存储、第三方缩写等属于已知行为的现象
+  - name: 项目主页与 Releases
+    url: https://github.com/woo4005/meteor-zh
+    about: 源码、版本说明与 jar 下载

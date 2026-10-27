@@ -18,7 +18,7 @@ BUILD = os.path.join(ROOT, "build")
 CLASSES = os.path.join(BUILD, "classes")
 DIST = os.path.join(ROOT, "dist")
 MOD_ID = "meteor-zh"
-VERSION = "1.3.1"
+VERSION = "1.4.0"
 
 
 def read_classpath():
@@ -84,6 +84,12 @@ def compile_java():
 
 
 def copy_resources():
+    """Copy resources into the class output dir.
+
+    ``fabric.mod.json`` declares ``"version": "${version}"`` so that the Gradle build can
+    expand it through processResources. This offline build has no Gradle, so substitute the
+    same placeholder here — the two build paths then produce identical metadata.
+    """
     res = os.path.join(ROOT, "src", "main", "resources")
     for base, _, files in os.walk(res):
         for name in files:
@@ -91,7 +97,13 @@ def copy_resources():
             rel = os.path.relpath(src, res)
             dst = os.path.join(CLASSES, rel)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
-            shutil.copy2(src, dst)
+            if name == "fabric.mod.json":
+                with io.open(src, "r", encoding="utf-8") as f:
+                    text = f.read().replace("${version}", VERSION)
+                with io.open(dst, "w", encoding="utf-8", newline="\n") as f:
+                    f.write(text)
+            else:
+                shutil.copy2(src, dst)
 
 
 def jar_dir(out_path):

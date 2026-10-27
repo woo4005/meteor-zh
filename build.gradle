@@ -1,0 +1,112 @@
+/*
+ * Meteor-ZH —— Meteor Client 简体中文汉化 addon 的标准 Fabric Loom 构建脚本
+ * =====================================================================
+ *
+ * 一、映射（mappings）：本工程是 mojmap，不是 yarn（最容易踩的坑）
+ * ---------------------------------------------------------------------
+ * 源码里的类名全是 Mojang 官方映射名（mojmap）：
+ *   net.minecraft.commands.SharedSuggestionProvider   （yarn 下叫 net.minecraft.command.CommandSource）
+ *   net.minecraft.network.chat.Component              （yarn 下叫 net.minecraft.text.Text）
+ *   net.minecraft.client.gui.GuiGraphics              （yarn 下叫 net.minecraft.client.gui.DrawContext）
+ * 所以下面必须写 mappings loom.officialMojangMappings()。
+ * 一旦换成 yarn（例如 net.fabricmc:yarn:1.21.11+build.x），这些 import 会全部对不上，
+ * 编译直接报「程序包 net.minecraft.commands 不存在」，不是依赖没下载的问题。
+ * 改 build.gradle 前先看这一段。
+ *
+ * 二、Meteor Client 为什么用 modImplementation
+ * ---------------------------------------------------------------------
+ * meteordevelopment:meteor-client:1.21.11-SNAPSHOT 发布在 maven.meteordev.org 上，
+ * 是 Loom 重映射链条里的 mod 产物。modImplementation 会让 Loom 把它重映射到
+ * 本工程当前的命名空间（mojmap），源码才能用 mojmap 名字调用 Meteor 的 API。
+ * 如果某天上游改成直接发 yarn 命名的 dev jar、导致 Loom 无法重映射，
+ * 可以退回 implementation 并在这一行留注释说明取舍；那种情况下只能配合
+ * yarn 映射使用，本工程（mojmap）就不能这么改 —— 届时改用离线流程（见下）。
+ *
+ * 三、Gradle 版本
+ * ---------------------------------------------------------------------
+ * Loom 1.16 起最低要求 Gradle 9.4（见 Fabric Loom 1.16 release notes：
+ * "Update minimum Gradle version to 9.4"），Loom 1.17.19 自身用 Gradle 9.5 自举。
+ * 因此 wrapper 钉的是 Gradle 9.5.1，而不是更低的 8.x —— 写 8.12 会在插件加载阶段
+ * 就被 Loom 拒绝。详见 gradle/wrapper/gradle-wrapper.properties 的注释。
+ *
+ * 四、本工程的验证方式（如实说明，别在 README 里写成「本地已验证」）
+ * ---------------------------------------------------------------------
+ * 本工程在 GitHub Actions 的联网环境验证：.github/workflows/build.yml
+ * （push / PR / 手动触发，JDK 21 + ./gradlew build --no-daemon）。
+ * 本机（国内网络）没有安装 Gradle，且 Maven Central、maven.fabricmc.net 在本网络
+ * 不可达，所以本机维护者走的是离线构建流程：
+ *     python scripts/build_words.py
+ *     python scripts/build_dict.py
+ *     python scripts/build.py       -> dist/meteor-zh-x.y.z.jar
+ * 离线流程用 javac + 自带 ASM 重映射工具出包，不经过 Gradle；
+ * 两条路径最终产物都是 meteor-zh-<version>.jar，fabric.mod.json 的 ${version}
+ * 都由构建期注入（Gradle 侧见下面的 processResources）。
+ *
+ * 五、其它约定
+ * ---------------------------------------------------------------------
+ * - 产物名固定为 build/libs/meteor-zh-<version>.jar；
+ * - version 唯一来源是 gradle.properties 的 mod_version；
+ * - 不开 withSourcesJar()：用户只需要运行期 jar，没必要把源码打进发布产物。
+ */
+
+plugins {
+    // 1.21.11 仍属混淆时代，必须用 -remap 变体的 Loom（26.x 才换成 net.fabricmc.fabric-loom）
+    id 'net.fabricmc.fabric-loom-remap' version "1.17.19"
+    id 'maven-publish'
+}
+
+repositories {
+    // 国内镜像优先：Maven Central 在本网络不可达（DNS 解析失败），用阿里云公共镜像替代
+    maven { url = uri('https://maven.aliyun.com/repository/public') }
+    // Meteor Client 的 maven（releases 放正式版，snapshots 放 1.21.11-SNAPSHOT 这类快照）
+    maven { url = uri('https://maven.meteordev.org/releases') }
+    maven { url = uri('https://maven.meteordev.org/snapshots') }
+    // 兜底：GitHub Actions 等联网环境直连 Maven Central
+    mavenCentral()
+    // Fabric 的 maven（loader / mixin 等）由 Loom 自动加，这里不重复声明
+}
+
+version = mod_version          // 来自 gradle.properties，产物名与 fabric.mod.json 的 ${version} 都用它
+group = maven_group            // 来自 gradle.properties
+
+base {
+    // 固定 jar 前缀：meteor-zh-<version>.jar
+    // 显式写 project. 前缀，避免在闭包里按任务属性解析而出错
+    archivesName = project.archives_base_name
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:1.21.11"
+    // ⚠️ 必须 mojmap（见文件头第一节）：yarn 会让源码全部编译不过
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:0.19.3"
+
+    // Meteor Client：dev jar / mod jar 由 Loom 重映射到 mojmap（见文件头第二节）
+    modImplementation "meteordevelopment:meteor-client:1.21.11-SNAPSHOT"
+}
+
+processResources {
+    // fabric.mod.json 里写 "version": "${version}"，构建时用 Gradle 的 version 展开，
+    // 避免手工在多处维护版本号（漏展开时 loader 会报版本解析失败）
+    inputs.property "version", project.version
+    filesMatching('fabric.mod.json') {
+        expand "version": project.version
+    }
+}
+
+// 源码里有大量中文（词典、提示语），显式钉 UTF-8，避免 Windows 默认 GBK 下 javac 乱码
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+// 产物名兜底：即使基础名被别处改掉，remapJar 也固定输出 meteor-zh-<version>.jar
+tasks.named('remapJar') {
+    archiveFileName = "${project.archives_base_name}-${project.version}.jar"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    // 刻意不开 withSourcesJar()：发布产物只给运行期 jar，源码见 GitHub
+}

@@ -1,53 +1,66 @@
 # -*- coding: utf-8 -*-
-"""在纯 JVM 里验证词法兜底翻译（不启动 Minecraft）。"""
-import io
+"""验证词法兜底引擎（WordTranslator）的合成结果（不启动 Minecraft）。
+
+喂一批词典里没有的标识符，看能否逐词合成出可读中文；再喂已经是中文的名字，
+确认返回 null —— 这是「不会把 Miku/Lotus 的中文模块名拉丁化」的关键设计。
+
+用法:
+    python scripts/verify_lexical.py
+"""
 import os
 import subprocess
+import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-JAR = os.path.join(ROOT, "dist", "meteor-zh-1.3.0.jar")
-JAVA = r"C:\Users\wang'xiao'ya\AppData\Roaming\.minecraft\runtime\java-runtime-delta\bin\java.exe"
-JAVAC = r"C:\Users\wang'xiao'ya\AppData\Roaming\.minecraft\runtime\java-runtime-delta\bin\javac.exe"
-ARGS_FILE = os.path.join(os.path.dirname(ROOT), "miku-villager-mover", "build-offline", "javac.args")
-TEST_DIR = os.path.join(os.environ.get("TEMP", "/tmp"), "zh_test")
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+
+from _verify_env import build_classpath, find_java, find_javac  # noqa: E402
+
+TEST_SRC_DIR = os.path.join(HERE, "jvm-test")
+TEST_DIR = os.path.join(os.environ.get("TEMP", "/tmp"), "meteor-zh-jvm-test")
+MAIN_CLASS = "TestLex"
 
 
-def read_classpath():
-    with io.open(ARGS_FILE, "r", encoding="utf-8") as f:
-        lines = [ln.rstrip("\r\n") for ln in f]
-    for i, line in enumerate(lines):
-        if line.strip() == "-cp" and i + 1 < len(lines):
-            return lines[i + 1].strip().strip('"')
-        if line.startswith("-cp "):
-            return line[4:].strip().strip('"')
-    raise SystemExit("no -cp entry in javac.args")
+def decode(raw):
+    """JVM 在 Windows 上的输出可能是 UTF-8，也可能退回系统代码页，逐个试。"""
+    for enc in ("utf-8", "gbk", "cp936"):
+        try:
+            return raw.decode(enc)
+        except UnicodeDecodeError:
+            continue
+    return raw.decode("utf-8", errors="replace")
 
 
 def main():
-    offline = os.path.dirname(ARGS_FILE)
-    cp = ";".join([
-        TEST_DIR, JAR,
-        os.path.join(offline, "meteor-mojmap.jar"),
-        os.path.join(offline, "client-mojmap.jar"),
-        os.path.join(offline, "orbit.jar"),
-        read_classpath(),
-    ])
+    os.makedirs(TEST_DIR, exist_ok=True)
+    cp = build_classpath(TEST_DIR)
+    javac = find_javac()
+    java = find_java()
 
-    src = os.path.join(TEST_DIR, "TestLex.java")
-    c = subprocess.run([JAVAC, "-encoding", "UTF-8", "--release", "21", "-d", TEST_DIR, src],
-                       capture_output=True, env=dict(os.environ, CLASSPATH=cp))
-    if c.returncode != 0:
-        print("javac failed:\n" + c.stderr.decode("utf-8", errors="replace")[:2000])
+    src = os.path.join(TEST_SRC_DIR, MAIN_CLASS + ".java")
+    compile_proc = subprocess.run(
+        [javac, "-encoding", "UTF-8", "--release", "21", "-d", TEST_DIR, "-cp", cp, src],
+        capture_output=True,
+    )
+    if compile_proc.returncode != 0:
+        print("javac failed:\n" + decode(compile_proc.stderr)[:3000])
         return 1
 
-    p = subprocess.run([JAVA, "-Dfile.encoding=UTF-8", "-cp", cp, "TestLex"],
-                       capture_output=True, cwd=TEST_DIR)
-    print("exit: %d" % p.returncode)
-    print(p.stdout.decode("utf-8", errors="replace"))
-    err = p.stderr.decode("utf-8", errors="replace")
+    proc = subprocess.run(
+        [java, "-Dfile.encoding=UTF-8", "-Dstdout.encoding=UTF-8",
+         "-Dstderr.encoding=UTF-8", "-cp", cp, MAIN_CLASS],
+        capture_output=True,
+        cwd=TEST_DIR,
+    )
+    print("exit: %d" % proc.returncode)
+    print(decode(proc.stdout))
+    err = decode(proc.stderr)
     if err.strip():
-        print("--- stderr ---\n" + err[:2000])
-    return p.returncode
+        print("--- stderr ---\n" + err[:3000])
+    return proc.returncode
 
 
 if __name__ == "__main__":

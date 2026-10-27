@@ -1,7 +1,7 @@
 # Meteor-ZH 发布文案（QQ 群用）
 
 > 用于在 Meteor / MC 插件群推广。三个版本按场景取用。
-> 发布前请先把 `meteor-zh-1.3.1.jar` 传到**群文件**，因为群里不少人打不开 GitHub。
+> 发布前请先把 `meteor-zh-1.4.0.jar` 传到**群文件**，因为群里不少人打不开 GitHub。
 
 ---
 
@@ -26,10 +26,10 @@ GUI 里 Bind、Modules、Reset、Chat Feedback 这些还是英文，按键名也
 启动自动翻译，不用点任何东西，重启照样生效。
 
 下载见群文件（或 GitHub Releases）
-源码：https://github.com/wzy080532/meteor-zh
-有问题这里提：https://github.com/wzy080532/meteor-zh/issues
+源码：https://github.com/woo4005/meteor-zh
+有问题这里提：https://github.com/woo4005/meteor-zh/issues
 
-开源 CC0，随便改随便传。
+开源 GPL-3.0，随便用随便改，改了再分发记得也开源。
 ```
 
 ---
@@ -52,8 +52,8 @@ GUI 里 Bind、Modules、Reset、Chat Feedback 这些还是英文，按键名也
 · 第三方 addon（AutoElytra、Miku、Lotus 等）完全没覆盖
 
 【这个补了什么】
-· 模块名 + 描述      171 个模块全覆盖
-· 设置项名称 + 说明   1136 条
+· 模块名 + 描述      267 个模块（含 addon），170 条带描述
+· 设置项名称 + 说明   1136 条，其中 1028 条带说明
 · 设置分组标题       129 条（General→通用、Render→渲染、Colors→颜色…）
 · GUI 按钮/提示      295 条（Bind→绑定、Apply→应用、Chat Feedback→聊天反馈…）
 · 按键名            66 条（Left Shift→左Shift、Space→空格、None→无）
@@ -76,12 +76,12 @@ GUI 里 Bind、Modules、Reset、Chat Feedback 这些还是英文，按键名也
 合成不出来的保留英文，不会乱翻。
 
 【安装】
-1. 把 meteor-zh-1.3.1.jar 放进 .minecraft/mods/
+1. 把 meteor-zh-1.4.0.jar 放进 .minecraft/mods/
    （PCL 版本隔离的话是 PCL 目录/minecraft/versions/<版本>/mods/）
 2. 建议删掉旧的 Meteor-I18n-Support-*.jar（共存不崩，但功能重复）
 3. 启动游戏，完事
 
-要求：Fabric Loader ≥ 0.16.0，Minecraft ≥ 1.21.9，仅客户端
+要求：Fabric Loader ≥ 0.16.0，Minecraft 1.21.11，仅客户端
 不兼容问题基本没有，纯客户端 addon，不碰服务端。
 
 【命令】
@@ -90,16 +90,17 @@ GUI 里 Bind、Modules、Reset、Chat Feedback 这些还是英文，按键名也
 .zh info    看词典条目数
 
 【下载】
-群文件：meteor-zh-1.3.1.jar
-GitHub：https://github.com/wzy080532/meteor-zh/releases
-源码：https://github.com/wzy080532/meteor-zh
-反馈：https://github.com/wzy080532/meteor-zh/issues
+群文件：meteor-zh-1.4.0.jar
+GitHub：https://github.com/woo4005/meteor-zh/releases
+源码：https://github.com/woo4005/meteor-zh
+反馈：https://github.com/woo4005/meteor-zh/issues
 （GitHub 打不开的话直接用群文件，反馈也可以群里说）
 
 【许可】
-CC0-1.0，公共领域，随便改、随便二次分发、不用署名。
+GPL-3.0。免费使用、修改、二次分发都行；
+如果你改了再发出去，按 GPL 要求同样开源就行。
 
-作者：dsh-woo4005
+作者：woo4005
 开发过程有 DeepSeek V4.1 flash 1017 协助
 ━━━━━━━━━━━━━━━━━━━━
 ```
@@ -111,7 +112,7 @@ CC0-1.0，公共领域，随便改、随便二次分发、不用署名。
 ```text
 Meteor 我做了个全界面汉化插件，模块名/设置项/GUI 按钮/按键名全中文，
 装上进游戏自动翻，重启也不会退回去，新装的 addon 也能自动识别。
-群文件里有，GitHub 上开源：https://github.com/wzy080532/meteor-zh
+群文件里有，GitHub 上开源：https://github.com/woo4005/meteor-zh
 ```
 
 ---
@@ -121,7 +122,7 @@ Meteor 我做了个全界面汉化插件，模块名/设置项/GUI 按钮/按键
 **先传群文件。** 这条最重要——国内打不开 GitHub 的人很多（我自己这次就是 DNS 解析问题折腾了半天）。
 顺序建议：
 
-1. 先把 `meteor-zh-1.3.1.jar` 传到群文件，文件名别改
+1. 先把 `meteor-zh-1.4.0.jar` 传到群文件，文件名别改
 2. 发「群聊短版」
 3. 有人问细节，再贴「完整版」或直接给群公告
 4. GitHub 链接放最后，作为"想追更新/提问题"的入口
@@ -135,4 +136,4 @@ Meteor 我做了个全界面汉化插件，模块名/设置项/GUI 按钮/按键
 | 支持 1.20 吗？ | 只做了 1.21.11，其他版本没测 |
 | 能翻 Lotus/Miku 吗？ | 它们本身有中文，原样保留；Miku 新增的英文条目会尽量翻 |
 | 怎么改翻译？ | 改 `src/main/resources/assets/meteorzh/lang/zh.json` 重新构建，或直接提 issue |
-| 收费吗？ | 免费，CC0 公共领域 |
+| 收费吗？ | 免费开源，GPL-3.0 |

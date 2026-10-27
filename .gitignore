@@ -1,0 +1,43 @@
+# =====================================================================
+# Meteor-ZH（meteor-zh） .gitignore
+# =====================================================================
+
+# ---------- Gradle ----------
+.gradle/
+build/
+# Gradle 9 的构建缓存与崩溃转储
+.gradle-cache/
+*.hprof
+
+# ---------- 离线构建流程（scripts/build.py）产物 ----------
+# build/ 是 javac 中间产物目录（classes/、addon-mojmap.jar、addon-intermediary.jar …），已在上方忽略。
+# dist/ 里放的是手工发布的正式分发包（meteor-zh-x.y.z.jar），按项目现有习惯保留、不忽略；
+# Gradle 的产物在 build/libs/，不会和 dist/ 冲突。
+scripts/__pycache__/
+*.pyc
+*.pyo
+
+# ---------- IDE ----------
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+bin/
+
+# ---------- Loom / Minecraft 运行与重映射目录 ----------
+run/
+remappedSrc/
+*.class
+
+# ---------- OS ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- 本地凭据 / 环境（不要提交） ----------
+.env
+local.properties

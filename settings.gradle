@@ -1,0 +1,25 @@
+// Meteor-ZH（meteor-zh）—— Gradle 工程设置
+//
+// 映射注意：本工程源码使用 Mojang 官方映射名（mojmap），build.gradle 里是
+// `mappings loom.officialMojangMappings()`，不是 yarn。改配置前先读 build.gradle 文件头。
+//
+// Gradle 版本：Loom 1.16 起要求 Gradle >= 9.4，wrapper 钉 9.5.1。
+
+pluginManagement {
+    repositories {
+        // Fabric Loom 插件本体在 Fabric 的 maven 上（插件 marker 也在这里）
+        maven { url = uri('https://maven.fabricmc.net/') }
+        // 国内镜像：本网络下 Maven Central 不可达，用阿里云公共镜像替代
+        maven { url = uri('https://maven.aliyun.com/repository/public') }
+        // 兜底：Gradle 官方插件门户（loom 的传递依赖、maven-publish 等）
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+// 不声明 org.gradle.toolchains.foojay-resolver-convention：
+// CI 用 actions/setup-java 装 temurin 21，本机也已有 JDK 21，
+// toolchain 21 直接复用当前 JDK；避免额外解析 plugins.gradle.org 的插件（国内网络不稳定）。
+// 如果在只有 JDK 25 的机器上构建，再到这里补一行 foojay 解析器声明。
+
+rootProject.name = 'meteor-zh'

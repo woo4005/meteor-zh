@@ -1,0 +1,141 @@
+name: Bug 报告
+description: 报告翻译缺失、翻译错误、界面异常或游戏崩溃
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈！提交前请先搜索 [现有 issue](https://github.com/woo4005/meteor-zh/issues)，确认没有重复。
+
+        如果安装过 `Meteor-I18n-Support`，请先删除再复现——它和本模组功能重复，共存会干扰判断。
+        崩溃类问题请一并附上 `crash-reports/crash-*.txt`。
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: 前置确认
+      description: 提交前请逐项确认。
+      options:
+        - label: 我已经搜索过现有 issue，确认这不是重复问题
+          required: true
+        - label: 我已阅读 README（含「安装」与「已知边界」）
+          required: true
+        - label: 我已删除旧的 Meteor-I18n-Support 插件（如安装过）
+          required: true
+    validations:
+      required: true
+
+  - type: input
+    id: mc-version
+    attributes:
+      label: Minecraft 版本
+      description: 精确到补丁号，例如 1.21.11
+      placeholder: "1.21.11"
+    validations:
+      required: true
+
+  - type: input
+    id: loader-version
+    attributes:
+      label: Fabric Loader 版本
+      description: 启动器的版本列表，或 logs/latest.log 开头可查
+      placeholder: "0.16.9"
+    validations:
+      required: true
+
+  - type: input
+    id: meteor-version
+    attributes:
+      label: Meteor Client 版本
+      description: 你使用的 Meteor Client 版本
+      placeholder: "1.21.11"
+    validations:
+      required: true
+
+  - type: input
+    id: addon-version
+    attributes:
+      label: meteor-zh 版本
+      description: mods/ 里的 jar 文件名，或游戏内执行 .zh info
+      placeholder: "1.4.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: 问题类型
+      description: 选最接近的一项
+      options:
+        - 模块名未翻译
+        - 设置项未翻译
+        - GUI 文字未翻译
+        - 按键名未翻译
+        - 翻译错误
+        - 游戏崩溃
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      description: 期望显示中文的地方实际显示了什么？如果是翻译错误，请写上你认为正确的译法。
+      placeholder: 例如：打开 Bind 界面时，按键名显示的是「Left Shift」，而不是「左Shift」。
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 打开哪个模块、哪个分页、点了什么，越精确越好。
+      value: |
+        1. 启动游戏，进入世界
+        2. 
+        3.
+    validations:
+      required: true
+
+  - type: input
+    id: entry
+    attributes:
+      label: 涉及的具体条目（可选）
+      description: 英文原串、模块名或设置名，例如 Chat Feedback / auto-firework
+      placeholder: "例如：Bind: "
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: latest.log
+      description: |
+        必填。位置：`.minecraft/logs/latest.log`（PCL 版本隔离用户：`versions/<版本>/logs/latest.log`）。
+        请粘贴完整内容，或把文件直接拖进输入框上传为附件。
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 截图（可选）
+      description: 直接把图片拖进输入框即可。
+    validations:
+      required: false
+
+  - type: textarea
+    id: other-mods
+    attributes:
+      label: 已安装的其他 addon（可选）
+      description: 第三方 Meteor addon 会影响词表兜底，请列出 mods/ 里的 addon 文件名。
+      placeholder: |
+        meteor-zh-1.4.0.jar
+        baritone-meteor-1.21.11.jar
+        ...
+    validations:
+      required: false
