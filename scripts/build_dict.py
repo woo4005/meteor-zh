@@ -14,6 +14,7 @@ Output
 import io
 import json
 import os
+import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REF = os.path.join(ROOT, "i18n_ref")
@@ -112,6 +113,26 @@ def convert_ui():
     return groups, ui
 
 
+def _norm_name(s):
+    """'1st line' / 'Anti Bot' / 'auto_accept' -> '1st-line' / 'anti-bot' / 'auto-accept'"""
+    s = s.strip().lower()
+    s = re.sub(r"[\s_]+", "-", s)
+    return re.sub(r"-+", "-", s)
+
+
+def _real_261_names():
+    """读取 Meteor 26.1 源码里真实存在的模块名与设置名，用来判断一个标识符的归属。
+
+    没有这个白名单，第三方 names 里的设置名会被同时写进 modules，把模块表撑大。
+    """
+    raw = load_json(os.path.join(DICT, "raw_261.json"))
+    if not raw:
+        return set(), set()
+    mods = {_norm_name(k) for k in (raw.get("modules") or {})}
+    sets = {_norm_name(k) for k in (raw.get("settings") or {})}
+    return mods, sets
+
+
 def convert_addons(modules, settings):
     """Merge third party addon entries.
 
@@ -119,9 +140,9 @@ def convert_addons(modules, settings):
       {"names": {"<kebab>": "中文"}, "descs": {"<english sentence>": "中文"}}
       {"modules": {...}, "settings": {...}, "groups": {...}, "ui": {...}}
 
-    Plain identifiers are stored in the settings bucket; ZhDict cross-checks the
-    module table as well, so one bucket is enough for identifiers whose real
-    owner (module vs setting) we cannot tell apart from the jar alone.
+    Plain identifiers are routed by a whitelist of names that really exist in the
+    Meteor 26.1 sources, so a setting name never pollutes the module table.
+    Identifiers we cannot place go into both buckets; ZhDict cross-checks both.
     """
     addons = load_json(os.path.join(DICT, "zh_addons.json"))
     if not addons:
@@ -130,12 +151,20 @@ def convert_addons(modules, settings):
     groups = {}
     ui = {}
     descriptions = {}
+    real_mod, real_set = _real_261_names()
 
     for name, value in (addons.get("names") or {}).items():
         if not value:
             continue
-        settings.setdefault(name, {}).setdefault("title", value)
-        modules.setdefault(name, {}).setdefault("title", value)
+        n = _norm_name(name)
+        if n in real_mod:
+            modules.setdefault(n, {}).setdefault("title", value)
+            settings.setdefault(n, {}).setdefault("title", value)
+        elif n in real_set:
+            settings.setdefault(n, {}).setdefault("title", value)
+        else:
+            settings.setdefault(n, {}).setdefault("title", value)
+            modules.setdefault(n, {}).setdefault("title", value)
 
     for text, value in (addons.get("descs") or {}).items():
         if value and value != text:

@@ -12,6 +12,33 @@
 
 暂无变更。后续改动会先记录在此处，发布时再归入对应版本号。
 
+## [1.5.0] - 2026-10-28
+> 本次发布新增 **Minecraft 26.1 / Meteor Client 26.1.x** 支持，为一条独立的构建线；1.21.11 线继续用 1.4.x 的 jar。两条线的源码共用同一份，只有构建脚本与产物名不同。
+
+### 新增
+
+- 支持 Minecraft 26.1 + Fabric Loader 0.20.1 + Java 25 + Meteor Client 26.1.2。产物名带 `-mc26.1` 后缀，与 1.21.11 的 jar 可以同时放在各自实例的 mods 里，互不影响。
+- `scripts/build_261.py`：26.1 专用离线构建脚本。MC 26.x 起游戏不再混淆，所以**整条 mojmap → intermediary 的 remap 流程被删掉**，编译完直接打包；classpath 由实例的 version json 自动拼出，无需手写清单。
+- `scripts/extract_261.py`：扫描 Meteor 26.1.2 的 sources jar，提取全部模块名、设置名、分组名与描述，用来和现有词典比对找缺口。
+- `scripts/patch_261_dict.py`：把 26.1 相对旧版新增/改名的词条补进 `dict/zh_addons.json`。
+- `scripts/merge_external.py`：把社区其它 Meteor 汉化项目（`xingke0/meteor_chinese` 等）的译名并入本项目词典。**只收「Meteor 26.1 源码里真实存在」的标识符**，以及按英文原句匹配的描述句，已有中文绝不覆盖。
+- `scripts/sanity_zh.py`：合并后体检，剔除值里带「暂未翻译 / TODO」之类占位语的条目。
+- `scripts/verify_261.py`：26.1 的离线验证——用实例真实 classpath 加载插件 jar，检查词典、**9 个反射字段全部存在**、若干查找结果，不启动游戏即可跑。
+
+### 变更
+
+- **词典大幅扩充**：模块 267 → 376 条，设置 1136 → 1335 条，英文描述句 22 → **1357 条**，词法引擎词表 795 → **1012 词元**。
+  - 描述句是这次收益最大的一项：Meteor 的模块说明与设置说明都按英文原句查表，1357 条覆盖了 26.1 本体 + AutoElytra/Miku 等常见 addon 的绝大多数说明文字。
+- **Minecraft 26.1 本体覆盖率经脚本核对达到 100%**：169 个模块、968 个设置项、92 个设置分组，全部有中文标题；每一条的英文说明也都有对应中文（走 `descriptions` 表按英文原句匹配）。
+- `meteor-zh.mixins.json` 的 `compatibilityLevel` 由 `JAVA_21` 提升到 `JAVA_25`（Minecraft 26.x 的 class 是 Java 25 编译的，Sponge Mixin 0.8.7 支持 `JAVA_25`）。对 1.21.11 线同样有效。
+- `ZhCommand.build()` 改用原始类型 `LiteralArgumentBuilder`：Meteor 1.21.11 的抽象方法签名是 `LiteralArgumentBuilder<SharedSuggestionProvider>`，26.1 起改成 `LiteralArgumentBuilder<ClientSuggestionProvider>`，泛型擦除后签名相同，用原始类型可以一份源码同时编译两个版本。
+- `fabric.mod.json` 在 26.1 构建时自动注入 `"java": ">=25"` 依赖，低版本 JVM 会得到明确的版本提示而不是 `UnsupportedClassVersionError`。
+- `scripts/build.py` 增加 stdout/stderr 的 UTF-8 重定向，避免 Windows GBK 控制台在打印非 ASCII 编译错误时抛 `UnicodeEncodeError` 盖住真正的错误。
+
+### 修复
+
+- 26.1 构建时 `meteordevelopment.orbit`、`net.fabricmc.api`、`org.spongepowered.asm.mixin` 找不到：Meteor 把 orbit / gson 等以嵌套 jar 形式放在自己 jar 的 `META-INF/jars/` 下，javac 读不了嵌套 jar，需要先解出来；`fabric-loader` 与 `sponge-mixin` 在 PCL 的 version json 里没有 `downloads.artifact`，要按 Maven 坐标自己拼路径。
+
 ## [1.4.0] - 2026-10-27
 
 > 本次发布把许可证从 CC0 1.0 迁移到 GNU GPL v3.0（GPL-3.0-or-later）。再分发或二次开发前请先阅读 `LICENSE` 与 `NOTICE`。

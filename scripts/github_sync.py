@@ -33,8 +33,11 @@ import github_publish_ip as ghp  # noqa: E402
 
 ROOT = ghp.ROOT
 REPO = "meteor-zh"
-VERSION = "1.4.0"
+VERSION = "1.5.0"
 BRANCH = "main"
+
+#: 两条构建线的产物（26.1 线带 -mc26.1 后缀）
+JARS = ["meteor-zh-%s.jar" % VERSION, "meteor-zh-%s-mc26.1.jar" % VERSION]
 
 UPLOAD_IPS = ["20.27.177.119", "140.82.112.9", "140.82.113.9", "140.82.114.9"]
 BLOB_CACHE = os.path.join(os.environ.get("TEMP", "."), "meteor_zh_blobs.json")
@@ -54,7 +57,7 @@ DIR_SPECS = {
     "scripts": {"skip_dirs": {"__pycache__"}, "skip_ext": {".pyc"}},
     "dict": {},
     "docs": {"only_files": {"qq-group-post.md"}},
-    "dist": {"only_files": {"meteor-zh-%s.jar" % VERSION}},
+    "dist": {"only_files": set(JARS)},
     # i18n_ref 只保留英文/中文词源记录，反编译出来的 class 与第三方 jar 不上传
     "i18n_ref": {"skip_dirs": {"jar_extract"}, "only_ext": {".json"}},
 }
@@ -237,32 +240,42 @@ def ensure_release(token):
 
     body = """Meteor Client 全界面简体中文汉化 v{ver}
 
+## 本次新增 Minecraft 26.1 支持
+
+本版是**双构建线**：同一份源码，两个 jar。
+
+| 游戏版本 | 下载 | 前置要求 |
+|---|---|---|
+| **Minecraft 26.1** | `meteor-zh-{ver}-mc26.1.jar` | Fabric Loader ≥ 0.20.1、Java 25、Meteor Client 26.1.x |
+| **Minecraft 1.21.11** | `meteor-zh-{ver}.jar` | Fabric Loader ≥ 0.16.0、Java 21、Meteor Client 1.21.11 |
+
+两个 jar 的 mod id 相同，**各自放进对应实例的 `mods/`**，不要塞进同一个实例。
+
 ## 主要变化
 
-- **许可证改为 GPL-3.0-or-later**（此前为 CC0 1.0；从本版起源码与分发包都按 GPL-3.0 授权，`LICENSE` 已替换为官方全文）
-- 新增 `DEVELOPERS.md`：完整记录需求来源、人机分工、ADR 与技术取舍
-- 新增 `CONTRIBUTING.md` / `SECURITY.md` / Issue 与 PR 模板
-- 新增标准 Fabric Loom Gradle 工程与 GitHub Actions（构建 + 按 tag 发布）
-- README 补齐兼容性矩阵、Mixin 注入点、性能实测数据、12 条已知边界
-- 明确列出「明确不改的字段」及原因（改 `SettingGroup.name` 会静默破坏所有已保存配置）
-- 词法词表修正：`no` → 无（原为「否」）、`anti` → 防（原为「反」）、`rad` → 半径
+- **新增 Minecraft 26.1 / Meteor Client 26.1.2 支持**：MC 26.x 起游戏不再混淆，整条 mojmap → intermediary 的 remap 流程被删掉，编译完直接打包
+- **词典大扩充**：模块 267 → 376，设置 1136 → 1335，英文描述句 22 → **1357**，词法词表 795 → **1069 词元**
+- **Minecraft 26.1 本体覆盖率 100%**：169 模块 / 968 设置项 / 92 分组，标题与说明全部有中文（脚本逐条核对）
+- 并入社区四个 GPL-3.0 汉化项目（xingke0、Nippaku-Zanmu、dingzhen-vape、EnderUnion）的译名，见 `NOTICE`
+- `compatibilityLevel` 提升到 `JAVA_25`；`ZhCommand.build()` 改用原始类型，一份源码同时编译 21 和 25
+- 新增离线验证脚本 `scripts/verify_261.py`：不启动游戏即可验证词典、**9 个反射字段是否仍然存在**、查找结果
 
 ## 汉化覆盖
 
 | 内容 | 条数 |
 |---|---|
-| 模块名 / 带描述的 | 267 / 170 |
-| 设置项 / 带说明的 | 1136 / 1028 |
+| 模块名 / 带描述的 | 376 / 170 |
+| 设置项 / 带说明的 | 1335 / 1028 |
 | 设置分组 | 129 |
 | GUI 固定文本（Bind / Active / Reset 等） | 295 |
-| 模块描述补充 | 22 |
+| 英文描述句（模块与设置说明） | 1357 |
 | 按键名 | 66 |
 | 顶部标签页 | 7 |
-| 词法兜底词表 | 795 |
+| 词法兜底词表 | 1069 |
 
 ## 安装
 
-把 `meteor-zh-{ver}.jar` 放进 `mods/`，启动游戏即可，无需任何配置。
+按游戏版本下载对应 jar，放进 `mods/`，启动游戏即可，无需任何配置。
 
 ## 详细说明
 
@@ -286,38 +299,46 @@ def ensure_release(token):
 
 
 def upload_asset(token, rel):
-    jar = os.path.join(ROOT, "dist", "meteor-zh-%s.jar" % VERSION)
-    name = os.path.basename(jar)
-    raw = open(jar, "rb").read()
-
+    """上传本版所有 jar（1.5.0 起是双线，两个产物）。"""
     st, assets = api_retry("GET", "/repos/%s/%s/releases/%d/assets" % (ghp.OWNER, REPO, rel["id"]),
                            token=token, accept=(200,))
-    if isinstance(assets, list):
-        for a in assets:
-            if a.get("name") == name:
-                print("asset 已存在: %s (%d bytes)" % (a["name"], a["size"]), flush=True)
-                return a
+    have = {a.get("name") for a in assets} if isinstance(assets, list) else set()
 
-    path = "/repos/%s/%s/releases/%d/assets?name=%s" % (
-        ghp.OWNER, REPO, rel["id"], urllib.parse.quote(name))
-    headers = {
-        "Authorization": "Bearer " + token,
-        "Content-Type": "application/octet-stream",
-    }
-    last = None
-    for _attempt in range(4):
-        for ip in UPLOAD_IPS:
-            try:
-                st2, _hs, payload = ghp._once(ip, "uploads.github.com", "POST", path, raw, headers, 180)
-                if st2 in (200, 201):
-                    info = json.loads(payload.decode("utf-8"))
-                    print("asset uploaded: %s (%d bytes)" % (info["name"], info["size"]), flush=True)
-                    return info
-                last = (ip, st2, payload[:200])
-            except Exception as exc:  # noqa: BLE001
-                last = (ip, type(exc).__name__, str(exc)[:120])
-        time.sleep(2)
-    raise SystemExit("上传 asset 失败: %r" % (last,))
+    for jar_name in JARS:
+        jar = os.path.join(ROOT, "dist", jar_name)
+        if not os.path.exists(jar):
+            raise SystemExit("缺少产物: " + jar)
+        raw = open(jar, "rb").read()
+        name = jar_name
+        if name in have:
+            print("asset 已存在: %s (%d bytes)" % (name, len(raw)), flush=True)
+            continue
+
+        path = "/repos/%s/%s/releases/%d/assets?name=%s" % (
+            ghp.OWNER, REPO, rel["id"], urllib.parse.quote(name))
+        headers = {
+            "Authorization": "Bearer " + token,
+            "Content-Type": "application/octet-stream",
+        }
+        last = None
+        ok = False
+        for _attempt in range(4):
+            for ip in UPLOAD_IPS:
+                try:
+                    st2, _hs, payload = ghp._once(ip, "uploads.github.com", "POST", path, raw, headers, 180)
+                    if st2 in (200, 201):
+                        info = json.loads(payload.decode("utf-8"))
+                        print("asset uploaded: %s (%d bytes)" % (info["name"], info["size"]), flush=True)
+                        ok = True
+                        break
+                    last = (ip, st2, payload[:200])
+                except Exception as exc:  # noqa: BLE001
+                    last = (ip, type(exc).__name__, str(exc)[:120])
+            if ok:
+                break
+            time.sleep(2)
+        if not ok:
+            raise SystemExit("上传 asset 失败: %r" % (last,))
 
 
 def main():
@@ -376,22 +397,25 @@ def main():
     print("tree:", new_tree["sha"], flush=True)
 
     message = (
-        "chore: 切换到 GPL-3.0 并补齐工程化设施 (v%s)\n\n"
-        "许可证\n"
-        "- LICENSE 由 CC0 换为 GPL-3.0 官方全文，源码与分发包同步\n"
-        "- 6 个 Java 源文件加 GPL-3.0 头与 SPDX 标识\n\n"
+        "feat: 新增 Minecraft 26.1 支持，词典大幅扩充 (v%s)\n\n"
+        "26.1 构建线\n"
+        "- 新增 scripts/build_261.py：MC 26.x 不再混淆，去掉整条 remap，直接打包\n"
+        "- 产物 meteor-zh-%s-mc26.1.jar（Fabric Loader >= 0.20.1 / Java 25 / Meteor 26.1.x）\n"
+        "- ZhCommand.build() 改用原始类型，一份源码同时编译 1.21.11 与 26.1\n"
+        "- meteor-zh.mixins.json 的 compatibilityLevel: JAVA_21 -> JAVA_25\n"
+        "- fabric.mod.json 在 26.1 构建时注入 \"java\": \">=25\"\n\n"
+        "词典\n"
+        "- 新增 scripts/extract_261.py：扫 Meteor 26.1.2 源码提取模块/设置/分组/描述\n"
+        "- 新增 scripts/patch_261_dict.py、scripts/merge_external.py、scripts/sanity_zh.py\n"
+        "- 模块 267 -> 376，设置 1136 -> 1335，描述句 22 -> 1357，词表 795 -> 1069\n"
+        "- 并入 xingke0 / Nippaku-Zanmu / dingzhen-vape / EnderUnion 四个 GPL-3.0 项目的译名\n"
+        "- NOTICE 更新第三方词源与许可证说明（yalu 词典的 CC0 表述已更正）\n\n"
+        "验证\n"
+        "- 新增 scripts/verify_261.py：用实例真实 classpath 离线验证词典、9 个反射字段与查找结果\n"
+        "- build.py 增加 stdout/stderr UTF-8 重定向，编译错误不再被 GBK 控制台吞掉\n\n"
         "文档\n"
-        "- 新增 DEVELOPERS.md：需求来源、人机分工、5 条 ADR 与技术取舍\n"
-        "- 新增 CONTRIBUTING.md / SECURITY.md / Issue 与 PR 模板\n"
-        "- 新增 CHANGELOG.md / NOTICE（第三方词源归属）\n"
-        "- README 重写：兼容性矩阵、Mixin 注入点、性能实测、12 条已知边界\n\n"
-        "工程化\n"
-        "- 新增标准 Fabric Loom Gradle 工程（mojmap）与 Gradle 9.5.1 wrapper\n"
-        "- 新增 GitHub Actions：build.yml 构建、release.yml 按 tag 发布\n"
-        "- verify 脚本改为环境变量 + 自动探测，去掉写死的本机路径\n"
-        "- 词法词表修正：no→无、anti→防、rad→半径\n\n"
-        "- fabric.mod.json 版本改用 ${version} 占位符，两条构建路径都展开\n"
-        "- 仓库清理：移除反编译产物与旧版本 jar" % VERSION
+        "- README：双线兼容性表、按版本下载、前置要求表、26.1 线的两个构建坑\n"
+        "- CHANGELOG / qq-group-post 同步到 1.5.0" % (VERSION, VERSION)
     )
     st, new_commit = api_retry(
         "POST", "/repos/%s/%s/git/commits" % (ghp.OWNER, REPO),

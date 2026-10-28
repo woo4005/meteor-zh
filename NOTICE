@@ -13,33 +13,50 @@ https://github.com/woo4005/meteor-zh
 
 1. Meteor-I18n-Support v1.0.2（作者：yalu）
 
-   本项目沿用了该项目的 Meteor 本体中文词条，共 2454 条。
+   本项目沿用了该项目的 Meteor 本体中文词条（初版 2454 条）。
 
-   该项目的词典以 CC0 1.0 Universal（公共领域贡献）发布，因此可以被
-   GPL-3.0 项目收录与再分发。原项目若已停止维护，其词条仍按 CC0 条款保留在
-   本项目中。
+   该项目（github.com/yalu/… 的复刻仓库 dingzhen-vape/Meteor-I18n-Support-plugin，
+   以及反编译得到的 Meteor-I18n-Support-1.21.11_to_26.1.jar）的词典在发布时以
+   CC0 1.0 Universal（公共领域贡献）声明；其后继仓库已改为 GPL-3.0。
 
-2. Meteor Client
+   **无论按 CC0 还是按 GPL-3.0 理解，并入本项目（GPL-3.0-or-later）都是兼容的**：
+   CC0 允许任意使用，GPL-3.0 与本项目同协议。本项目按 GPL-3.0-or-later 原样保留这些词条。
+
+2. 其它 Meteor 汉化项目的词条（2026-10 并入）
+
+   1.5.0 起，本项目从下列同样以 GPL-3.0 发布的开源项目并入了一批译名与英文描述句，
+   全部经过去重（本项目已有键优先）与清洗（剔除乱码、占位符、机翻否定式、元文本），
+   逐条来源与丢弃统计见 dict/zh_external_sources.md：
+
+   - xingke0/meteor_chinese（GPL-3.0）
+   - Nippaku-Zanmu/meteor-translation-addon（GPL-3.0）
+   - dingzhen-vape/Meteor-I18n-Support-plugin（GPL-3.0）
+   - EnderUnion/meteor-zh-cn-addon（GPL-3.0）
+
+   另有 ra1nyxin/MeteorTranslation 未包含任何许可证文件，按默认保留所有权利处理，
+   **未采用其任何内容**。
+
+3. Meteor Client
 
    本 mod 是 Meteor Client 的附属模组（addon），运行期依赖用户自行安装的
    Meteor Client。Meteor Client 以其自身许可证发布，本项目不分发 Meteor
    Client 的任何代码或资源。
 
-3. Fabric Loader / Fabric API / Fabric Loom
+4. Fabric Loader / Fabric API / Fabric Loom
 
    构建与运行依赖，按各自许可证（Apache-2.0 等）使用，本项目不分发。
 
-4. ASM（ObjectWeb）
+5. ASM（ObjectWeb）
 
    构建期用于字节码重映射（RemapJar 工具），按 BSD-3-Clause 使用，
    不随产物分发。
 
-5. Mojang 官方映射（mojmap）
+6. Mojang 官方映射（mojmap）
 
    编译期映射表，按 Mojang 的 mappings 使用条款使用，仅用于开发，
    不随产物分发。
 
-6. Minecraft
+7. Minecraft
 
    本项目不包含任何 Minecraft 代码或资源；用户需自备正版游戏。
 

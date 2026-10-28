@@ -1,7 +1,8 @@
 # Meteor-ZH 发布文案（QQ 群用）
 
 > 用于在 Meteor / MC 插件群推广。三个版本按场景取用。
-> 发布前请先把 `meteor-zh-1.4.0.jar` 传到**群文件**，因为群里不少人打不开 GitHub。
+> 发布前请先把两个 jar 传到**群文件**，因为群里不少人打不开 GitHub：
+> `meteor-zh-1.5.0-mc26.1.jar`（Minecraft 26.1）与 `meteor-zh-1.4.0.jar`（Minecraft 1.21.11）。
 
 ---
 
@@ -14,9 +15,9 @@ Meteor 本体没有中文，之前那个 I18n 只翻了模块名和设置项，
 GUI 里 Bind、Modules、Reset、Chat Feedback 这些还是英文，按键名也是 Left Shift 这种，
 第三方 addon 更是完全没覆盖。
 
-这个全补上了：
-· 模块名 + 功能描述
-· 1136 条设置项名称和说明
+这个全补上了（26.1 和 1.21.11 都有）：
+· 模块名 + 功能描述（305 个模块）
+· 1174 条设置项名称和说明
 · 设置分组（General→通用、Render→渲染）
 · GUI 按钮和提示文字
 · 按键名（Left Shift→左Shift、None→无）
@@ -42,8 +43,9 @@ GUI 里 Bind、Modules、Reset、Chat Feedback 这些还是英文，按键名也
 ━━━━━━━━━━━━━━━━━━━━
 
 【是什么】
-给 Minecraft 1.21.11 + Fabric + Meteor Client 用的汉化 addon。
+给 Minecraft 26.1 / 1.21.11 + Fabric + Meteor Client 用的汉化 addon。
 装上之后 Meteor 的界面基本全中文，不用改配置文件，不用手动触发。
+两个游戏版本各有一个 jar，源码共用。
 
 【为什么不用现成的】
 社区里的 Meteor-I18n-Support 只翻了模块名和设置项，问题是：
@@ -52,14 +54,14 @@ GUI 里 Bind、Modules、Reset、Chat Feedback 这些还是英文，按键名也
 · 第三方 addon（AutoElytra、Miku、Lotus 等）完全没覆盖
 
 【这个补了什么】
-· 模块名 + 描述      267 个模块（含 addon），170 条带描述
-· 设置项名称 + 说明   1136 条，其中 1028 条带说明
+· 模块名 + 描述      305 个模块（含 addon），170 条带描述
+· 设置项名称 + 说明   1174 条，其中 1028 条带说明
 · 设置分组标题       129 条（General→通用、Render→渲染、Colors→颜色…）
 · GUI 按钮/提示      295 条（Bind→绑定、Apply→应用、Chat Feedback→聊天反馈…）
 · 按键名            66 条（Left Shift→左Shift、Space→空格、None→无）
 · 顶部标签页         Modules→模块、Config→配置、Friends→好友…
 · HUD 元素名与分组
-· 第三方插件描述句   22 条
+· 第三方插件描述句   63 条
 
 已经自带中文的插件（比如 Miku、Lotus 的中文模块）原样保留，不会被二次翻译。
 
@@ -76,13 +78,17 @@ GUI 里 Bind、Modules、Reset、Chat Feedback 这些还是英文，按键名也
 合成不出来的保留英文，不会乱翻。
 
 【安装】
-1. 把 meteor-zh-1.4.0.jar 放进 .minecraft/mods/
+1. 按游戏版本选 jar，放进 .minecraft/mods/
+   · Minecraft 26.1     → meteor-zh-1.5.0-mc26.1.jar
+   · Minecraft 1.21.11  → meteor-zh-1.4.0.jar
    （PCL 版本隔离的话是 PCL 目录/minecraft/versions/<版本>/mods/）
 2. 建议删掉旧的 Meteor-I18n-Support-*.jar（共存不崩，但功能重复）
 3. 启动游戏，完事
 
-要求：Fabric Loader ≥ 0.16.0，Minecraft 1.21.11，仅客户端
-不兼容问题基本没有，纯客户端 addon，不碰服务端。
+要求：
+· Minecraft 26.1    → Fabric Loader ≥ 0.20.1，Java 25，Meteor 26.1.x
+· Minecraft 1.21.11 → Fabric Loader ≥ 0.16.0，Java 21，Meteor 1.21.11
+仅客户端，不碰服务端。
 
 【命令】
 .zh         手动重新翻译一次
@@ -90,7 +96,7 @@ GUI 里 Bind、Modules、Reset、Chat Feedback 这些还是英文，按键名也
 .zh info    看词典条目数
 
 【下载】
-群文件：meteor-zh-1.4.0.jar
+群文件：meteor-zh-1.5.0-mc26.1.jar（MC 26.1） / meteor-zh-1.4.0.jar（MC 1.21.11）
 GitHub：https://github.com/woo4005/meteor-zh/releases
 源码：https://github.com/woo4005/meteor-zh
 反馈：https://github.com/woo4005/meteor-zh/issues

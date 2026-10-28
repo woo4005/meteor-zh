@@ -22,10 +22,15 @@ package com.meteorzh;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import meteordevelopment.meteorclient.commands.Command;
-import net.minecraft.commands.SharedSuggestionProvider;
 
 /**
  * {@code .zh} — re-apply the translation and report dictionary statistics.
+ *
+ * <p>注意这里故意写成原始类型 {@code LiteralArgumentBuilder}（不带泛型参数）：
+ * Meteor 1.21.11 的 {@code Command.build} 参数是
+ * {@code LiteralArgumentBuilder<SharedSuggestionProvider>}，而 26.1 起改成了
+ * {@code LiteralArgumentBuilder<ClientSuggestionProvider>}。泛型擦除后签名相同，
+ * 原始类型正好能同时覆盖两边的抽象方法，一份源码即可编译两个游戏版本。
  */
 public class ZhCommand extends Command {
     public ZhCommand() {
@@ -33,7 +38,8 @@ public class ZhCommand extends Command {
     }
 
     @Override
-    public void build(LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
+    @SuppressWarnings("rawtypes")
+    public void build(LiteralArgumentBuilder builder) {
         builder.executes(context -> {
             int count = Translator.translateAll();
             info("已重新翻译 %d 处文本（词典 %d 条）", count, ZhDict.size());

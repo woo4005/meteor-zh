@@ -2,9 +2,9 @@
 
 [![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
 [![Build](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml/badge.svg)](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml)
-[![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11-62b47a.svg)](#兼容性)
-[![Fabric](https://img.shields.io/badge/Fabric-0.19.3-dbb69b.svg)](#兼容性)
-[![Version](https://img.shields.io/badge/version-1.4.0-a855f7.svg)](CHANGELOG.md)
+[![Minecraft](https://img.shields.io/badge/Minecraft-26.1%20%7C%201.21.11-62b47a.svg)](#兼容性)
+[![Fabric](https://img.shields.io/badge/Fabric-0.20.1%20%7C%200.19.3-dbb69b.svg)](#兼容性)
+[![Version](https://img.shields.io/badge/version-1.5.0-a855f7.svg)](CHANGELOG.md)
 
 **Meteor-ZH** 是一个 Meteor Client 附属模组（addon），把 Meteor 的整套界面翻成简体中文：模块名、功能描述、设置项名称与说明、设置分组、**按键名（Bind）**、HUD 元素、顶部标签页，以及 GUI 里写死在代码中的按钮与提示文字。
 
@@ -60,15 +60,16 @@ Meteor-ZH 把这些都补上了。
 
 | 位置 | 覆盖方式 | 词条数 |
 |---|---|---|
-| 模块名 + 模块描述 | 反射改写 `Module.title` / `Module.description` | 267 模块（170 条带描述） |
-| 设置项名称 + 说明 | 反射改写 `Setting.title` / `Setting.description` | 1136 条（1028 条带描述） |
+| 模块名 + 模块描述 | 反射改写 `Module.title` / `Module.description` | 376 模块（另按英文原句匹配 1357 条说明） |
+| 设置项名称 + 说明 | 反射改写 `Setting.title` / `Setting.description` | 1335 条（说明同样走原句匹配） |
 | 设置分组标题 | 反射改写 `SettingGroup.name` 的**显示值** | 129 条 |
 | GUI 硬编码文字 | Mixin 拦截 `GuiRenderer#text` 做字符串替换 | 295 条 |
 | 按键名（Bind） | 同渲染层替换，`Left Shift`→`左Shift`、`None`→`无` | 66 条 |
 | 顶部标签页 | 反射改写 `Tab.name` | 7 条 |
 | HUD 元素名与分组 | 反射改写 `HudElementInfo.title/description`、`HudGroup.title` | — |
 | 第三方插件的模块与描述 | 词典 + 词法兜底引擎 | 96 名称 + 22 描述句 |
-| 词典未收录的新标识符 | 795 词元的词法合成引擎 | — |
+| 模块/设置说明文字 | `descriptions` 表按英文原句精确匹配 | 1357 条 |
+| 词典未收录的新标识符 | 1012 词元的词法合成引擎 | — |
 
 **已经自带中文的插件（Lotus、Miku 的中文模块）会原样跳过，不会被二次翻译。** 这是词法引擎的
 硬性设计：一个词都没命中时返回 `null`，调用方保留原文。
@@ -77,17 +78,27 @@ Meteor-ZH 把这些都补上了。
 
 ## 兼容性
 
-| meteor-zh | Minecraft | Fabric Loader | Meteor Client | 状态 |
-|---|---|---|---|---|
-| **1.4.0**（当前） | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，对应发布版 build 82） | 开发基线，见下方说明 |
-| 1.3.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 已发布 |
-| ≤ 1.2.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 已被替代 |
+| meteor-zh | Minecraft | Fabric Loader | Meteor Client | Java | 状态 |
+|---|---|---|---|---|---|
+| **1.5.0**（当前，26.1 线） | **26.1** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 新增，产物名带 `-mc26.1` 后缀 |
+| **1.4.0**（1.21.11 线） | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，发布版 build 82） | 21 | 稳定，继续维护 |
+| 1.3.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已发布 |
+| ≤ 1.2.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被替代 |
+
+**两条线是两个独立 jar，源码共用**：
+
+| 游戏版本 | 下载的 jar | 构建脚本 |
+|---|---|---|
+| Minecraft 26.1 | `meteor-zh-1.5.0-mc26.1.jar` | `scripts/build_261.py` |
+| Minecraft 1.21.11 | `meteor-zh-1.4.0.jar` | `scripts/build.py` |
+
+两个 jar 分别放进各自实例的 `mods` 目录即可；同一个实例里**不要同时放两个**（mod id 相同，Fabric 会报重复）。
 
 关于“支持哪些 Meteor 版本”的说明：
 
 - Meteor-ZH 只依赖 Meteor 的四个**长期稳定**的类：`Module`、`Setting`、`SettingGroup`、`GuiRenderer`。
-  这些是 Meteor 每个版本都有的核心 API，字段名多年未变，因此 1.21.11 线上的 Meteor 小版本更新
-  通常不需要 Meteor-ZH 跟着发版。
+  26.1 与 1.21.11 的这四个类字段名一致，真正变了的只有 `Command#build` 的泛型参数
+  （`SharedSuggestionProvider` → `ClientSuggestionProvider`），已用原始类型兼容两边。
 - 本 mod **没有**逐个小版本做回归验证。Meteor 一旦改动上述字段或 `GuiRenderer#text` 的签名，
   数据层翻译会失效（Mixin 部分有 `required = false` 兜底，不会崩游戏）。
 - **不支持 Minecraft 1.20.x 及更早**：1.21 换了渲染管线与 mappings，跨大版本无法兼容。
@@ -99,7 +110,7 @@ Meteor-ZH 把这些都补上了。
 
 | 项目 | 值 |
 |---|---|
-| Mixin 配置 | `meteor-zh.mixins.json`，`required: false`，`compatibilityLevel: JAVA_21` |
+| Mixin 配置 | `meteor-zh.mixins.json`，`required: false`，`compatibilityLevel: JAVA_25` |
 | 目标类 | `meteordevelopment.meteorclient.gui.renderer.GuiRenderer` |
 | 目标方法 | `public void text(String text, double x, double y, Color color, boolean title)` |
 | 注入方式 | `@ModifyVariable(method = "text", at = @At("HEAD"), argsOnly = true)`，改写第一个 `String` 参数 |
@@ -119,14 +130,21 @@ Meteor-ZH 把这些都补上了。
 
 ## 安装
 
-1. 从 [Releases](https://github.com/woo4005/meteor-zh/releases) 下载 `meteor-zh-<版本>.jar`
+1. 从 [Releases](https://github.com/woo4005/meteor-zh/releases) 下载对应你游戏版本的 jar：
+   - **Minecraft 26.1** → `meteor-zh-1.5.0-mc26.1.jar`
+   - **Minecraft 1.21.11** → `meteor-zh-1.4.0.jar`
 2. 放进 `mods/` 目录
    - 官方启动器：`.minecraft/mods/`
    - **PCL 版本隔离**：`<PCL目录>/.minecraft/versions/<版本名>/mods/`
 3. **删掉**旧的 `Meteor-I18n-Support-*.jar`（与它共存不会崩，但功能重复，且两者的翻译会互相覆盖）
 4. 启动游戏，翻译自动完成
 
-前置要求：Fabric Loader ≥ 0.16.0，Minecraft 1.21.11，已安装 Meteor Client。
+前置要求：
+
+| 游戏 | Fabric Loader | Java | Meteor Client |
+|---|---|---|---|
+| Minecraft 26.1 | ≥ 0.20.1 | **25** | 26.1.x |
+| Minecraft 1.21.11 | ≥ 0.16.0 | 21 | 1.21.11 |
 
 ### 卸载
 
@@ -278,7 +296,7 @@ python scripts/verify_lexical.py
 
 有两种方式。**社区贡献者用 Gradle，维护者本机用离线脚本**——两条路产出的 jar 功能一致。
 
-### 方式一：Gradle（推荐）
+### 方式一：Gradle（推荐，目前只配了 1.21.11 线）
 
 需要 JDK 21、联网访问 `maven.fabricmc.net` 与 `maven.meteordev.org`。
 
@@ -288,6 +306,12 @@ cd meteor-zh
 ./gradlew build          # Windows: gradlew.bat build
 # 产物：build/libs/meteor-zh-<版本>.jar
 ```
+
+> 仓库里的 `build.gradle` 目前写死 Minecraft 1.21.11 / Loader 0.19.3 / Java 21。
+> **26.1 线（Minecraft 26.1、Loader 0.20.1、Java 25）暂时只有离线脚本这条路**，
+> 因为 26.x 不混淆、不需要 remap，Loom 的 `remapJar` 流程在这里反而不适用。
+> 想把 26.1 也接进 Gradle，需要另建一个 `build-261.gradle.kts` 之类的配置，
+> 把 Loom 换成不 remap 的模式。
 
 工程配置要点：
 
@@ -311,17 +335,33 @@ cd meteor-zh
 cd projects\meteor-zh
 python scripts\build_words.py    :: 生成词表 words.json（含回归评估）
 python scripts\build_dict.py     :: 装配主词典 zh.json
+
+:: --- 1.21.11 线 ---
 python scripts\build.py          :: 编译 + remap + 打包 -> dist\meteor-zh-x.y.z.jar
+
+:: --- 26.1 线（不需要 remap，但要 JDK 25）---
+python scripts\extract_261.py    :: 扫 Meteor 26.1 源码，比对词典缺口
+python scripts\build_261.py      :: 编译 + 打包 -> dist\meteor-zh-x.y.z-mc26.1.jar
 ```
 
 | 脚本 | 作用 |
 |---|---|
 | `scripts/build_words.py` | 生成词法词表，并用现有词典做回归评估（打印命中率） |
 | `scripts/build_dict.py` | 合并 I18n 语料、GUI 短语、按键名、标签页、第三方条目 → `zh.json` |
-| `scripts/build.py` | javac 编译 → ASM 重映射到 intermediary → 打 jar |
+| `scripts/build.py` | 1.21.11 线：javac 编译 → ASM 重映射到 intermediary → 打 jar |
+| `scripts/build_261.py` | 26.1 线：javac(JDK 25) 编译 → 直接打 jar（26.x 不混淆，无 remap） |
+| `scripts/extract_261.py` | 扫 Meteor 26.1.2 源码，提取模块/设置/分组/描述，与词典比对 |
+| `scripts/patch_261_dict.py` | 把 26.1 新增词条补进 `dict/zh_addons.json` |
 | `scripts/verify_dict.py` | 纯 JVM 加载 jar 内词典，检查查找结果 |
 | `scripts/verify_lexical.py` | 纯 JVM 验证词法合成引擎 |
 | `scripts/extract_*.py` | 从 Meteor 源码/jar 提取候选短语（UI 文本、按键名、addon 条目） |
+
+> **26.1 线的两个坑**（`build_261.py` 已处理，改脚本时别回退）：
+> 1. Meteor 把 `orbit`、`gson` 等依赖以**嵌套 jar** 形式放在自己 jar 的 `META-INF/jars/` 下，
+>    javac 读不了嵌套 jar，必须按 `fabric.mod.json` 的 `jars` 字段解出来再加进 classpath，否则
+>    报 `找不到符号: meteordevelopment.orbit.EventHandler`。
+> 2. `fabric-loader` 与 `sponge-mixin` 在 PCL 生成的 version json 里**没有** `downloads.artifact`，
+>    但 jar 确实在 `libraries/` 下，要按 Maven 坐标自己拼路径。
 
 产物在 `dist/`，直接丢进 `mods/` 即可。
 

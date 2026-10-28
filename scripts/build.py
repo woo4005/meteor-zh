@@ -7,6 +7,9 @@ import shutil
 import subprocess
 import sys
 
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MIKU = os.path.abspath(os.path.join(ROOT, "..", "miku-villager-mover"))
 BO = os.path.join(MIKU, "build-offline")

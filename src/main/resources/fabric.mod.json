@@ -3,7 +3,7 @@
   "id": "meteor-zh",
   "version": "${version}",
   "name": "Meteor 中文汉化 (Meteor-ZH)",
-  "description": "Meteor Client 全界面简体中文汉化：模块名与描述、设置项名称与说明、设置分组、按键名（Bind）、HUD 元素、顶部标签页，以及 GUI 里硬编码的按钮与提示文字。启动后自动翻译，无需任何手动操作，重启后依旧生效；新安装的附属模组会在下次启动时被自动识别并翻译（词典未收录的条目由内置词法引擎逐词合成，全不命中则保留英文）。由 woo4005 提出需求与验收，DeepSeek V4.1 flash 1017 完成全部设计、编码、词表与文档，详见 DEVELOPERS.md。",
+  "description": "Meteor Client 全界面简体中文汉化（Minecraft 26.1 与 1.21.11 双线）：模块名与描述、设置项名称与说明、设置分组、按键名（Bind）、HUD 元素、顶部标签页，以及 GUI 里硬编码的按钮与提示文字。启动后自动翻译，无需任何手动操作，重启后依旧生效；新安装的附属模组会在下次启动时被自动识别并翻译（词典未收录的条目由内置词法引擎逐词合成，全不命中则保留英文）。由 woo4005 提出需求与验收，DeepSeek V4.1 flash 1017 完成全部设计、编码、词表与文档，详见 DEVELOPERS.md。",
   "authors": [
     "woo4005",
     "DeepSeek V4.1 flash 1017"
