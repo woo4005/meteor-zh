@@ -38,8 +38,12 @@ VERSION = "1.5.0"
 VERSION_1211 = "1.4.0"
 BRANCH = "main"
 
-#: 两条构建线的产物（26.1 线带 -mc26.1 后缀）
-JARS = ["meteor-zh-%s.jar" % VERSION_1211, "meteor-zh-%s-mc26.1.jar" % VERSION]
+#: 两条构建线的产物（26.1 线带 -mc26.1 后缀）——见同一个仓库的 dist/ 白名单
+JARS_ALL = ["meteor-zh-%s.jar" % VERSION_1211, "meteor-zh-%s-mc26.1.jar" % VERSION]
+
+#: 本次 release 应附上的 jar：只放属于本版本线的产物。
+#: 1.5.0 是 26.1 线，所以只上传 -mc26.1 那个；1.21.11 的 1.4.0 jar 归 v1.4.0 release。
+JARS_RELEASE = ["meteor-zh-%s-mc26.1.jar" % VERSION]
 
 UPLOAD_IPS = ["20.27.177.119", "140.82.112.9", "140.82.113.9", "140.82.114.9"]
 BLOB_CACHE = os.path.join(os.environ.get("TEMP", "."), "meteor_zh_blobs.json")
@@ -59,7 +63,7 @@ DIR_SPECS = {
     "scripts": {"skip_dirs": {"__pycache__"}, "skip_ext": {".pyc"}},
     "dict": {},
     "docs": {"only_files": {"qq-group-post.md"}},
-    "dist": {"only_files": set(JARS)},
+    "dist": {"only_files": set(JARS_ALL)},
     # i18n_ref 只保留英文/中文词源记录，反编译出来的 class 与第三方 jar 不上传
     "i18n_ref": {"skip_dirs": {"jar_extract"}, "only_ext": {".json"}},
 }
@@ -309,7 +313,7 @@ def upload_asset(token, rel):
                            token=token, accept=(200,))
     have = {a.get("name") for a in assets} if isinstance(assets, list) else set()
 
-    for jar_name in JARS:
+    for jar_name in JARS_RELEASE:
         jar = os.path.join(ROOT, "dist", jar_name)
         if not os.path.exists(jar):
             raise SystemExit("缺少产物: " + jar)
