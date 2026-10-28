@@ -4,7 +4,8 @@
 [![Build](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml/badge.svg)](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml)
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.1%20%7C%201.21.11-62b47a.svg)](#兼容性)
 [![Fabric](https://img.shields.io/badge/Fabric-0.20.1%20%7C%200.19.3-dbb69b.svg)](#兼容性)
-[![Version](https://img.shields.io/badge/version-1.5.0-a855f7.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/26.1--%E7%BA%BF-1.5.0-a855f7.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/1.21.11--%E7%BA%BF-1.4.x-a855f7.svg)](CHANGELOG.md)
 
 **Meteor-ZH** 是一个 Meteor Client 附属模组（addon），把 Meteor 的整套界面翻成简体中文：模块名、功能描述、设置项名称与说明、设置分组、**按键名（Bind）**、HUD 元素、顶部标签页，以及 GUI 里写死在代码中的按钮与提示文字。
 
@@ -80,17 +81,20 @@ Meteor-ZH 把这些都补上了。
 
 | meteor-zh | Minecraft | Fabric Loader | Meteor Client | Java | 状态 |
 |---|---|---|---|---|---|
-| **1.5.0**（当前，26.1 线） | **26.1** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 新增，产物名带 `-mc26.1` 后缀 |
-| **1.4.0**（1.21.11 线） | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，发布版 build 82） | 21 | 稳定，继续维护 |
-| 1.3.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已发布 |
+| **1.5.0** | **26.1** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 26.1 专用线 |
+| **1.4.x** | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，发布版 build 82） | 21 | 1.21.11 专用线，继续维护 |
+| 1.3.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被 1.4.x 替代 |
 | ≤ 1.2.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被替代 |
 
-**两条线是两个独立 jar，源码共用**：
+**两条线各自独立编号，按游戏版本选择对应的 jar**：
 
-| 游戏版本 | 下载的 jar | 构建脚本 |
-|---|---|---|
-| Minecraft 26.1 | `meteor-zh-1.5.0-mc26.1.jar` | `scripts/build_261.py` |
-| Minecraft 1.21.11 | `meteor-zh-1.4.0.jar` | `scripts/build.py` |
+| 游戏版本 | 下载的 jar | 版本线 | 构建脚本 |
+|---|---|---|---|
+| Minecraft **26.1** | `meteor-zh-1.5.0-mc26.1.jar` | 1.5.x | `scripts/build_261.py` |
+| Minecraft **1.21.11** | `meteor-zh-1.4.0.jar` | 1.4.x | `scripts/build.py` |
+
+两条线的源码共用（同一份 `src/`），但**版本号各走各的**：1.21.11 线的后续更新发 1.4.1、1.4.2……，
+26.1 线的更新发 1.5.1、1.6.0……，互不牵连。词典是两条线共享的资源，会同时扩充到两个 jar 中。
 
 两个 jar 分别放进各自实例的 `mods` 目录即可；同一个实例里**不要同时放两个**（mod id 相同，Fabric 会报重复）。
 

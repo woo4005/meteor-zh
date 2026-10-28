@@ -34,10 +34,12 @@ import github_publish_ip as ghp  # noqa: E402
 ROOT = ghp.ROOT
 REPO = "meteor-zh"
 VERSION = "1.5.0"
+#: 1.21.11 线仍停留在 1.4.0，两条线独立编号
+VERSION_1211 = "1.4.0"
 BRANCH = "main"
 
 #: 两条构建线的产物（26.1 线带 -mc26.1 后缀）
-JARS = ["meteor-zh-%s.jar" % VERSION, "meteor-zh-%s-mc26.1.jar" % VERSION]
+JARS = ["meteor-zh-%s.jar" % VERSION_1211, "meteor-zh-%s-mc26.1.jar" % VERSION]
 
 UPLOAD_IPS = ["20.27.177.119", "140.82.112.9", "140.82.113.9", "140.82.114.9"]
 BLOB_CACHE = os.path.join(os.environ.get("TEMP", "."), "meteor_zh_blobs.json")
@@ -240,14 +242,17 @@ def ensure_release(token):
 
     body = """Meteor Client 全界面简体中文汉化 v{ver}
 
-## 本次新增 Minecraft 26.1 支持
+## 本版新增 Minecraft 26.1 支持（1.5.x 线）
 
-本版是**双构建线**：同一份源码，两个 jar。
+两条构建线**各自独立编号**，源码共用同一份：
 
-| 游戏版本 | 下载 | 前置要求 |
-|---|---|---|
-| **Minecraft 26.1** | `meteor-zh-{ver}-mc26.1.jar` | Fabric Loader ≥ 0.20.1、Java 25、Meteor Client 26.1.x |
-| **Minecraft 1.21.11** | `meteor-zh-{ver}.jar` | Fabric Loader ≥ 0.16.0、Java 21、Meteor Client 1.21.11 |
+| 游戏版本 | 下载 | 版本线 | 前置要求 |
+|---|---|---|---|
+| **Minecraft 26.1** | `meteor-zh-{ver}-mc26.1.jar` | **1.5.x**（本版新增） | Fabric Loader ≥ 0.20.1、Java 25、Meteor Client 26.1.x |
+| **Minecraft 1.21.11** | `meteor-zh-{ver1211}.jar` | **1.4.x**（继续维护） | Fabric Loader ≥ 0.16.0、Java 21、Meteor Client 1.21.11 |
+
+1.21.11 线的后续更新发 1.4.1、1.4.2……，26.1 线的更新发 1.5.1、1.6.0……，互不牵连。
+词典为两条线共享，本版扩充的词条已同时打进两个 jar。
 
 两个 jar 的 mod id 相同，**各自放进对应实例的 `mods/`**，不要塞进同一个实例。
 
@@ -282,7 +287,7 @@ def ensure_release(token):
 - [README.md](https://github.com/{owner}/{repo}/blob/main/README.md)
 - [CHANGELOG.md](https://github.com/{owner}/{repo}/blob/main/CHANGELOG.md)
 - [DEVELOPERS.md](https://github.com/{owner}/{repo}/blob/main/DEVELOPERS.md)
-""".format(ver=VERSION, owner=ghp.OWNER, repo=REPO)
+""".format(ver=VERSION, ver1211=VERSION_1211, owner=ghp.OWNER, repo=REPO)
 
     st, rel = api_retry("POST", "/repos/%s/%s/releases" % (ghp.OWNER, REPO), data={
         "tag_name": tag,
@@ -311,8 +316,16 @@ def upload_asset(token, rel):
         raw = open(jar, "rb").read()
         name = jar_name
         if name in have:
-            print("asset 已存在: %s (%d bytes)" % (name, len(raw)), flush=True)
-            continue
+            # 同名 asset 已存在时比对大小，不一致就删掉重传，避免远端留着旧产物
+            old = next((a for a in assets if a.get("name") == name), None)
+            if old and old.get("size") == len(raw):
+                print("asset 已存在: %s (%d bytes)" % (name, len(raw)), flush=True)
+                continue
+            print("asset 大小不一致，删除重传: %s (远端 %s B / 本地 %d B)"
+                  % (name, old.get("size") if old else "?", len(raw)), flush=True)
+            api_retry("DELETE", "/repos/%s/%s/releases/assets/%d" % (ghp.OWNER, REPO, old["id"]),
+                      token=token, accept=(204, 200))
+            have.discard(name)
 
         path = "/repos/%s/%s/releases/%d/assets?name=%s" % (
             ghp.OWNER, REPO, rel["id"], urllib.parse.quote(name))
