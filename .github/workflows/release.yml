@@ -1,10 +1,15 @@
 # Meteor-ZH 自动发布（release.yml）
 #
-# 触发：推送 v* 标签（例如 v1.4.0）
-#   git tag v1.4.0 && git push origin v1.4.0
+# 触发：推送 v* 标签（例如 v1.4.1）
+#   git tag v1.4.1 && git push origin v1.4.1
 #
 # 注意：标签版本必须与 gradle.properties 的 mod_version 一致，
-# 否则构建出的 jar 是 meteor-zh-1.4.0.jar，而 release 标成 v1.5.0。
+# 否则构建出的 jar 是 meteor-zh-1.4.1.jar，而 release 标成 v1.4.2。
+#
+# 两条版本线的分工：
+#   v1.4.x  -> Minecraft 1.21.11 线，本 Gradle 工程的构建目标，本 workflow 负责构建并发布
+#   v1.5.x  -> Minecraft 26.1 线，不走 Gradle（MC 26.x 换了一套构建环境，见 README「26.1 线的两个坑」），
+#             由 scripts/build_261.py 离线构建、scripts/github_sync.py 上传，因此本 workflow 直接跳过
 #
 # ⚠️ 映射说明：本工程源码使用 Mojang 官方映射名（mojmap），
 # build.gradle 里是 `mappings loom.officialMojangMappings()`，不是 yarn。
@@ -23,6 +28,9 @@ jobs:
   release:
     name: Build and publish release
     runs-on: ubuntu-latest
+    # 只处理 1.21.11 线（v1.4.x）的标签；26.1 线（v1.5.x）不经过 Gradle，直接跳过，
+    # 否则「tag 版本 ≠ mod_version」的校验步骤会让每次 26.1 发版都红一次
+    if: startsWith(github.ref_name, 'v1.4.')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
