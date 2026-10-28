@@ -240,14 +240,6 @@ def ensure_release(token):
     tag = "v" + VERSION
     st, rel = api_retry("GET", "/repos/%s/%s/releases/tags/%s" % (ghp.OWNER, REPO, tag),
                         token=token, accept=(200, 404))
-    if st == 200:
-        print("release %s 已存在: %s" % (tag, rel.get("html_url")), flush=True)
-        # 正文变了就同步过去，免得远端留着上一版的说明
-        if rel.get("body") != body:
-            api_retry("PATCH", "/repos/%s/%s/releases/%d" % (ghp.OWNER, REPO, rel["id"]),
-                      data={"body": body}, token=token, accept=(200,))
-            print("release 正文已更新", flush=True)
-        return rel
 
     body = """Meteor Client 全界面简体中文汉化 v{ver}
 
@@ -311,6 +303,15 @@ Meteor 留了开关：`设置 → Visual → Font`，可以换成系统里的任
 - [CHANGELOG.md](https://github.com/{owner}/{repo}/blob/main/CHANGELOG.md)
 - [DEVELOPERS.md](https://github.com/{owner}/{repo}/blob/main/DEVELOPERS.md)
 """.format(ver=VERSION, ver1211=VERSION_1211, owner=ghp.OWNER, repo=REPO)
+
+    if st == 200:
+        print("release %s 已存在: %s" % (tag, rel.get("html_url")), flush=True)
+        # 正文变了就同步过去，免得远端留着上一版的说明
+        if rel.get("body") != body:
+            api_retry("PATCH", "/repos/%s/%s/releases/%d" % (ghp.OWNER, REPO, rel["id"]),
+                      data={"body": body}, token=token, accept=(200,))
+            print("release 正文已更新", flush=True)
+        return rel
 
     st, rel = api_retry("POST", "/repos/%s/%s/releases" % (ghp.OWNER, REPO), data={
         "tag_name": tag,
