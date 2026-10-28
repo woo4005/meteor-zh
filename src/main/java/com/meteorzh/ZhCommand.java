@@ -58,5 +58,17 @@ public class ZhCommand extends Command {
             info("Meteor-zh 词典条目：%d", ZhDict.size());
             return SINGLE_SUCCESS;
         }));
+
+        builder.then(literal("font").executes(context -> {
+            String current = FontFixer.currentFamily();
+            if (FontFixer.supportsChinese()) {
+                info("当前 GUI 字体「%s」可以显示中文，无需修改", current);
+            } else if (FontFixer.ensureCjkFont()) {
+                info("已切换到中文字体「%s」", FontFixer.currentFamily());
+            } else {
+                warning("没找到可用的中文字体（当前「%s」）。请在 Meteor 设置 > Visual > Font 手动选择微软雅黑 / 等线", current);
+            }
+            return SINGLE_SUCCESS;
+        }));
     }
 }

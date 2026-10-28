@@ -33,9 +33,9 @@ import github_publish_ip as ghp  # noqa: E402
 
 ROOT = ghp.ROOT
 REPO = "meteor-zh"
-VERSION = "1.5.0"
+VERSION = "1.5.1"
 #: 1.21.11 线仍停留在 1.4.0，两条线独立编号
-VERSION_1211 = "1.4.0"
+VERSION_1211 = "1.4.1"
 BRANCH = "main"
 
 #: 两条构建线的产物（26.1 线带 -mc26.1 后缀）——见同一个仓库的 dist/ 白名单
@@ -242,39 +242,57 @@ def ensure_release(token):
                         token=token, accept=(200, 404))
     if st == 200:
         print("release %s 已存在: %s" % (tag, rel.get("html_url")), flush=True)
+        # 正文变了就同步过去，免得远端留着上一版的说明
+        if rel.get("body") != body:
+            api_retry("PATCH", "/repos/%s/%s/releases/%d" % (ghp.OWNER, REPO, rel["id"]),
+                      data={"body": body}, token=token, accept=(200,))
+            print("release 正文已更新", flush=True)
         return rel
 
     body = """Meteor Client 全界面简体中文汉化 v{ver}
 
-## 本版新增 Minecraft 26.1 支持（1.5.x 线）
+## 修复：Minecraft 26.1 上中文全部显示为空白
 
-两条构建线**各自独立编号**，源码共用同一份：
+`v1.5.0` 在 26.1 上有一个严重问题：模块名、设置项标题、分组标题这些**已经翻成中文**的地方，
+界面上完全看不到，只剩数字和尚未翻译的英文，看起来像界面坏掉了一半。词典本身没问题，问题在字体。
+
+### 起因
+
+Meteor 的 GUI 不使用 Minecraft 的字体。它把界面文字烘焙进一张自建的字体图集，
+而 Meteor 自带的四款字体（JetBrains Mono / Comfortaa / Tw Cen MT / Pixelation）**只有拉丁字形**，
+没有任何中日韩字形。图集里查不到的字符不会生成任何绘制指令，于是整段中文静默消失。
+
+Meteor 留了开关：`设置 → Visual → Font`，可以换成系统里的任意字体。
+但这是**需要手动打开**的选项，全新的 26.1 实例默认用 Comfortaa，中文就会这样消失。
+1.21.11 那边之所以正常，是因为早先手动把字体设成了「等线（DengXian）」——
+对比两个实例的 `meteor-zh/config.nbt` 能直接看到：1.21.11 里有 `font: DengXian`，26.1 里是空的。
+
+### 修复
+
+本版新增 `FontFixer`：启动后用一串中文探针测量当前字体，宽度为 0 就说明画不出中文，
+于是自动把 Meteor 切到系统里第一款可用的中文字体
+（等线 → 微软雅黑 → 黑体 → 宋体 → Noto Sans CJK → 苹方 …），并写回 `Config`，下次启动保持。
+
+- 已经能显示中文的机器**不会被改动**，字体偏好保持不变
+- 一个中文字体都找不到时会在日志里说明，可执行 `.zh font` 重新检测，或在设置里手动选择
+- 字体图集要等首次资源加载才建好，所以插件会在最初若干 tick 内重试，不会抢跑
+
+### 两条线都已更新
 
 | 游戏版本 | 下载 | 版本线 | 前置要求 |
 |---|---|---|---|
-| **Minecraft 26.1** | `meteor-zh-{ver}-mc26.1.jar` | **1.5.x**（本版新增） | Fabric Loader ≥ 0.20.1、Java 25、Meteor Client 26.1.x |
-| **Minecraft 1.21.11** | `meteor-zh-{ver1211}.jar` | **1.4.x**（继续维护） | Fabric Loader ≥ 0.16.0、Java 21、Meteor Client 1.21.11 |
+| **Minecraft 26.1** | `meteor-zh-{ver}-mc26.1.jar` | **1.5.x** | Fabric Loader ≥ 0.20.1、Java 25、Meteor Client 26.1.x |
+| **Minecraft 1.21.11** | `meteor-zh-{ver1211}.jar` | **1.4.x** | Fabric Loader ≥ 0.16.0、Java 21、Meteor Client 1.21.11 |
 
-1.21.11 线的后续更新发 1.4.1、1.4.2……，26.1 线的更新发 1.5.1、1.6.0……，互不牵连。
-词典为两条线共享，本版扩充的词条已同时打进两个 jar。
+两条线的源码相同，本版同样给 1.21.11 线发了 {ver1211}（新增 `FontFixer` 与 `compatibilityLevel`
+按目标版本分线设置），26.1 线发 {ver}。两个 jar 的 mod id 相同，**分别放进对应实例的 `mods/`**。
 
-两个 jar 的 mod id 相同，**各自放进对应实例的 `mods/`**，不要塞进同一个实例。
-
-## 主要变化
-
-- **新增 Minecraft 26.1 / Meteor Client 26.1.2 支持**：MC 26.x 起游戏不再混淆，整条 mojmap → intermediary 的 remap 流程被删掉，编译完直接打包
-- **词典大扩充**：模块 267 → 376，设置 1136 → 1335，英文描述句 22 → **1357**，词法词表 795 → **1069 词元**
-- **Minecraft 26.1 本体覆盖率 100%**：169 模块 / 968 设置项 / 92 分组，标题与说明全部有中文（脚本逐条核对）
-- 并入社区四个 GPL-3.0 汉化项目（xingke0、Nippaku-Zanmu、dingzhen-vape、EnderUnion）的译名，见 `NOTICE`
-- `compatibilityLevel` 提升到 `JAVA_25`；`ZhCommand.build()` 改用原始类型，一份源码同时编译 21 和 25
-- 新增离线验证脚本 `scripts/verify_261.py`：不启动游戏即可验证词典、**9 个反射字段是否仍然存在**、查找结果
-
-## 汉化覆盖
+### 汉化覆盖
 
 | 内容 | 条数 |
 |---|---|
-| 模块名 / 带描述的 | 376 / 170 |
-| 设置项 / 带说明的 | 1335 / 1028 |
+| 模块名 | 376 |
+| 设置项 | 1335 |
 | 设置分组 | 129 |
 | GUI 固定文本（Bind / Active / Reset 等） | 295 |
 | 英文描述句（模块与设置说明） | 1357 |
@@ -282,11 +300,12 @@ def ensure_release(token):
 | 顶部标签页 | 7 |
 | 词法兜底词表 | 1069 |
 
-## 安装
+### 安装
 
 按游戏版本下载对应 jar，放进 `mods/`，启动游戏即可，无需任何配置。
+如果界面出现中文但显示成方框或空白，执行一次 `.zh font`。
 
-## 详细说明
+### 详细说明
 
 - [README.md](https://github.com/{owner}/{repo}/blob/main/README.md)
 - [CHANGELOG.md](https://github.com/{owner}/{repo}/blob/main/CHANGELOG.md)
@@ -305,6 +324,52 @@ def ensure_release(token):
         raise SystemExit("创建 release 失败: %s %r" % (st, rel))
     print("release created:", rel["html_url"], flush=True)
     return rel
+
+
+
+RETIRED_TAG = "v1.5.0"
+RETIRED_BODY = """⚠️ 本版已撤回，请改用 v{VERSION}。
+
+## 发生了什么
+
+本版在 Minecraft 26.1 上会导致**界面中文全部显示为空白**：
+模块名、设置项标题、分组标题都渲染不出来，
+只剩数字和尚未翻译的英文，看起来像界面坏了一半。
+
+## 原因
+
+Meteor 的 GUI 不用 Minecraft 的字体，而是把文字烘焙进自建的字体图集。
+它自带的四款字体只有拉丁字形，**没有任何中日韩字形**；
+图集里查不到的字符不会生成任何绘制指令，于是整段中文静默消失。
+
+Meteor 自带开关（`设置 → Visual → Font`）可以换成系统中文字体，
+但它需要手动开启，全新的 26.1 实例默认用 Comfortaa，中文就会这样消失。
+1.21.11 上之所以正常，是因为那边早先手动把字体设成了「等线」。
+
+## 处理
+
+本版的 jar 已从下载列表移除，不再提供下载。
+请使用 [{TAG}](https://github.com/{OWNER}/{REPO}/releases/tag/{TAG})：它会自动检测并切换到可用的中文字体。
+""".format(VERSION=VERSION, TAG="v" + VERSION, OWNER="{owner}", REPO="{repo}")
+
+
+def retire_old_release(token):
+    """把 1.5.0 的 jar 撤下来（不再提供下载），并把正文改成事故说明。"""
+    st, rel = api_retry("GET", "/repos/%s/%s/releases/tags/%s" % (ghp.OWNER, REPO, RETIRED_TAG),
+                        token=token, accept=(200, 404))
+    if st != 200:
+        print("release %s 不存在，无需撤回" % RETIRED_TAG, flush=True)
+        return
+
+    for asset in rel.get("assets", []):
+        api_retry("DELETE", "/repos/%s/%s/releases/assets/%d" % (ghp.OWNER, REPO, asset["id"]),
+                  token=token, accept=(204, 200))
+        print("已撤下 asset: %s" % asset["name"], flush=True)
+
+    body = RETIRED_BODY.replace("{owner}", ghp.OWNER).replace("{repo}", REPO)
+    api_retry("PATCH", "/repos/%s/%s/releases/%d" % (ghp.OWNER, REPO, rel["id"]),
+              data={"body": body}, token=token, accept=(200,))
+    print("release %s 正文已改为事故说明" % RETIRED_TAG, flush=True)
 
 
 def upload_asset(token, rel):
@@ -414,25 +479,26 @@ def main():
     print("tree:", new_tree["sha"], flush=True)
 
     message = (
-        "feat: 新增 Minecraft 26.1 支持，词典大幅扩充 (v%s)\n\n"
-        "26.1 构建线\n"
-        "- 新增 scripts/build_261.py：MC 26.x 不再混淆，去掉整条 remap，直接打包\n"
-        "- 产物 meteor-zh-%s-mc26.1.jar（Fabric Loader >= 0.20.1 / Java 25 / Meteor 26.1.x）\n"
-        "- ZhCommand.build() 改用原始类型，一份源码同时编译 1.21.11 与 26.1\n"
-        "- meteor-zh.mixins.json 的 compatibilityLevel: JAVA_21 -> JAVA_25\n"
-        "- fabric.mod.json 在 26.1 构建时注入 \"java\": \">=25\"\n\n"
-        "词典\n"
-        "- 新增 scripts/extract_261.py：扫 Meteor 26.1.2 源码提取模块/设置/分组/描述\n"
-        "- 新增 scripts/patch_261_dict.py、scripts/merge_external.py、scripts/sanity_zh.py\n"
-        "- 模块 267 -> 376，设置 1136 -> 1335，描述句 22 -> 1357，词表 795 -> 1069\n"
-        "- 并入 xingke0 / Nippaku-Zanmu / dingzhen-vape / EnderUnion 四个 GPL-3.0 项目的译名\n"
-        "- NOTICE 更新第三方词源与许可证说明（yalu 词典的 CC0 表述已更正）\n\n"
+        "fix: 26.1 上中文不显示，自动切换到可渲染中文的系统字体 (v%s)\n\n"
+        "问题\n"
+        "- 1.5.0 在 MC 26.1 上中文全部渲染为空白（模块名/设置项/分组标题消失）\n"
+        "- 根因：Meteor 的 GUI 用自烘焙字体图集，自带四款字体无 CJK 字形；\n"
+        "  图集缺字形时不生成绘制指令，整段中文静默消失\n"
+        "- 26.1 实例的 meteor-zh/config.nbt 里 font 为空（默认 Comfortaa），\n"
+        "  而 1.21.11 实例早先手动设成了 DengXian，所以旧版本没暴露该问题\n\n"
+        "修复\n"
+        "- 新增 com.meteorzh.FontFixer：用中文探针测宽，为 0 则切换系统 CJK 字体\n"
+        "  （DengXian / Microsoft YaHei / SimHei / SimSun / Noto Sans CJK ...）\n"
+        "- 切换结果写回 Config.font，重启后保持；已能显示中文的机器不被动到\n"
+        "- 字体图集要等首次资源加载，MeteorZh 在最初 40 个 tick 内重试\n"
+        "- 新增 .zh font 手动重检；找不到字体时在日志与命令里给出指引\n\n"
+        "版本\n"
+        "- 26.1 线 1.5.0 -> %s（v1.5.0 已撤回下载）\n"
+        "- 1.21.11 线 1.4.0 -> %s（同步 FontFixer）\n"
+        "- mixins.json 的 compatibilityLevel 改为按构建线设置：21 线 JAVA_21 / 26.1 线 JAVA_25\n\n"
         "验证\n"
-        "- 新增 scripts/verify_261.py：用实例真实 classpath 离线验证词典、9 个反射字段与查找结果\n"
-        "- build.py 增加 stdout/stderr UTF-8 重定向，编译错误不再被 GBK 控制台吞掉\n\n"
-        "文档\n"
-        "- README：双线兼容性表、按版本下载、前置要求表、26.1 线的两个构建坑\n"
-        "- CHANGELOG / qq-group-post 同步到 1.5.0" % (VERSION, VERSION)
+        "- scripts/verify_261.py 增加 FontFixer 探针：无 GL 上下文时安全返回 false，不抛异常\n"
+        "- 两个 jar 的 fabric.mod.json / mixins.json 逐项核对" % (VERSION, VERSION, VERSION_1211)
     )
     st, new_commit = api_retry(
         "POST", "/repos/%s/%s/git/commits" % (ghp.OWNER, REPO),
@@ -450,6 +516,7 @@ def main():
     print("branch moved to", ref["object"]["sha"], flush=True)
 
     set_repo_meta(token)
+    retire_old_release(token)
     rel = ensure_release(token)
     upload_asset(token, rel)
 

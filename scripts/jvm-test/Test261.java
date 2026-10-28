@@ -15,7 +15,19 @@ public class Test261 {
         if (!ok) failed++;
     }
 
-    public static void main(String[] args) throws Exception {
+        /** FontFixer must load and fail soft outside a GL context. */
+    private static void fontProbe() {
+        try {
+            boolean cn = com.meteorzh.FontFixer.supportsChinese();
+            String fam = com.meteorzh.FontFixer.currentFamily();
+            System.out.println("font probe: supportsChinese=" + cn + " family=" + fam);
+        } catch (Throwable t) {
+            System.out.println("font probe: THREW " + t);
+            throw t;
+        }
+    }
+
+public static void main(String[] args) throws Exception {
         ZhDict.load();
         check("dictionary size > 0", ZhDict.size() > 0, true);
 
@@ -36,6 +48,7 @@ public class Test261 {
         check("lexical keeps chinese", WordTranslator.translate("自动跟随"), null);
 
         System.out.println();
+        fontProbe();
         System.out.println(failed == 0 ? "ALL OK" : (failed + " FAILED"));
         if (failed != 0) System.exit(1);
     }

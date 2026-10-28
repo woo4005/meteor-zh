@@ -4,7 +4,7 @@
 [![Build](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml/badge.svg)](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml)
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.1%20%7C%201.21.11-62b47a.svg)](#兼容性)
 [![Fabric](https://img.shields.io/badge/Fabric-0.20.1%20%7C%200.19.3-dbb69b.svg)](#兼容性)
-[![Version](https://img.shields.io/badge/26.1--%E7%BA%BF-1.5.0-a855f7.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/26.1--%E7%BA%BF-1.5.1-a855f7.svg)](CHANGELOG.md)
 [![Version](https://img.shields.io/badge/1.21.11--%E7%BA%BF-1.4.x-a855f7.svg)](CHANGELOG.md)
 
 **Meteor-ZH** 是一个 Meteor Client 附属模组（addon），把 Meteor 的整套界面翻成简体中文：模块名、功能描述、设置项名称与说明、设置分组、**按键名（Bind）**、HUD 元素、顶部标签页，以及 GUI 里写死在代码中的按钮与提示文字。
@@ -81,7 +81,7 @@ Meteor-ZH 把这些都补上了。
 
 | meteor-zh | Minecraft | Fabric Loader | Meteor Client | Java | 状态 |
 |---|---|---|---|---|---|
-| **1.5.0** | **26.1** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 26.1 专用线 |
+| **1.5.1** | **26.1** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 26.1 专用线 |
 | **1.4.x** | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，发布版 build 82） | 21 | 1.21.11 专用线，继续维护 |
 | 1.3.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被 1.4.x 替代 |
 | ≤ 1.2.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被替代 |
@@ -90,8 +90,8 @@ Meteor-ZH 把这些都补上了。
 
 | 游戏版本 | 下载的 jar | 版本线 | 构建脚本 |
 |---|---|---|---|
-| Minecraft **26.1** | `meteor-zh-1.5.0-mc26.1.jar` | 1.5.x | `scripts/build_261.py` |
-| Minecraft **1.21.11** | `meteor-zh-1.4.0.jar` | 1.4.x | `scripts/build.py` |
+| Minecraft **26.1** | `meteor-zh-1.5.1-mc26.1.jar` | 1.5.x | `scripts/build_261.py` |
+| Minecraft **1.21.11** | `meteor-zh-1.4.1.jar` | 1.4.x | `scripts/build.py` |
 
 两条线的源码共用（同一份 `src/`），但**版本号各走各的**：1.21.11 线的后续更新发 1.4.1、1.4.2……，
 26.1 线的更新发 1.5.1、1.6.0……，互不牵连。词典是两条线共享的资源，会同时扩充到两个 jar 中。
@@ -114,7 +114,7 @@ Meteor-ZH 把这些都补上了。
 
 | 项目 | 值 |
 |---|---|
-| Mixin 配置 | `meteor-zh.mixins.json`，`required: false`，`compatibilityLevel: JAVA_25` |
+| Mixin 配置 | `meteor-zh.mixins.json`，`required: false`；`compatibilityLevel` 按构建线生成：1.21.11 线 `JAVA_21`、26.1 线 `JAVA_25` |
 | 目标类 | `meteordevelopment.meteorclient.gui.renderer.GuiRenderer` |
 | 目标方法 | `public void text(String text, double x, double y, Color color, boolean title)` |
 | 注入方式 | `@ModifyVariable(method = "text", at = @At("HEAD"), argsOnly = true)`，改写第一个 `String` 参数 |
@@ -135,13 +135,13 @@ Meteor-ZH 把这些都补上了。
 ## 安装
 
 1. 从 [Releases](https://github.com/woo4005/meteor-zh/releases) 下载对应你游戏版本的 jar：
-   - **Minecraft 26.1** → `meteor-zh-1.5.0-mc26.1.jar`
-   - **Minecraft 1.21.11** → `meteor-zh-1.4.0.jar`
+   - **Minecraft 26.1** → `meteor-zh-1.5.1-mc26.1.jar`
+   - **Minecraft 1.21.11** → `meteor-zh-1.4.1.jar`
 2. 放进 `mods/` 目录
    - 官方启动器：`.minecraft/mods/`
    - **PCL 版本隔离**：`<PCL目录>/.minecraft/versions/<版本名>/mods/`
 3. **删掉**旧的 `Meteor-I18n-Support-*.jar`（与它共存不会崩，但功能重复，且两者的翻译会互相覆盖）
-4. 启动游戏，翻译自动完成
+4. 启动游戏，翻译自动完成，字体也会自动检查
 
 前置要求：
 
@@ -149,6 +149,22 @@ Meteor-ZH 把这些都补上了。
 |---|---|---|---|
 | Minecraft 26.1 | ≥ 0.20.1 | **25** | 26.1.x |
 | Minecraft 1.21.11 | ≥ 0.16.0 | 21 | 1.21.11 |
+
+### 界面里的中文变成空白？
+
+Meteor 的 GUI 不用 Minecraft 的字体，而是把文字烘焙进自建的字体图集。它自带的四款字体
+（JetBrains Mono / Comfortaa / Tw Cen MT / Pixelation）**只有拉丁字形，没有中日韩字形**，
+图集里查不到的字符不会画任何东西 —— 中文就会整段消失，只剩数字和没翻译的英文。
+
+从 1.5.1 / 1.4.1 起插件会自己处理这件事：启动后用一串中文探针测量当前字体，宽度为 0 就说明
+画不出中文，于是自动切到系统里第一款可用的中文字体（等线 → 微软雅黑 → 黑体 → 宋体 → Noto Sans CJK → 苹方 …），
+并写回 `Config`，重启后保持。**已经能显示中文的机器不会被动到。**
+
+如果还是空白：
+
+1. 执行 `.zh font`（游戏内聊天栏），它会重新检测并告诉你当前字体与环境里找到的中文字体；
+2. 一个中文字体都没找到时，装一款中文字体（Windows 通常自带等线/微软雅黑）后重进游戏；
+3. 也可以自己指定：Meteor 的 `设置 → Visual → Font` 里换任意中文字体。
 
 ### 卸载
 
@@ -271,6 +287,8 @@ python scripts/verify_lexical.py
 ---
 
 ## 已知边界
+
+> 字体相关的边界见上文「[界面里的中文变成空白？](#界面里的中文变成空白)」。
 
 1. **设置分组的内部名不翻译，只翻译显示。** `SettingGroup.name` 参与配置反序列化
    （`Settings.fromTag()` 按 `name` 找分组），改了会让已保存的分组设置全部失配。所以

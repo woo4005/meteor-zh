@@ -50,7 +50,16 @@ public class MeteorZh extends MeteorAddon {
     public static final String MOD_ID = "meteor-zh";
     public static final Logger LOG = LoggerFactory.getLogger(MOD_ID);
 
+    /**
+     * Meteor builds its font atlas during the first resource reload, which lands a
+     * few ticks after the addon initialises. The probe therefore keeps retrying for
+     * a while instead of giving up on the first tick.
+     */
+    private static final int FONT_ATTEMPTS = 40;
+
     private boolean done;
+    private int fontAttempts;
+    private boolean fontResolved;
 
     @Override
     public void onInitialize() {
@@ -63,7 +72,10 @@ public class MeteorZh extends MeteorAddon {
 
     @EventHandler
     private void onTick(TickEvent.Post event) {
-        if (done) return;
+        if (done) {
+            rootTick();
+            return;
+        }
         done = true;
 
         try {
@@ -74,7 +86,36 @@ public class MeteorZh extends MeteorAddon {
             LOG.info("Meteor-zh: ready (.zh reload to re-apply)");
         } catch (Throwable t) {
             LOG.error("Meteor-zh: initialisation failed", t);
-        } finally {
+        }
+        // Keep listening a little longer: the font atlas may not exist yet.
+        rootTick();
+    }
+
+    /**
+     * Second-stage work that has to wait for Meteor's font atlas. Unsubscribes as
+     * soon as the font question is settled so a normal session pays nothing.
+     */
+    private void rootTick() {
+        if (fontResolved) {
+            meteordevelopment.meteorclient.MeteorClient.EVENT_BUS.unsubscribe(this);
+            return;
+        }
+
+        fontAttempts++;
+        if (FontFixer.supportsChinese()) {
+            fontResolved = true;
+            LOG.info("Meteor-zh: GUI font \"{}\" can render Chinese", FontFixer.currentFamily());
+        } else if (FontFixer.ensureCjkFont()) {
+            fontResolved = true;
+        } else if (fontAttempts >= FONT_ATTEMPTS) {
+            fontResolved = true;
+            LOG.warn(
+                "Meteor-zh: gave up looking for a CJK font after {} ticks (current: \"{}\"); "
+                    + "Chinese may not render — set Settings > Visual > Font manually",
+                FONT_ATTEMPTS, FontFixer.currentFamily());
+        }
+
+        if (fontResolved) {
             meteordevelopment.meteorclient.MeteorClient.EVENT_BUS.unsubscribe(this);
         }
     }

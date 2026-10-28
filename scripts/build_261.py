@@ -21,7 +21,7 @@ import zipfile
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VERSION = "1.5.0"
+VERSION = "1.5.1"
 MOD_ID = "meteor-zh"
 
 INSTANCE = r"E:\pcl\.minecraft\versions\26.1-Fabric 0.20.1"
@@ -172,6 +172,15 @@ def copy_resources():
                 if '"java"' not in text:
                     text = text.replace('"minecraft": "~26.1"',
                                         '"minecraft": "~26.1",\n    "java": ">=25"')
+                with open(dst, "w", encoding="utf-8") as fh:
+                    fh.write(text)
+            elif rel.replace(os.sep, "/") == "meteor-zh.mixins.json":
+                with open(src, encoding="utf-8") as fh:
+                    text = fh.read()
+                # MC 26.1 的 class 是 Java 25（major 69），Mixin 必须按 JAVA_25 解析；
+                # 1.21.11 线走 build.py，那边保留 JAVA_21。
+                text = text.replace('"compatibilityLevel": "JAVA_21"',
+                                    '"compatibilityLevel": "JAVA_25"')
                 with open(dst, "w", encoding="utf-8") as fh:
                     fh.write(text)
             else:
