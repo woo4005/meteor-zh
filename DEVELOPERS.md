@@ -171,6 +171,57 @@ GitHub 发布遇到两个本机网络问题，都是 AI 自己绕过去的：
 README、CHANGELOG、CONTRIBUTING、NOTICE、SECURITY、Issue/PR 模板、GitHub Actions、
 本文件，以及一份 22 页的项目介绍 PPT（`dist/Meteor-ZH-项目介绍.pptx`）。
 
+### 阶段 8 · Minecraft 26.1 适配（2026-10-28）
+
+用户装好了 26.1 实例并自己先测通了界面，剩下的交给 AI。这一段最能说明「AI 干活的方式」——
+**结论先给，坑在下面**：
+
+**技术结论：26.1 相对 1.21.11，源码只需要改一个方法的签名。**
+
+AI 把 Meteor 26.1.2 的 1347 个 class 逐个用 `javap` 和 1.21.11 对比，
+确认 `MeteorAddon`、`Module`、`Setting`、`SettingGroup`、`Settings`、`Category`、
+`GuiRenderer`、`Tabs`、`Hud`、`HudElementInfo`、`Commands`、`Modules` 这十二个类
+**字段名、字段修饰符、方法签名全部一致**。唯一的破坏性变更：
+
+- `Command#build` 的参数从 `LiteralArgumentBuilder<SharedSuggestionProvider>`（服务端类型）
+  变成 `LiteralArgumentBuilder<ClientSuggestionProvider>`（客户端类型）。
+  泛型擦除后两者对 JVM 是同一个签名，所以把 `ZhCommand.build()` 写成**原始类型**
+  `LiteralArgumentBuilder` + `@SuppressWarnings("rawtypes")`，一份源码同时编译两个版本。
+
+**构建环境的坑（比代码多得多）：**
+
+1. **MC 26.x 起游戏不再混淆**，整条 mojmap → intermediary 的 remap 流程直接删掉。
+   这不是「适配成功」，而是「以前必须做的步骤现在不需要了」。
+2. **Meteor 把 orbit / gson / fabric-api-base 等 15 个依赖以嵌套 jar 放在自己 jar 的
+   `META-INF/jars/` 下**。`javac` 读不了 jar 里的 jar，必须先把它们解包到磁盘再进 classpath，
+   否则报 `找不到符号: meteordevelopment.orbit.EventHandler`。
+3. **PCL 的 version json 里 `fabric-loader` 和 `sponge-mixin` 没有 `downloads.artifact` 字段**，
+   只有 Maven 坐标，得自己按 `group/artifact/version/artifact-version.jar` 拼路径。
+   另有 5 个库（`java-objc-bridge`、netty 的 linux/osx native）本机根本不存在，要能跳过。
+4. **必须用 JDK 25 编译**（产出 class major version 69），Mixin 的 `compatibilityLevel`
+   也要从 `JAVA_21` 提到 `JAVA_25`。
+5. `scripts/build.py` 在编译失败时会因打印非 ASCII 错误信息触发
+   `UnicodeEncodeError: 'gbk'`，把真正的错误盖住——加了 stdout/stderr 的 UTF-8 重定向才好查。
+
+**词典是怎么补到 100% 的：**
+
+AI 写了个脚本扫描 26.1 sources jar 里全部 196 个模块源文件，用正则抽出
+`super(Categories.X, "name", "description")`、`.name("x")` + `.description("y")`、
+`createGroup("...")`，得到本体 169 模块 / 968 设置项 / 92 分组的**完整清单**，
+再和已有词典比对——缺口只有 4 个模块 + 34 个设置名 + 38 条说明，补完后经脚本逐条核对：
+**标题 0 缺失、说明 0 缺失、分组 0 缺失**。
+
+然后并入社区四个 GPL-3.0 汉化项目（xingke0、Nippaku-Zanmu、dingzhen-vape、EnderUnion）
+的译名。这里 AI 做了一次**主动裁剪**：外部词典里大量条目是本地根本没装的 addon
+（`advanceditemesp`、`2b2t-queue` 之类），收进词典对用户零收益、还要背质量风险；
+而 Meteor 的所有描述文字都是按**英文原句**查表的，这才是收益最大且最安全的一项。
+所以最终只收描述句（+1357 条）、只收能对上已知原始英文说明的标识符、词表全收（+274 词根）。
+
+**验证方式：** 写 `scripts/verify_261.py`，用 26.1 实例的真实 classpath 加载插件 jar，
+不启动游戏就检查词典能读、`Translator.init()` 的 9 个反射字段在 26.1 的类里全部存在
+（`NoSuchFieldException` 会在这里暴露）、若干查找结果正确。这一步能抓住「字段改名」这类
+最致命的兼容性问题。真机验收仍然交给用户。
+
 ---
 
 ## 4. AI 没有做到的事（承认局限）
@@ -227,6 +278,18 @@ CONTRIBUTING 的“不要做的事”。**任何 PR 都不应该改动这个字�
 **理由**：`null` 约定把「无法翻译」和「已经是中文」统一处理，避免了把中文标识符二次拉丁化。
 **代价**：组合词可能生硬（`chest-stealer-percent` → `箱子 StealerPercent`），接受了。
 
+### ADR-005 · 两条游戏版本线各自独立编号，源码共用
+
+**背景**：26.1 与 1.21.11 的 Meteor API 几乎一致，但编译目标（Java 25 / Java 21）、
+mapping（无混淆 / mojmap）、产物文件名都不同。用户明确要求：1.4.0 继续负责 1.21.11，
+1.5.0 专门给 26.1。
+**决定**：同一份 `src/`，两套构建脚本，两个版本号各自递增（1.21.11 → 1.4.x，26.1 → 1.5.x），
+词典共享。
+**理由**：如果强行统一版本号，1.21.11 用户会被推着升级一个自己用不上的版本；
+反过来，26.1 的修复也不该让 1.21.11 的用户重新下载。独立编号让两条线的节奏互不牵连。
+**代价**：每次改词典要重建两个 jar、发两次说明，维护成本翻倍。可接受——词典是纯数据，
+两个 jar 的构建只差几十秒。
+
 ---
 
 ## 6. 给后续维护者的建议
@@ -237,16 +300,21 @@ CONTRIBUTING 的“不要做的事”。**任何 PR 都不应该改动这个字�
    `Component` ↔ `Text` 的对应关系，改错了编译不过。
 4. **词典改完一定要跑 `build_dict.py`**，`zh.json` 是生成物，直接改它会在下次构建时被覆盖。
 5. **`dist/` 里的 jar 是构建产物但需要提交**——因为要做分发，且 GitHub Release 的 asset 从这里来。
-6. **构建脚本里有一条硬编码的 JDK 路径**（`scripts/build.py` 的 `JDK` 常量），换机器要改。
+6. **构建脚本里有一条硬编码的 JDK 路径**（`scripts/build.py` 与 `scripts/build_261.py` 的 `JDK` 常量），换机器要改。
+7. **两条线要一起改**：动了 `src/` 或词典，先 `build.py` 出 1.4.x 的 jar，再 `build_261.py` 出 1.5.x 的 jar。
+   `ZhCommand.build()` 的原始类型签名是两条线共存的唯一原因，不要「顺手」把它改回带泛型的版本。
 
 ---
 
 ## 7. 一句话总结
 
 > 这是一个**人类主导、AI 执行**的项目：人定方向和验收标准，AI 写了全部代码、全部脚本、全部文档。
-> 如果这个项目要长期维护下去，接手的人最好记住上面第 6 节那六条——
-> 尤其是「`SettingGroup.name` 不能改」和「源码是 mojmap」。
+> 如果这个项目要长期维护下去，接手的人最好记住上面第 6 节那七条——
+> 尤其是「`SettingGroup.name` 不能改」「源码是 mojmap」「两条线要一起重建」。
 
 ---
 
-最后更新：2026-10-27 · 对应版本 v1.4.0
+最后更新：2026-10-28 · 对应版本 **1.4.0（Minecraft 1.21.11 线）** 与 **1.5.0（Minecraft 26.1 线）**
+
+> 两条线共用同一份 `src/`，但版本号各自独立：1.21.11 线发 1.4.x，26.1 线发 1.5.x。
+> 本文描述的是两条线共同的技术实现，差异只在构建脚本（`scripts/build.py` vs `scripts/build_261.py`）。
