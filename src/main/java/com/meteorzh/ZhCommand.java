@@ -24,7 +24,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import meteordevelopment.meteorclient.commands.Command;
 
 /**
- * {@code .zh} — re-apply the translation and report dictionary statistics.
+ * {@code .zh} — re-apply the translation, reload the dictionary, report state.
  *
  * <p>注意这里故意写成原始类型 {@code LiteralArgumentBuilder}（不带泛型参数）：
  * Meteor 1.21.11 的 {@code Command.build} 参数是
@@ -47,26 +47,31 @@ public class ZhCommand extends Command {
         });
 
         builder.then(literal("reload").executes(context -> {
-            ZhDict.load();
+            // ZhDict.load() is a no-op once loaded, so this has to be reload().
+            ZhDict.reload();
             Translator.init();
             int count = Translator.translateAll();
-            info("词典重新加载完成，翻译 %d 处文本", count);
+            info("词典已重新加载：%d 条，重新翻译 %d 处文本", ZhDict.size(), count);
             return SINGLE_SUCCESS;
         }));
 
         builder.then(literal("info").executes(context -> {
-            info("Meteor-zh 词典条目：%d", ZhDict.size());
+            info("词典 %d 条，词表 %d 条", ZhDict.size(), WordTranslator.size());
+            info("字体：%s", FontFixer.describe());
+            info("界面文本渲染器：%s", FontFixer.usingVanilla()
+                ? "Minecraft 原版（可显示中文）"
+                : "Meteor 自带图集（只有拉丁/希腊/西里尔，中文会变成空白）");
             return SINGLE_SUCCESS;
         }));
 
         builder.then(literal("font").executes(context -> {
-            String current = FontFixer.currentFamily();
-            if (FontFixer.supportsChinese()) {
-                info("当前 GUI 字体「%s」可以显示中文，无需修改", current);
-            } else if (FontFixer.ensureCjkFont()) {
-                info("已切换到中文字体「%s」", FontFixer.currentFamily());
+            boolean changed = FontFixer.ensureVanillaRenderer();
+            if (changed) {
+                info("已关闭 Meteor 自定义字体，改用 Minecraft 原版字体 —— 中文现在可以显示了");
+            } else if (FontFixer.usingVanilla()) {
+                info("当前已经在使用 Minecraft 原版字体（可显示中文），无需修改");
             } else {
-                warning("没找到可用的中文字体（当前「%s」）。请在 Meteor 设置 > Visual > Font 手动选择微软雅黑 / 等线", current);
+                warning("无法切换到原版字体渲染器，请在 Meteor 设置 > Visual 里关闭 Custom Font");
             }
             return SINGLE_SUCCESS;
         }));

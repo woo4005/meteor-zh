@@ -33,9 +33,9 @@ import github_publish_ip as ghp  # noqa: E402
 
 ROOT = ghp.ROOT
 REPO = "meteor-zh"
-VERSION = "1.5.1"
+VERSION = "1.5.2"
 #: 1.21.11 线仍停留在 1.4.0，两条线独立编号
-VERSION_1211 = "1.4.1"
+VERSION_1211 = "1.4.2"
 BRANCH = "main"
 
 #: 两条构建线的产物（26.1 线带 -mc26.1 后缀）——见同一个仓库的 dist/ 白名单
@@ -243,31 +243,51 @@ def ensure_release(token):
 
     body = """Meteor Client 全界面简体中文汉化 v{ver}
 
-## 修复：Minecraft 26.1 上中文全部显示为空白
+## 修复：Minecraft 26.1 上中文仍是空白（1.5.1 没修对，本版才是真修复）
 
-`v1.5.0` 在 26.1 上有一个严重问题：模块名、设置项标题、分组标题这些**已经翻成中文**的地方，
-界面上完全看不到，只剩数字和尚未翻译的英文，看起来像界面坏掉了一半。词典本身没问题，问题在字体。
+`v1.5.0` 在 26.1 上界面中文全部显示为空白；`v1.5.1` 尝试修复但**没有生效**。本版找到了真正的原因。
 
-### 起因
+### 1.5.1 为什么没用
 
-Meteor 的 GUI 不使用 Minecraft 的字体。它把界面文字烘焙进一张自建的字体图集，
-而 Meteor 自带的四款字体（JetBrains Mono / Comfortaa / Tw Cen MT / Pixelation）**只有拉丁字形**，
-没有任何中日韩字形。图集里查不到的字符不会生成任何绘制指令，于是整段中文静默消失。
+1.5.1 做的是「检测当前字体画不画得出中文，画不出就自动换一款系统里的中文字体」。这条路有两个致命问题：
 
-Meteor 留了开关：`设置 → Visual → Font`，可以换成系统里的任意字体。
-但这是**需要手动打开**的选项，全新的 26.1 实例默认用 Comfortaa，中文就会这样消失。
-1.21.11 那边之所以正常，是因为早先手动把字体设成了「等线（DengXian）」——
-对比两个实例的 `meteor-zh/config.nbt` 能直接看到：1.21.11 里有 `font: DengXian`，26.1 里是空的。
+**一、检测方法失效。** Meteor 的 `Font#getWidth` 对查不到字形的字符会**回退成空格（码位 32）的宽度**：
 
-### 修复
+```java
+CharData c = charMap.get(cp);
+if (c == null) c = charMap.get(32);
+width += c.xAdvance;
+```
 
-本版新增 `FontFixer`：启动后用一串中文探针测量当前字体，宽度为 0 就说明画不出中文，
-于是自动把 Meteor 切到系统里第一款可用的中文字体
-（等线 → 微软雅黑 → 黑体 → 宋体 → Noto Sans CJK → 苹方 …），并写回 `Config`，下次启动保持。
+四个汉字 = 四个空格宽度，永远大于 0，所以判断恒为真、换字体的分支一次都没执行，
+日志里那句 "can render Chinese" 是假的。
 
-- 已经能显示中文的机器**不会被改动**，字体偏好保持不变
-- 一个中文字体都找不到时会在日志里说明，可执行 `.zh font` 重新检测，或在设置里手动选择
-- 字体图集要等首次资源加载才建好，所以插件会在最初若干 tick 内重试，不会抢跑
+**二、换字体这条路根本走不通。** Meteor 在 `Font` 构造时就把要烘焙的码位范围写死了，只有
+Basic Latin、Latin-1、Latin Ext-A、Greek、Cyrillic 和 ∞ 六段。**换成任何一款中文字体，
+图集里都不会出现中日韩字形。**（1.21.11 与 26.1 的 `Font.java` 字节码完全相同，这条限制跟游戏版本无关。）
+
+> 1.21.11 上之所以一直正常，也不是因为"设了等线字体"，而是那个实例里还装着一份 Meteor-I18n-Support，
+> 它的 Mixin 把文字渲染强制切到了 Minecraft 原版字体。
+
+### 本版的做法
+
+不再跟字体较劲，直接让 Meteor 改用 **Minecraft 原版字体渲染**。`TextRenderer.get()` 的实现本来就是
+`Config.customFont ? Fonts.RENDERER : VanillaTextRenderer.INSTANCE`，所以只要把 `Config.customFont` 关掉，
+文字就会走 `VanillaTextRenderer`（用 MC 自带的 `mc.font`，中文渲染是原版就支持的），
+再把 `scaleIndividually` 打开让双宽字符正确排布。
+
+- 一行配置解决，**不需要 Mixin**，不会因为 Meteor 更新而失效
+- 代价：失去 Meteor 的自定义美术字体，界面变成原版字体样式——这是能显示中文的最小代价
+- `.zh font` 查看当前渲染状态，`.zh reload` 重新应用一次
+
+### 顺带修掉的问题
+
+- **`.zh reload` 之前是空操作**（`ZhDict.load()` 开头有 `if (loaded) return`），现在会真正重读词典
+- **词法兜底过度拼接**：未知标识符会被拼成「无 Such 模块 XYZ」这类半中半英的串；现在要求"未识别的词不超过已识别词的一半"，否则保留原文
+- **验证脚本从"只打印"改成"真断言"**：三个 Java 测试类以前 JVM 能启动就算通过（其中"9 个反射字段全部存在"是无条件打印），现在逐条断言并非 0 退出
+- **`build_261.py` 补 `--release 25`** 与产物校验（JSON 可解析、class major 版本、必需条目齐全）
+- **`fabric.mod.json` 补 `java` / `meteor-client` 依赖**，装错环境时 Fabric 会明确报错
+- **词典清理**：不再误删含"占位符"的正常词条；词表构建与来源文件闭合，`release` 等重复键不再静默互相覆盖
 
 ### 两条线都已更新
 
@@ -276,26 +296,20 @@ Meteor 留了开关：`设置 → Visual → Font`，可以换成系统里的任
 | **Minecraft 26.1** | `meteor-zh-{ver}-mc26.1.jar` | **1.5.x** | Fabric Loader ≥ 0.20.1、Java 25、Meteor Client 26.1.x |
 | **Minecraft 1.21.11** | `meteor-zh-{ver1211}.jar` | **1.4.x** | Fabric Loader ≥ 0.16.0、Java 21、Meteor Client 1.21.11 |
 
-两条线的源码相同，本版同样给 1.21.11 线发了 {ver1211}（新增 `FontFixer` 与 `compatibilityLevel`
-按目标版本分线设置），26.1 线发 {ver}。两个 jar 的 mod id 相同，**分别放进对应实例的 `mods/`**。
+两个 jar 的 mod id 相同，**分别放进对应实例的 `mods/`**，不要放在同一个实例里。
 
 ### 汉化覆盖
 
 | 内容 | 条数 |
 |---|---|
-| 模块名 | 376 |
-| 设置项 | 1335 |
+| 模块名 | 377 |
+| 设置项 | 1336 |
 | 设置分组 | 129 |
 | GUI 固定文本（Bind / Active / Reset 等） | 295 |
 | 英文描述句（模块与设置说明） | 1357 |
 | 按键名 | 66 |
 | 顶部标签页 | 7 |
 | 词法兜底词表 | 1069 |
-
-### 安装
-
-按游戏版本下载对应 jar，放进 `mods/`，启动游戏即可，无需任何配置。
-如果界面出现中文但显示成方框或空白，执行一次 `.zh font`。
 
 ### 详细说明
 

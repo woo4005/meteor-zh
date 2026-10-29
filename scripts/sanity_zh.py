@@ -9,7 +9,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DICT = os.path.join(ROOT, "dict")
 ZH = os.path.join(ROOT, "src", "main", "resources", "assets", "meteorzh", "lang", "zh.json")
 
-BAD_MARK = re.compile(r"暂未翻译|TODO|待翻译|未翻译|占位|placeholder|None\b")
+# 只匹配真正的"未翻译"哨兵。**不要**把「占位」「placeholder」「None」加进来：
+# 「占位符」是正常术语（placeholder-color = 占位符文本的颜色），加进来会把合法词条删掉。
+BAD_MARK = re.compile(r"暂未翻译|TODO|待翻译|未翻译")
 
 
 def load(p):

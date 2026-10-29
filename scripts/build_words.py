@@ -7,9 +7,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # 英文词元 -> 中文。用于对未收录词典的 addon 条目做逐词拼合翻译。
 W = {
     # 动作/状态
-    "enable": "启用", "disable": "禁用", "enabled": "启用", "disabled": "禁用",
+    "enable": "启用", "disable": "禁用", "enabled": "已启用", "disabled": "已禁用",
     "auto": "自动", "automatic": "自动", "automaticly": "自动", "toggle": "切换",
-    "switch": "切换", "show": "显示", "hide": "隐藏", "notify": "通知", "notify": "通知",
+    "switch": "切换", "show": "显示", "hide": "隐藏", "notify": "通知",
     "send": "发送", "open": "打开", "close": "关闭", "load": "加载", "save": "保存",
     "reset": "重置", "clear": "清除", "add": "添加", "remove": "移除", "delete": "删除",
     "set": "设置", "get": "获取", "use": "使用", "allow": "允许", "ignore": "忽略",
@@ -144,10 +144,10 @@ W = {
     "experimental": "实验性", "official": "官方", "author": "作者",
     "license": "许可证", "issue": "问题", "issues": "问题", "source": "源码",
     "download": "下载", "install": "安装", "uninstall": "卸载",
-    "compatibility": "兼容性", "support": "支持", "support": "支持",
+    "compatibility": "兼容性", "support": "支持",
     "translation": "翻译", "translate": "翻译", "language": "语言",
     "chinese": "中文", "english": "英文", "team": "团队", "project": "项目",
-    "repository": "仓库", "release": "发布", "branch": "分支",
+    "repository": "仓库", "branch": "分支",
     "packet": "数据包", "anti": "防", "bypass": "绕过", "detect": "检测",
     "vanish": "消失", "invis": "隐身", "ghost": "幽灵", "fake": "伪造",
     "simulate": "模拟", "spoof": "欺骗", "safe": "安全", "danger": "危险",
@@ -235,9 +235,47 @@ W = {
     "mover": "移动器", "jumper": "跳跃器", "climber": "攀爬器",
 }
 
+def _conflicting_keys():
+    """静态找出 W 字面量里「同一个键被赋了不同值」的情况。
+
+    Python 的 dict 字面量遇到重复键会静默保留后一个。值相同无所谓（只是冗余），
+    值不同就说明有人改了一处却漏了另一处，产物里到底哪个生效完全看书写顺序 ——
+    只有解析源码才发现得了。历史上 `release` 就同时写着「松开」和「发布」。
+    """
+    import ast
+
+    with open(os.path.abspath(__file__), "r", encoding="utf-8-sig") as f:
+        tree = ast.parse(f.read())
+
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        for target in node.targets:
+            if not (isinstance(target, ast.Name) and target.id == "W"):
+                continue
+            if not isinstance(node.value, ast.Dict):
+                continue
+            seen = {}
+            for k, v in zip(node.value.keys, node.value.values):
+                if not (isinstance(k, ast.Constant) and isinstance(k.value, str)):
+                    continue
+                if not (isinstance(v, ast.Constant) and isinstance(v.value, str)):
+                    continue
+                seen.setdefault(k.value, []).append(v.value)
+            return {k: vs for k, vs in seen.items() if len(set(vs)) > 1}
+    return {}
+
+
 def build_words():
-    # 去重检查
-    assert len(W) > 300, len(W)
+    if len(W) < 700:
+        raise SystemExit("W 字面量只有 %d 条（少于 700），词表八成被误删了" % len(W))
+
+    conflicts = _conflicting_keys()
+    if conflicts:
+        detail = "; ".join("%s -> %s" % (k, " | ".join(vs))
+                           for k, vs in sorted(conflicts.items()))
+        raise SystemExit("W 字面量里有同键不同值（后写的会静默覆盖前写的）: " + detail)
+
     out = os.path.join(ROOT, "src", "main", "resources", "assets", "meteorzh", "lang", "words.json")
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, "w", encoding="utf-8", newline="\n") as f:
@@ -271,7 +309,11 @@ def translate_lexical(name):
             out.append(t.upper() if len(t) <= 3 else t.capitalize())
     if not out:
         return None
-    if len(unknown) == len(out):
+    # 与 Java WordTranslator 保持同一条规则：未知词超过已识别词的一半就放弃，
+    # 否则会把标识符拼成「无 Such 模块 XYZ」这种半中半英的东西。
+    known = sum(1 for t in toks if t not in SKIP and t in W)
+    unknown_count = sum(1 for t in toks if t not in SKIP and t not in W and not t.isdigit())
+    if known == 0 or unknown_count > known // 2:
         return None
     return join_cn(out)
 

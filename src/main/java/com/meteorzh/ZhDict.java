@@ -67,12 +67,40 @@ public final class ZhDict {
     }
 
     public static int size() {
-        return MODULE_TITLES.size() + SETTING_TITLES.size() + GROUPS.size() + UI.size() + DESCRIPTIONS.size();
+        return MODULE_TITLES.size() + MODULE_DESCS.size()
+            + SETTING_TITLES.size() + SETTING_DESCS.size()
+            + GROUPS.size() + UI.size() + DESCRIPTIONS.size();
     }
 
     public static void load() {
         if (loaded) return;
+        loadInternal();
+    }
 
+    /**
+     * Drops every table and reads the jar resource again.
+     *
+     * <p>Exists because {@link #load()} is a no-op once {@code loaded} is set, so a
+     * plain {@code load()} would make {@code .zh reload} silently do nothing.
+     */
+    public static void reload() {
+        reset();
+        loadInternal();
+    }
+
+    private static void reset() {
+        MODULE_TITLES.clear();
+        MODULE_DESCS.clear();
+        SETTING_TITLES.clear();
+        SETTING_DESCS.clear();
+        GROUPS.clear();
+        UI.clear();
+        DESCRIPTIONS.clear();
+        WordTranslator.reset();
+        loaded = false;
+    }
+
+    private static void loadInternal() {
         try (InputStream in = ZhDict.class.getResourceAsStream("/assets/meteorzh/lang/zh.json")) {
             if (in == null) {
                 MeteorZh.LOG.error("Meteor-zh: language file missing from jar");
@@ -186,6 +214,15 @@ public final class ZhDict {
     /** Render layer replacement for hard-coded GUI strings. Never returns null. */
     public static String ui(String text) {
         if (text == null || UI.isEmpty()) return text;
+
+        // GuiRenderer.text() also receives the contents of text boxes (the module
+        // search box, Starscript editors, click-GUI inputs). User-typed text must be
+        // left alone — only exact dictionary keys are rewritten, so the practical risk
+        // is a typed string that happens to equal a GUI label. Cheap guards cover the
+        // realistic cases without walking the call stack on every frame.
+        if (text.length() > 200) return text;
+        if (text.indexOf('$') >= 0) return text;       // Starscript / placeholder syntax
+
         String v = UI.get(text);
         return v != null ? v : text;
     }

@@ -68,6 +68,12 @@ public final class WordTranslator {
         return WORDS.size();
     }
 
+    /** Drops the cached table so the next {@link #load()} re-reads the jar resource. */
+    public static void reset() {
+        WORDS.clear();
+        loaded = false;
+    }
+
     public static void load() {
         if (loaded) return;
 
@@ -93,7 +99,12 @@ public final class WordTranslator {
     /**
      * Best effort translation of a kebab/snake/camel case identifier.
      *
-     * @return Chinese text, or null when no word was recognised (caller keeps the original)
+     * <p>Gives up (returns null) when the identifier is mostly made of words we do not
+     * know: splicing Chinese fragments together with leftover Latin produces things
+     * like「无 Such 模块 XYZ」, which is worse than leaving the original English.
+     * Unknown words are allowed only up to half as many as recognised ones.
+     *
+     * @return Chinese text, or null when nothing (or too little) was recognised
      */
     public static String translate(String name) {
         if (name == null || name.isEmpty() || WORDS.isEmpty()) return null;
@@ -103,6 +114,7 @@ public final class WordTranslator {
 
         StringBuilder sb = new StringBuilder();
         int known = 0;
+        int unknown = 0;
 
         for (String token : tokens) {
             if (SKIP.contains(token)) continue;
@@ -114,6 +126,7 @@ public final class WordTranslator {
             } else if (isDigits(token)) {
                 sb.append(token);
             } else {
+                unknown++;
                 sb.append(token.length() <= 3
                     ? token.toUpperCase(Locale.ROOT)
                     : Character.toUpperCase(token.charAt(0)) + token.substring(1));
@@ -121,6 +134,7 @@ public final class WordTranslator {
         }
 
         if (known == 0 || sb.length() == 0) return null;
+        if (unknown > known / 2) return null;
 
         return joinCn(sb.toString());
     }

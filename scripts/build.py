@@ -21,7 +21,7 @@ BUILD = os.path.join(ROOT, "build")
 CLASSES = os.path.join(BUILD, "classes")
 DIST = os.path.join(ROOT, "dist")
 MOD_ID = "meteor-zh"
-VERSION = "1.4.0"
+VERSION = "1.4.2"
 
 
 def read_classpath():
@@ -103,6 +103,17 @@ def copy_resources():
             if name == "fabric.mod.json":
                 with io.open(src, "r", encoding="utf-8") as f:
                     text = f.read().replace("${version}", VERSION)
+                # 补上 java / meteor-client 依赖：缺了不会崩（Meteor 不在时 addon 入口
+                # 不会被实例化），但装错环境时 Fabric 会给出一条清楚的报错。
+                extra = []
+                if '"java"' not in text:
+                    extra.append('"java": ">=21"')
+                if '"meteor-client"' not in text:
+                    extra.append('"meteor-client": ">=1.21.11"')
+                if extra:
+                    text = text.replace(
+                        '"minecraft": "~1.21.11"',
+                        '"minecraft": "~1.21.11",\n    ' + ",\n    ".join(extra))
                 with io.open(dst, "w", encoding="utf-8", newline="\n") as f:
                     f.write(text)
             else:
@@ -126,7 +137,14 @@ def remap(src_jar, out_jar):
     mappings = os.path.join(MIKU, "mappings", "mojmap_to_intermediary.txt")
     remap_tool = os.path.join(MIKU, "tools", "RemapJar.java")
     tool_classes = os.path.join(BUILD, "tool-classes")
-    if not os.path.exists(os.path.join(tool_classes, "RemapJar.class")):
+    tool_class = os.path.join(tool_classes, "RemapJar.class")
+
+    # Compare timestamps instead of "class file exists" — otherwise an edited
+    # RemapJar.java keeps being ignored forever.
+    needs_build = True
+    if os.path.exists(tool_class):
+        needs_build = os.path.getmtime(remap_tool) > os.path.getmtime(tool_class)
+    if needs_build:
         if os.path.isdir(tool_classes):
             shutil.rmtree(tool_classes)
         os.makedirs(tool_classes)
@@ -134,7 +152,7 @@ def remap(src_jar, out_jar):
         env["CLASSPATH"] = read_classpath()  # provides the ASM jars RemapJar needs
         run([JAVAC, "-encoding", "UTF-8", "-d", tool_classes, remap_tool], env=env)
 
-    run([JAVA, "-cp", tool_classes + ";" + read_classpath(), "RemapJar",
+    run([JAVA, "-cp", tool_classes + os.pathsep + read_classpath(), "RemapJar",
          mappings, src_jar, out_jar], cwd=BUILD)
 
 

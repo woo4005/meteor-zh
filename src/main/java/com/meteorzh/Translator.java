@@ -26,7 +26,6 @@ import meteordevelopment.meteorclient.gui.tabs.Tab;
 import meteordevelopment.meteorclient.gui.tabs.Tabs;
 import meteordevelopment.meteorclient.systems.hud.Hud;
 import meteordevelopment.meteorclient.systems.hud.HudElementInfo;
-import meteordevelopment.meteorclient.systems.hud.HudGroup;
 import meteordevelopment.meteorclient.systems.modules.Category;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.systems.modules.Modules;
@@ -34,7 +33,9 @@ import meteordevelopment.meteorclient.systems.modules.Modules;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Rewrites the display strings of already-instantiated Meteor objects through
@@ -60,7 +61,12 @@ public final class Translator {
     private static Field fCategoryName;
     private static Field fHudTitle;
     private static Field fHudDesc;
-    private static Field fHudGroupTitle;
+
+    /** Fields that rejected a reflective write; warned once each so logs stay readable. */
+    private static final Set<Field> REPORTED = new HashSet<>();
+
+    /** Fields that no longer exist in the running Meteor build. */
+    private static final Set<String> MISSING = new HashSet<>();
     private static Field fTabName;
 
     private Translator() {}
@@ -73,7 +79,6 @@ public final class Translator {
         fCategoryName = field(Category.class, "name");
         fHudTitle = field(HudElementInfo.class, "title");
         fHudDesc = field(HudElementInfo.class, "description");
-        fHudGroupTitle = field(HudGroup.class, "title");
         fTabName = field(Tab.class, "name");
     }
 
@@ -165,12 +170,10 @@ public final class Translator {
             if (replace(fHudTitle, info, ZhDict.moduleTitle(info.name, info.title))) count++;
             if (replace(fHudDesc, info, ZhDict.moduleDesc(info.name, info.description))) count++;
 
-            if (info.group != null) {
-                String gt = ZhDict.groupTitle(info.group.title());
-                if (gt != null) {
-                    if (replace(fHudGroupTitle, info.group, gt)) count++;
-                }
-            }
+            // HudGroup is a record and the JVM refuses reflective writes to record
+            // components, so its title is translated at render time instead: the
+            // GuiRenderer mixin routes every drawn string through ZhDict.ui(), which
+            // falls back to the group table.
         }
 
         return count;
@@ -184,9 +187,23 @@ public final class Translator {
             f.setAccessible(true);
             return f;
         } catch (Throwable t) {
+            MISSING.add(owner.getSimpleName() + "." + name);
             MeteorZh.LOG.warn("Meteor-zh: field {}.{} unavailable ({})", owner.getSimpleName(), name, t.toString());
             return null;
         }
+    }
+
+    /**
+     * @return the fields this build could not resolve, e.g.
+     *         {@code ["HudElementInfo.title"]}. Empty on a healthy Meteor.
+     *
+     * <p>Exposed so the offline verification can actually fail when a Meteor
+     * update renames something — a warning in the log is easy to miss.
+     */
+    public static java.util.List<String> missingFields() {
+        java.util.List<String> out = new ArrayList<>(MISSING);
+        out.sort(null);
+        return out;
     }
 
     /** @return true when the value actually changed. */
@@ -198,7 +215,14 @@ public final class Translator {
             if (value.equals(current)) return false;
             field.set(target, value);
             return true;
-        } catch (Throwable ignored) {
+        } catch (Throwable t) {
+            // Record components and other truly immutable slots land here. Report once
+            // per field so a new Meteor version cannot silently disable a whole table.
+            if (REPORTED.add(field)) {
+                MeteorZh.LOG.warn(
+                    "Meteor-zh: cannot rewrite {}.{} — {} (this string stays English)",
+                    field.getDeclaringClass().getSimpleName(), field.getName(), t.toString());
+            }
             return false;
         }
     }

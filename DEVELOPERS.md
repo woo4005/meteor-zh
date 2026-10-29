@@ -262,6 +262,67 @@ AI 写了个脚本扫描 26.1 sources jar 里全部 196 个模块源文件，用
 - 另一条教训：用户当时说“可以正常打开界面”，我把它当成了“可以正常使用”。
   如果当时追问一句“界面里的中文显示正常吗”，问题会在发布前就暴露。
 
+### 阶段 10 · 1.5.1 的修复为何无效，1.5.2 才修对（2026-10-30）
+
+1.5.1 发出去之后用户反馈「还是空白」。复盘时发现是**两条互相独立的事实同时成立**，
+任何一条都足以让那次修复归零。
+
+**错误一：检测方法失效。** 1.5.1 用 `Fonts.RENDERER.getWidth("中文清单") > 0.5` 判断「当前字体画不画得出中文」。
+但 Meteor 的 `Font#getWidth` 对**查不到字形的字符会回退成空格（码位 32）的宽度**：
+
+```java
+CharData c = charMap.get(cp);
+if (c == null) c = charMap.get(32);   // ← 缺字形就用空格宽度占位
+width += c.xAdvance;
+```
+
+四个汉字 = 四个空格宽度，永远大于 0.5。于是判断恒为真、换字体的分支一次都没执行，
+日志里那句 “can render Chinese” 是彻底的假消息。顺带一提，**同一个 `if (c == null) c = charMap.get(32)`
+也正是「中文消失、但位置还占着」的绘制机制**——同一个 bug 的两面。
+
+**错误二：换字体这条路根本走不通。** `Font` 的构造函数把要打包的码位范围写死了，只有 6 段：
+
+```java
+packRange.set(height,  32, null,  95, cdata[0])   // Basic Latin 32–126
+         .set(        160, null,  96, cdata[1])   // Latin-1
+         .set(        256, null, 128, cdata[2])   // Latin Ext-A
+         .set(        880, null, 144, cdata[3])   // Greek
+         .set(       1024, null, 256, cdata[4])   // Cyrillic
+         .set(       8734, null,   1, cdata[5]);  // ∞
+```
+
+不管加载哪款字体，图集里都不会有中日韩码位。1.21.11 的 `Font.java` 与 26.1 的
+**字节码完全相同**（javap 反汇编输出都是 52,010 字节，常量序列也一致），所以这条限制跟游戏版本无关。
+
+**真正的解法：不跟字体较劲，改用 Minecraft 原版字体渲染。** Meteor 的 `TextRenderer.get()` 是：
+
+```java
+static TextRenderer get() {
+    return Config.get().customFont.get() ? Fonts.RENDERER : VanillaTextRenderer.INSTANCE;
+}
+```
+
+关掉 `Config.customFont` 就走 `VanillaTextRenderer`——它用 MC 自带的 `mc.font`，中文渲染是原版就支持的。
+再设 `VanillaTextRenderer.INSTANCE.scaleIndividually = true`，让双宽字符按实际宽度排布
+（这条是参考 Meteor-I18n-Support 的 `VanillaTextRendererMixin` 学来的，它在每次渲染前强设这个字段）。
+
+于是 1.5.2 的 `FontFixer` 只剩一个 `ensureVanillaRenderer()`：几行代码，无反射、无字体表、无重试。
+**代价是失去 Meteor 的美术字体**，界面变成原版字体样式——这是能显示中文的最小代价。
+
+**这一轮暴露的方法论问题：**
+
+- **在 1.21.11 上「一切正常」的归因错了。** 当时看到 1.21.11 的 `config.nbt` 里有 `font: DengXian`，
+  就认定「手动设了中文字体所以能显示」。真实原因是那个实例里**还装着一份 Meteor-I18n-Support**，
+  它的 `TextRendererMixin` 把 `TextRenderer.get()` 硬改成了 `VanillaTextRenderer.INSTANCE`。
+  两组证据都指向「字体」，但真正起作用的是另一组。**归因时只验证了「相关」，没有验证「因果」**
+  ——验证的方法很简单：把那一个变量关掉再试一次，一分钟的事。
+- **验证脚本全部是「只打印、不断言」的。** `TestZh` / `TestLex` / `Test261` 三个 Java 测试类加起来一百行，
+  全是 `System.out.println`，JVM 能启动就 exit 0。`Test261` 里那句「9 个反射字段全部存在」
+  甚至是**无条件打印的常量字符串**。所以前九轮「全部验证通过」的含金量比想象中低得多。
+  1.5.2 把它们改成逐条断言 + 非 0 退出，并让 `verify_261.py` 在源码比 jar 新时自动重建。
+- **`build_261.py` 没有 `--release 25`。** 换个 JDK 编译就会产出更高版本的字节码，游戏里直接
+  `UnsupportedClassVersionError`。这类问题离线测试永远发现不了，只能靠构建脚本自检（已加 class major 校验）。
+
 ---
 
 ## 4. AI 没有做到的事（承认局限）
@@ -334,6 +395,10 @@ mapping（无混淆 / mojmap）、产物文件名都不同。用户明确要求�
 
 ### ADR-006 · 字体自检放进插件，而不是只写文档让人手动改
 
+> ⚠️ **本决策已被 ADR-007 取代。** 下面「探针可行」的判断是错的：`Font#getWidth` 对缺字形字符会
+> 回退成空格宽度，探针恒为真；而且 `Font` 的图集码位范围写死，换成任何字体都不会有中日韩字形。
+> 原文保留下来，是为了记录当时的推理过程。
+
 **背景**：中文画不出来的根因是 Meteor 当前使用的字体没有 CJK 字形。可以只写文档让用户自己去
 `设置 → Visual → Font` 改，也可以由插件自动处理。
 
@@ -360,6 +425,40 @@ mapping（无混淆 / mojmap）、产物文件名都不同。用户明确要求�
   安全返回 false、不抛异常”），必须真机验证
 - `compatibilityLevel` 必须按构建线分别生成：1.5.0 期间两个 jar 都写成 `JAVA_25`，
   1.21.11 线虽然能跑（Mixin 向后兼容），但配置与实际 class 版本不符，属于隐患，1.5.1 一并改回
+
+### ADR-007 · 改用 `VanillaTextRenderer`，而不是换字体（取代 ADR-006）
+
+**背景**：ADR-006 选定的「探针 + 自动换字体」在 1.5.1 发布后被证伪。根因不是「字体选错了」，
+而是**这条渲染路径根本不支持中日韩**：`Font#getWidth` 对缺字形字符回退成空格宽度（探针恒为真），
+`Font` 的图集码位范围写死成 6 段（换任何字体都没有 CJK）。
+
+**选项**：
+
+1. 继续换字体 —— 已证伪，无效
+2. Mixin 掉 `TextRenderer.get()`，强制返回 `VanillaTextRenderer.INSTANCE`（Meteor-I18n-Support 的做法）
+3. 关掉 `Config.customFont`，让 Meteor 自己的开关切到 `VanillaTextRenderer`，再设 `scaleIndividually`
+4. 给 `Font` 打补丁扩容码位表 —— 要重写 stbtt 打包逻辑，工作量和风险都远超收益
+
+**决定**：选项 3。`FontFixer.ensureVanillaRenderer()` 只做两件事：
+`Config.get().customFont.set(false)` 和 `VanillaTextRenderer.INSTANCE.scaleIndividually = true`。
+
+**理由**：
+
+- 选项 3 与选项 2 的最终效果完全一致，但**不需要 Mixin**：`TextRenderer.get()` 的字节码本来就是
+  `customFont.get() ? Fonts.RENDERER : VanillaTextRenderer.INSTANCE`，改配置就是改分支
+- 少一个注入点就少一类兼容性风险：Mixin 会被 Meteor 的版本更新打断，配置项不会
+- 选项 4 的补丁不可维护：Meteor 每次改字体实现都要重新逆向一遍
+
+**代价**：
+
+- 用户失去 Meteor 的自定义美术字体（JetBrains Mono / Comfortaa / Tw Cen MT / Pixelation），
+  界面换成 Minecraft 原版字体样式
+- 这个开关是全局的：用户若手动把 `customFont` 再打开，中文会重新消失。
+  `.zh font` 报告当前状态，`.zh reload` 会重新应用一次
+- 与原版字体绑定的排版假设（行高、字距）可能让个别 GUI 元素看起来和之前略有差异，但不会错位到不可用
+
+**验证**：离线只能验证「字段存在、方法不抛异常」；「中文真的画出来了」必须真机看——
+这条已写进第 6 节的建议。
 
 ## 6. 给后续维护者的建议
 

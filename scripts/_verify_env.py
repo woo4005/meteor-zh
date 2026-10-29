@@ -42,8 +42,13 @@ def _fail(message):
     )
 
 
-def find_jar():
-    """返回要校验的 meteor-zh jar 路径。"""
+def find_jar(prefer=None):
+    """返回要校验的 meteor-zh jar 路径。
+
+    ``prefer`` 用来挑构建线：``"26.1"`` 只看 ``*-mc26.1.jar``，``"1.21.11"``
+    只看其它 jar。不传则「按 mtime 取最新」——那条老逻辑很容易挑错线
+    （26.1 的 jar 和 1.21.11 的 jar 都在 dist/ 里），所以调用方应该尽量显式传。
+    """
     env = os.environ.get("METEOR_ZH_JAR")
     if env:
         if not os.path.isfile(env):
@@ -63,7 +68,16 @@ def find_jar():
         ]
     if not candidates:
         _fail("在 dist/ 和 build/libs/ 下都没找到 meteor-zh-*.jar，请先构建（见 README）。")
-    # 文件名里带版本号，按修改时间取最新即可
+
+    if prefer:
+        want_261 = prefer.replace(".", "").startswith("261")
+        picked = [p for p in candidates if ("-mc26.1" in os.path.basename(p)) == want_261]
+        if not picked:
+            line = "26.1（meteor-zh-*-mc26.1.jar）" if want_261 else "1.21.11（meteor-zh-*.jar）"
+            _fail("dist/ 里没有 %s 线的产物，请先运行对应的 build 脚本。\n可用: %s"
+                  % (line, ", ".join(sorted(os.path.basename(p) for p in candidates))))
+        candidates = picked
+
     return os.path.abspath(max(candidates, key=os.path.getmtime))
 
 
@@ -178,8 +192,8 @@ def find_classpath():
     return sep.join(extra + [cp])
 
 
-def build_classpath(test_dir):
+def build_classpath(test_dir, prefer=None):
     """拼出最终的 classpath：测试类目录 + meteor-zh jar + MC/Meteor 依赖。"""
     sep = ";" if os.name == "nt" else ":"
-    parts = [test_dir, find_jar(), find_classpath()]
+    parts = [test_dir, find_jar(prefer), find_classpath()]
     return sep.join(parts)

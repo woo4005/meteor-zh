@@ -20,140 +20,122 @@
 
 package com.meteorzh;
 
-import meteordevelopment.meteorclient.renderer.Fonts;
-import meteordevelopment.meteorclient.renderer.text.FontFace;
-import meteordevelopment.meteorclient.renderer.text.FontFamily;
-import meteordevelopment.meteorclient.renderer.text.FontInfo;
+import meteordevelopment.meteorclient.renderer.text.VanillaTextRenderer;
 import meteordevelopment.meteorclient.systems.config.Config;
 
 /**
- * Makes sure the GUI font can actually draw Chinese.
+ * Switches Meteor's GUI over to Minecraft's own font so Chinese can actually be drawn.
  *
- * <p>Meteor does not use Minecraft's font. Every widget string is drawn with its
- * own renderer into a pre-baked texture atlas built from a single font file, and
- * the four bundled faces (JetBrains Mono, Comfortaa, Tw Cen MT, Pixelation) are
- * Latin-only — they contain no CJK glyphs at all. A character that is missing
- * from that atlas simply produces no quad, so translated text renders as
- * <em>nothing</em> while numbers and untranslated English keep showing up. The
- * GUI then looks like a pile of empty buttons.
+ * <h2>Why this is necessary</h2>
  *
- * <p>Meteor itself already ships the cure: Settings → Visual → Font lets you pick
- * any font installed on the system, and almost every Windows install has a CJK
- * face (DengXian, Microsoft YaHei, SimHei...). The catch is that this is an
- * opt-in setting, so a fresh Minecraft install — a brand new 26.1 profile, for
- * example — starts on Comfortaa and Chinese silently disappears.
+ * <p>Meteor does not draw widget text with Minecraft's font. It bakes the active
+ * font file into its own texture atlas once and then draws quads from that atlas.
+ * The bakery only packs six Unicode blocks, hard-coded in
+ * {@code meteordevelopment.meteorclient.renderer.text.Font}:
  *
- * <p>This class closes that gap: it measures a probe string with the active
- * renderer, and if the width comes back as zero (no glyphs) it switches Meteor
- * over to the first system font that can draw Chinese, persisting the choice to
- * {@code Config} so the next launch starts correct.
+ * <pre>
+ *   Basic Latin      32 - 126
+ *   Latin-1         160 - 255
+ *   Latin Ext-A     256 - 383
+ *   Greek           880 - 1023
+ *   Cyrillic       1024 - 1279
+ *   Infinity          8734
+ * </pre>
  *
- * <p>Nothing happens when the user already runs a Chinese-capable font, so the
- * 1.21.11 users who picked DengXian by hand are untouched.
+ * <p>There is no CJK block at all, so no matter which font file is installed or
+ * selected in {@code Settings > Visual > Font}, the atlas never contains a single
+ * Chinese glyph. Worse, {@code Font#getWidth} substitutes {@code charMap.get(32)}
+ * (a space) for every missing glyph and {@code Font#render} skips the quad
+ * entirely — which is exactly the failure mode users hit: the layout keeps the
+ * space for each character but every Chinese character draws as nothing, so
+ * buttons look blank while numbers and untranslated English still show.
+ *
+ * <h2>The fix</h2>
+ *
+ * <p>Meteor ships two text renderers and switches between them with a single
+ * config flag:
+ *
+ * <pre>
+ *   TextRenderer.get() = Config.get().customFont.get()
+ *       ? Fonts.RENDERER             // the baked atlas, Latin only
+ *       : VanillaTextRenderer.INSTANCE;  // Minecraft's font, full CJK support
+ * </pre>
+ *
+ * <p>So turning {@code customFont} off is the supported, upstream way to get
+ * Chinese on screen — the same thing a user would do by hand in the settings
+ * menu. Doing it programmatically means a fresh profile is translated correctly
+ * on the very first launch instead of showing a wall of empty buttons.
+ *
+ * <p>{@code scaleIndividually} is forced on as well: the vanilla renderer then
+ * advances every code point by its own scaled width, which is what Meteor's
+ * widget code assumes when it measures a label. Without it, double-width CJK
+ * characters overrun their slot and neighbouring widgets overlap.
+ *
+ * <p>The setting is persisted by Meteor, so on later launches the flag is
+ * already off and this class is a no-op.
  */
 public final class FontFixer {
-    /**
-     * System families to try, best-looking first. Windows ships DengXian and
-     * Microsoft YaHei; the rest cover macOS and Linux desktops.
-     */
-    private static final String[] PREFERRED = {
-        "DengXian",
-        "Microsoft YaHei UI",
-        "Microsoft YaHei",
-        "SimHei",
-        "SimSun",
-        "Noto Sans CJK SC",
-        "Noto Sans SC",
-        "Source Han Sans SC",
-        "PingFang SC",
-        "Hiragino Sans GB",
-        "WenQuanYi Micro Hei",
-        "Microsoft JhengHei",
-    };
-
-    /** Characters that exist in every CJK face and in none of the bundled Latin ones. */
-    private static final String PROBE = "\u4e2d\u6587\u6e05\u5355";
-
-    private static Boolean lastState;
+    /** Bumped only once so a normal session logs the switch a single time. */
+    private static Boolean logged;
 
     private FontFixer() {}
 
     /**
-     * Checks the current renderer and, if it cannot draw Chinese, swaps in a
-     * system font.
+     * Turns Meteor's custom font renderer off and returns whether this call
+     * changed anything.
      *
-     * @return {@code true} when a font switch was performed on this call.
+     * <p>Never throws: a font problem must not take the game down, and the
+     * translation itself keeps working either way.
      */
-    public static boolean ensureCjkFont() {
+    public static boolean ensureVanillaRenderer() {
         try {
-            if (supportsChinese()) {
-                lastState = Boolean.TRUE;
-                return false;
-            }
+            Config cfg = Config.get();
+            if (cfg == null || cfg.customFont == null) return false;
 
-            FontFamily family = pickFamily();
-            if (family == null) {
-                if (lastState == null) {
-                    lastState = Boolean.FALSE;
-                    MeteorZh.LOG.warn(
-                        "Meteor-zh: no CJK system font found — pick one manually in "
-                            + "Settings > Visual > Font, otherwise Chinese will not render");
+            boolean wasCustom = cfg.customFont.get();
+            if (wasCustom) cfg.customFont.set(false);
+
+            // Public field on the singleton; Meteor's own layout code expects it on
+            // whenever the vanilla renderer is in use.
+            VanillaTextRenderer.INSTANCE.scaleIndividually = true;
+
+            if (wasCustom || logged == null) {
+                logged = Boolean.TRUE;
+                if (wasCustom) {
+                    MeteorZh.LOG.info(
+                        "Meteor-zh: turned Meteor's custom font off and switched the GUI to "
+                            + "Minecraft's font — the baked atlas only packs Latin/Greek/Cyrillic, "
+                            + "so Chinese cannot render with it");
+                } else {
+                    MeteorZh.LOG.info(
+                        "Meteor-zh: GUI already uses Minecraft's font (custom font off)");
                 }
-                return false;
             }
-
-            FontFace face = family.get(FontInfo.Type.Regular);
-            if (face == null) return false;
-
-            // Setting.set() runs the setting's own callback, which is what Meteor
-            // normally uses to rebuild the renderer; Fonts.load() is idempotent and
-            // only rebuilds when the face actually differs, so call it explicitly
-            // too in case this Meteor build does not wire the callback.
-            Config.get().font.set(face);
-            Fonts.load(face);
-
-            lastState = Boolean.TRUE;
-            MeteorZh.LOG.info("Meteor-zh: switched GUI font to \"{}\" so Chinese can render", family.getName());
-            return true;
+            return wasCustom;
         } catch (Throwable t) {
-            // Never let a font problem take the game down; the translation itself is fine.
-            if (lastState == null) {
-                lastState = Boolean.FALSE;
-                MeteorZh.LOG.warn("Meteor-zh: font check failed ({})", t.toString());
+            if (logged == null) {
+                logged = Boolean.FALSE;
+                MeteorZh.LOG.warn(
+                    "Meteor-zh: could not switch to the vanilla font renderer ({}); "
+                        + "Chinese may render as blank — turn off Settings > Visual > Custom Font manually",
+                    t.toString());
             }
             return false;
         }
     }
 
-    /** @return whether the active GUI font can draw Chinese. */
-    public static boolean supportsChinese() {
+    /** @return whether the GUI currently draws through Minecraft's font. */
+    public static boolean usingVanilla() {
         try {
-            if (Fonts.RENDERER == null) return false;
-            // Missing glyphs contribute nothing to the advance width, so a face
-            // without CJK measures the whole probe as 0.
-            return Fonts.RENDERER.getWidth(PROBE) > 0.5;
+            Config cfg = Config.get();
+            return cfg != null && cfg.customFont != null && !cfg.customFont.get();
         } catch (Throwable t) {
             return false;
         }
     }
 
-    /** @return the family name currently in use, for diagnostics. */
-    public static String currentFamily() {
-        try {
-            if (Fonts.RENDERER == null || Fonts.RENDERER.fontFace == null) return "?";
-            return Fonts.RENDERER.fontFace.info.family();
-        } catch (Throwable t) {
-            return "?";
-        }
-    }
-
-    private static FontFamily pickFamily() {
-        // Fonts.FONT_FAMILIES only exists after Meteor's resource reload, so a very
-        // early tick can legitimately see an empty list — the caller retries.
-        for (String name : PREFERRED) {
-            FontFamily family = Fonts.getFamily(name);
-            if (family != null && family.hasType(FontInfo.Type.Regular)) return family;
-        }
-        return null;
+    /** @return a short label for logs and the {@code .zh info} command. */
+    public static String describe() {
+        return usingVanilla() ? "vanilla (Minecraft font, CJK capable)" : "custom (atlas, Latin only)";
     }
 }

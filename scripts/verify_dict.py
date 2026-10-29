@@ -42,7 +42,7 @@ def decode(raw):
 
 def main():
     os.makedirs(TEST_DIR, exist_ok=True)
-    cp = build_classpath(TEST_DIR)
+    cp = build_classpath(TEST_DIR, "1.21.11")
     javac = find_javac()
     java = find_java()
 

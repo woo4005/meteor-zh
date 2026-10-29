@@ -12,9 +12,68 @@
 
 暂无变更。后续改动会先记录在此处，发布时再归入对应版本号。
 
+## [1.5.2] - 2026-10-30
+
+> **1.5.1 的字体修复没有生效，本版才是真正的修复。**
+> 1.21.11 线的同一修复以 **1.4.2** 发布，代码相同，只是构建目标不同。
+
+### 修复
+
+- **界面中文在 26.1 上仍然空白的问题（真正的根因与修复）**。
+  - 1.5.1 的做法是「检测当前字体画不画得出中文，画不出就自动换一款系统里的中文字体」。这个检测用 `Fonts.RENDERER.getWidth("中文清单") > 0.5`，但 Meteor 的 `Font#getWidth` 对查不到字形的字符**回退成空格（码位 32）的宽度**：
+
+    ```java
+    CharData c = charMap.get(cp);
+    if (c == null) c = charMap.get(32);   // ← 缺字形 = 空格宽度
+    width += c.xAdvance;
+    ```
+
+    于是这个判断恒为真、换字体的分支一次都没跑过，日志里的「can render Chinese」是假的。
+  - 更根本的原因：Meteor 的字体图集在 `Font` 构造时就**写死了只打包 6 个码位区间**——Basic Latin 32–126、Latin-1 160–255、Latin Ext-A 256–383、Greek 880–1023、Cyrillic 1024–1279、∞ 8734。**无论换成哪款中文字体，图集里都不会有中日韩字形**，所以「自动换字体」这条路本身走不通。
+  - **正确做法：让 Meteor 改用 Minecraft 原版字体渲染。** `TextRenderer.get()` 的实现是
+    `Config.get().customFont.get() ? Fonts.RENDERER : VanillaTextRenderer.INSTANCE`，
+    把 `Config.customFont` 关掉就切到 `VanillaTextRenderer`（用的是 MC 的 `mc.font`，天然支持中文）；再把 `VanillaTextRenderer.INSTANCE.scaleIndividually` 设为 `true`，让中文这种双宽字符按实际宽度排布，否则会挤在一起。
+  - `FontFixer` 因此重写：删掉字体候选表与 `getWidth` 探测，只保留 `ensureVanillaRenderer()`。代价是失去 Meteor 的自定义美术字体、界面改用原版字体样式——这是能正常显示中文的最小代价。
+- **`.zh reload` 之前是空操作**：`ZhDict.load()` 开头有 `if (loaded) return;`，重新翻译时压根没重读词典。新增 `ZhDict.reload()`（清空 7 张表后重新加载），命令改调它。
+- **词法兜底过度拼接**：未知标识符会被逐词拼成「无 Such 模块 XYZ」这类半中半英的串。现在要求「未识别的词不超过已识别词的一半」，否则放弃翻译、保留原文。
+- **`scripts/sanity_zh.py` 误删正常词条**：它的占位语过滤规则里含「占位」「placeholder」，把 `placeholder-color`（占位符文本的颜色）当成未翻译占位语删掉了。规则已收窄为真正的未翻译标记。
+
+### 变更
+
+- **验证脚本从「只打印」改成「真断言」**：`TestZh` / `TestLex` / `Test261` 逐条断言并用退出码表示成败，`verify_dict.py` / `verify_lexical.py` / `verify_261.py` 透传退出码——以前 JVM 能启动就算通过，词典坏了也照样绿。
+  - `Test261` 用新增的 `Translator.missingFields()` 真正检查反射字段是否都还在（原来那行「9 个反射字段全部存在」是无条件打印）。
+  - `verify_261.py` 发现源码比 jar 新时会自动重建，避免拿旧产物跑出假绿。
+  - `_verify_env.find_jar()` 增加按构建线挑选的参数，不再「按修改时间取最新」（两个 jar 同时在 `dist/` 里时会挑错线）。
+- `scripts/build_261.py`：javac 加 `--release 25`（原来没有，换个 JDK 就会产出更高版本的字节码，游戏里直接 `UnsupportedClassVersionError`）；Meteor 的 jar 改为自动发现；实例路径与 JDK 支持环境变量覆盖；打包后自动校验 JSON 可解析、每个 class 的 major 版本、必需条目齐全。
+- `scripts/build.py`：RemapJar 工具的缓存改为比较时间戳（原来「class 文件存在就跳过」，改了工具源码永远不会重编）；classpath 拼装改用 `os.pathsep`。
+- `fabric.mod.json` 补齐 `java` 与 `meteor-client` 依赖声明——装错环境时 Fabric 会给出清楚的提示，而不是插件悄悄不生效。
+- `build_words.py` 增加「同键不同值」检测：`release` 曾同时被写成「松开」和「发布」，后写的静默覆盖前写的。词表产物现在与来源文件闭合（新增 `scripts/absorb_orphan_words.py`，把 217 个孤儿词并回 `dict/zh_external_words.json`）。
+
+### 说明
+
+- 26.1 线：1.5.1 → **1.5.2**。
+- 1.21.11 线：1.4.1 → **1.4.2**（同步本修复）。
+- `v1.5.1` / `v1.4.1` 仍可下载，但字体问题没解决，建议升级。
+
+## [1.4.2] - 2026-10-30
+
+> 1.21.11 线的同步修复版，内容与 [1.5.2] 一致，只是构建目标是 Minecraft 1.21.11。
+
+### 修复
+
+- 字体修复改为「关闭 `Config.customFont`、走 `VanillaTextRenderer`」，并设 `scaleIndividually`（原理详见 [1.5.2]）。
+- `.zh reload` 真正重新读取词典。
+- 词法兜底增加收敛规则，不再把未知标识符拼成半中半英的串。
+
+### 变更
+
+- 验证脚本改为真断言；`build.py` 的 RemapJar 缓存按时间戳失效；`fabric.mod.json` 补 `java` / `meteor-client` 依赖。
+
 ## [1.5.1] - 2026-10-28
 
-> **字体热修复版**：修掉 1.5.0 在 Minecraft 26.1 上「界面中文全部显示为空白」的问题。
+> ⚠️ **本版的字体修复无效，已被 [1.5.2] 取代。** 原因见 [1.5.2]：`getWidth` 探测恒为真、换字体的分支从未执行，而且 Meteor 的字体图集本身就不含中日韩码位，换字体这条路走不通。
+
+> **字体热修复版（尝试）**：修掉 1.5.0 在 Minecraft 26.1 上「界面中文全部显示为空白」的问题。
 > 1.21.11 线的同一修复以 **1.4.1** 发布，代码相同，只是构建目标不同。
 
 ### 修复

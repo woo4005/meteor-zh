@@ -26,7 +26,30 @@ JAVA = os.path.join(b.JDK, "java.exe")
 PLUGIN_JAR = os.path.join(b.DIST, "meteor-zh-%s-mc26.1.jar" % b.VERSION)
 
 
+def _newest_source_mtime():
+    newest = 0.0
+    for base, _dirs, files in os.walk(os.path.join(ROOT, "src", "main")):
+        for f in files:
+            newest = max(newest, os.path.getmtime(os.path.join(base, f)))
+    return newest
+
+
+def ensure_fresh():
+    """jar 比源码旧就自动重建一次。
+
+    老版本只判断「jar 存在」，改了 Java 却忘了重新构建时，验证跑的是旧 jar，
+    照样打印 ALL OK —— 这正是「假绿」的来源之一。
+    """
+    if os.path.exists(PLUGIN_JAR) and os.path.getmtime(PLUGIN_JAR) >= _newest_source_mtime():
+        return
+    print("源码比 jar 新（或 jar 不存在），先重建 26.1 产物 ...\n")
+    import build_261
+    build_261.main()
+    print()
+
+
 def main():
+    ensure_fresh()
     if not os.path.exists(PLUGIN_JAR):
         raise SystemExit("先跑 scripts/build_261.py 生成 " + PLUGIN_JAR)
     if os.path.isdir(TEST_DIR):

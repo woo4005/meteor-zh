@@ -2323,6 +2323,9 @@
   "place-side-color": {
    "title": "放置侧颜色"
   },
+  "placeholder-color": {
+   "title": "占位符文本的颜色"
+  },
   "placement-positions": {
    "title": "放置位置"
   },
@@ -6006,6 +6009,10 @@
   "placed-item": {
    "desc": "要放置的方块.",
    "title": "放置方块"
+  },
+  "placeholder-color": {
+   "desc": "占位符文本的颜色.",
+   "title": "占位符文本的颜色"
   },
   "placement-positions": {
    "desc": "锚在实体上的放置位置.",

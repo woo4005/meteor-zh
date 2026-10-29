@@ -2,7 +2,7 @@
 
 > 用于在 Meteor / MC 插件群推广。三个版本按场景取用。
 > 发布前请先把两个 jar 传到**群文件**，因为群里不少人打不开 GitHub：
-> `meteor-zh-1.5.1-mc26.1.jar`（Minecraft 26.1）与 `meteor-zh-1.4.1.jar`（Minecraft 1.21.11）。
+> `meteor-zh-1.5.2-mc26.1.jar`（Minecraft 26.1）与 `meteor-zh-1.4.2.jar`（Minecraft 1.21.11）。
 
 ---
 
@@ -79,11 +79,11 @@ GUI 里 Bind、Modules、Reset、Chat Feedback 这些还是英文，按键名也
 
 【安装】
 1. 按游戏版本选 jar，放进 .minecraft/mods/
-   · Minecraft 26.1     → meteor-zh-1.5.1-mc26.1.jar
-   · Minecraft 1.21.11  → meteor-zh-1.4.1.jar
+   · Minecraft 26.1     → meteor-zh-1.5.2-mc26.1.jar
+   · Minecraft 1.21.11  → meteor-zh-1.4.2.jar
    （PCL 版本隔离的话是 PCL 目录/minecraft/versions/<版本>/mods/）
 2. 建议删掉旧的 Meteor-I18n-Support-*.jar（共存不崩，但功能重复）
-3. 启动就完事 —— 1.5.1 起插件会自己检查字体，画不出中文时自动切成系统里的中文字体；
+3. 启动就完事 —— 1.5.2 起插件会自动改用 Minecraft 原版字体渲染，中文不会再变成空白；
    万一界面中文是空白，聊天栏敲 .zh font 重新检测即可
 3. 启动游戏，完事
 
@@ -98,7 +98,7 @@ GUI 里 Bind、Modules、Reset、Chat Feedback 这些还是英文，按键名也
 .zh info    看词典条目数
 
 【下载】
-群文件：meteor-zh-1.5.1-mc26.1.jar（MC 26.1） / meteor-zh-1.4.1.jar（MC 1.21.11）
+群文件：meteor-zh-1.5.2-mc26.1.jar（MC 26.1） / meteor-zh-1.4.2.jar（MC 1.21.11）
 GitHub：https://github.com/woo4005/meteor-zh/releases
 源码：https://github.com/woo4005/meteor-zh
 反馈：https://github.com/woo4005/meteor-zh/issues
@@ -130,7 +130,7 @@ Meteor 我做了个全界面汉化插件，模块名/设置项/GUI 按钮/按键
 **先传群文件。** 这条最重要——国内打不开 GitHub 的人很多（我自己这次就是 DNS 解析问题折腾了半天）。
 顺序建议：
 
-1. 先把 `meteor-zh-1.4.1.jar` 传到群文件，文件名别改
+1. 先把 `meteor-zh-1.4.2.jar` 传到群文件，文件名别改
 2. 发「群聊短版」
 3. 有人问细节，再贴「完整版」或直接给群公告
 4. GitHub 链接放最后，作为"想追更新/提问题"的入口
