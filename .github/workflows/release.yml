@@ -1,15 +1,17 @@
 # Meteor-ZH 自动发布（release.yml）
 #
-# 触发：推送 v* 标签（例如 v1.4.1）
-#   git tag v1.4.1 && git push origin v1.4.1
+# ⚠️ 只支持**手动触发**（workflow_dispatch），不再由 push tag 自动触发。
 #
-# 注意：标签版本必须与 gradle.properties 的 mod_version 一致，
-# 否则构建出的 jar 是 meteor-zh-1.4.1.jar，而 release 标成 v1.4.2。
+# 为什么不用 push tags 自动触发：
+#   1. 本仓库的发布由 scripts/build_261.py + scripts/github_sync.py 统一完成（含 26.1 线），
+#      脚本会先创建 release 并上传 jar；若再由 workflow 自动发布一次，同名 asset 会 409 撞车。
+#      （v1.4.2 就是这样红过一次的。）
+#   2. 26.1 线（v1.5.x）根本不走 Gradle —— MC 26.x 换了一套构建环境（见 README「26.1 线的两个坑」），
+#      由 scripts/build_261.py 离线构建。自动触发必然在「tag ≠ mod_version」这一步失败。
 #
 # 两条版本线的分工：
-#   v1.4.x  -> Minecraft 1.21.11 线，本 Gradle 工程的构建目标，本 workflow 负责构建并发布
-#   v1.5.x  -> Minecraft 26.1 线，不走 Gradle（MC 26.x 换了一套构建环境，见 README「26.1 线的两个坑」），
-#             由 scripts/build_261.py 离线构建、scripts/github_sync.py 上传，因此本 workflow 直接跳过
+#   v1.4.x  -> Minecraft 1.21.11 线，本 Gradle 工程的构建目标，本 workflow 可手动构建并发布
+#   v1.5.x  -> Minecraft 26.1 线，不走 Gradle，用 scripts/build_261.py 构建、github_sync.py 上传
 #
 # ⚠️ 映射说明：本工程源码使用 Mojang 官方映射名（mojmap），
 # build.gradle 里是 `mappings loom.officialMojangMappings()`，不是 yarn。
@@ -17,9 +19,12 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: '要发布的版本标签，例如 v1.4.3（必须与 gradle.properties 的 mod_version 一致）'
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -28,9 +33,6 @@ jobs:
   release:
     name: Build and publish release
     runs-on: ubuntu-latest
-    # 只处理 1.21.11 线（v1.4.x）的标签；26.1 线（v1.5.x）不经过 Gradle，直接跳过，
-    # 否则「tag 版本 ≠ mod_version」的校验步骤会让每次 26.1 发版都红一次
-    if: startsWith(github.ref_name, 'v1.4.')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,15 +42,25 @@ jobs:
 
       - name: Check tag matches mod_version
         # 标签版本和 gradle.properties 的 mod_version 不一致时直接失败，
-        # 避免出现「tag 是 v1.5.0、jar 却是 meteor-zh-1.4.0.jar」的发布事故
+        # 避免出现「tag 是 v1.4.3、jar 却是 meteor-zh-1.4.2.jar」的发布事故
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
         run: |
           VERSION=$(grep -E '^mod_version=' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
-          TAG="${GITHUB_REF_NAME#v}"
-          echo "tag=${TAG}  mod_version=${VERSION}"
+          TAG="${INPUT_TAG#v}"
+          echo "input_tag=${INPUT_TAG}  tag=${TAG}  mod_version=${VERSION}"
+          if [ -z "${TAG}" ]; then
+            echo "::error::没有提供 tag"
+            exit 1
+          fi
           if [ "${TAG}" != "${VERSION}" ]; then
             echo "::error::tag ${TAG} 与 gradle.properties 的 mod_version ${VERSION} 不一致"
             exit 1
           fi
+          case "${TAG}" in
+            1.4.*) echo "OK: 1.21.11 线" ;;
+            *) echo "::error::本 workflow 只处理 1.4.x（1.21.11 线），26.1 线请用 scripts/build_261.py"; exit 1 ;;
+          esac
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -77,6 +89,9 @@ jobs:
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ inputs.tag }}
           files: out/*.jar
           fail_on_unmatched_files: true
+          # 同名 asset 已存在时覆盖，避免与 scripts/github_sync.py 的产物撞车
+          overwrite_files: true
           generate_release_notes: true
