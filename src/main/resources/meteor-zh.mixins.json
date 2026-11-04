@@ -4,6 +4,7 @@
   "package": "com.meteorzh.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "ChatUtilsMixin",
     "GuiRendererMixin"
   ],
   "injectors": {

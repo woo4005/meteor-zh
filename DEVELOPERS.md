@@ -402,6 +402,49 @@ Jefff\ Mod-<hud>_<setting>     HUD 元素自己的设置
 
 ---
 
+### 阶段 12 · 聊天栏正文汉化（2026-11-04，1.4.5 / 1.5.5）
+
+**问题**：模块名早就是中文了，聊天栏里却是 `[Meteor] [仓库寻找器] Found stash at 123, 456.`
+—— 前缀中文、正文英文。
+
+**为什么翻译不到**：这些消息不是 `lang` 键，而是
+`ChatUtils.info("Found stash at (highlight)%s(default), (highlight)%s(default).", x, z)`
+这样的 Java 字符串模板。GUI 那条路（`GuiRenderer#text`）管不到聊天栏。
+
+**试错**：第一版钩的是 `ChatUtils.info / warning / error`，验证发现只有 22 条本体消息能命中，
+而用户截图里的两条恰好都不走这条路：
+- Jefff `BetterStashFinder` 直接调 `ChatUtils.sendMsg(int, ChatFormatting, String, Object...)`
+- Meteor `Notifier` 也是
+
+**最终方案**：钩 `ChatUtils.formatMsg(String, ChatFormatting)`。理由三条：
+1. 它是**所有**带文本消息的唯一汇聚点 —— `javap -c` 确认 `info/warning/error`、
+   `sendMsg` 的 7 个重载、`formatCoords` 最后都走它；
+2. `formatMsg` 这个名字在两个版本里**唯一**，注解只需要写方法名；
+3. 它的参数里虽然有 `ChatFormatting`，但我们的 `@ModifyVariable(method = "formatMsg")`
+   不需要写描述符，所以注解里**不含任何 MC 类型** ⇒ `remap = false` 在两条线上都成立。
+   反例是 `sendMsg`：7 个重载必须写描述符，而 `ChatFormatting` 在 1.21.11 是 `class_124`、
+   在 26.1 就是 `ChatFormatting`，一份源码写不出两边都能用的描述符。
+
+**代价**：`formatMsg` 拿到的是 `String.format` **之后**的文本（参数已经变成坐标、玩家名），
+所以不能拿模板直接查表。做法是把每条英文模板编译成**整串锚定的正则**：
+`%s → (.*?)`、`%d → (-?\d+)`、`%.1f → (-?\d+(?:\.\d+)?)`，其余字符 `Pattern.quote`；
+中文模板里的第 n 个格式符换成 `$n`。因为构建期已硬校验「中英格式符个数与顺序一致」
+（`build_dict.py` 的 `sync_chat()`），捕获组下标天然对齐。
+
+**性能**：按首字符分桶 + 长模板优先排序，一条消息通常只跑 1～3 个正则；词典 156 条，
+整表也就几 KB 字符串匹配，聊天频率下无感。
+
+**踩到的两个坑**：
+- `translate("")` → `StringIndexOutOfBoundsException`（空串取首字符）—— 被 `verify_chat.py` 抓到。
+- 构建期的格式符校验抓到 `unstick` 那条模板把 `%s` 与 `%d` 写反了；如果没有这条校验，
+  游戏里会抛 `MissingFormatArgumentException` 或参数错位。
+
+**验证**：`scripts/verify_chat.py`（9 项）用「已填好参数的英文原文」断言反查结果，
+其中两条就是用户截图里的真实消息。这类正则错误不会抛异常、只会静默不匹配，
+所以必须用断言而不是肉眼。
+
+---
+
 ## 4. AI 没有做到的事（承认局限）
 
 | 事情 | 为什么没做 |

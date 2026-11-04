@@ -10,6 +10,42 @@
 
 ## [未发布]
 
+## [1.5.5] - 2026-11-04
+
+### 新增
+
+- **聊天栏消息汉化**：模块名早就会变成中文，但聊天里的正文一直是英文
+  （`[Meteor] [仓库寻找器] Found stash at 123, 456.`、`[Meteor] [通知器] xxx's pearl landed at ...`）。
+  现在这些消息也会显示中文。覆盖 Meteor 本体（Notifier / StashFinder / 命令回显 / 路径点 / 好友 / 配置档案）
+  以及第三方插件的提示（Jefff 的仓库寻找器、Miku 的村民搬运、Baritone 的状态行等），共 **156 条模板**。
+  - 挂在 `ChatUtils.formatMsg(String, ChatFormatting)` 上 —— 它是所有带文本消息的唯一汇聚点，
+    名字在两个版本里都唯一且不含 MC 类型，所以一份源码能编译两条线。
+  - `formatMsg` 收到的是**已经填好参数**的文本，所以翻译用「模板反查」：
+    英文模板编译成整串锚定的正则（`%s` / `%d` / `%.1f` 变成捕获组），中文模板再用 `$1..$n` 拼回。
+    构建期会硬校验中英模板的格式符个数与顺序一致，不一致直接构建失败。
+  - `(highlight)` / `(default)` 伪颜色标记原样保留，聊天气泡的高亮配色不变。
+  - 调试类输出（`resolveArea:`、`GoalNear{...}` 等）**故意不收录**：它们是诊断信息，翻译反而丢细节，
+    宁可原样显示英文。
+- 词典新增 `assets/meteorzh/lang/chat.json`（156 条），`.zh info` / `.zh reload` 会报告并重新加载它。
+
+### 修复
+
+- `ChatDict.translate("")` 会抛 `StringIndexOutOfBoundsException`（空消息取首字符）—— 已在入口拦掉。
+- 新增 `scripts/verify_chat.py`（9 项断言）与 `scripts/jvm-test/TestChat.java`，
+  用真实填好参数的英文消息验证反查结果，包括用户截图里的那两条。
+
+---
+
+## [1.4.5] - 2026-11-04
+
+1.21.11 线，内容与 1.5.5 相同（同一份源码、同一个词典）：
+
+- 聊天栏消息正文汉化（156 条模板，含 Jefff 仓库寻找器、Meteor 通知器、Baritone 状态行等）。
+- 修复空消息导致 `StringIndexOutOfBoundsException`。
+- 新增 `scripts/verify_chat.py` 离线验证。
+
+---
+
 ## [1.5.4] - 2026-11-04
 
 ### 变更

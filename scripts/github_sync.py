@@ -34,9 +34,9 @@ import github_publish_ip as ghp  # noqa: E402
 ROOT = ghp.ROOT
 REPO = "meteor-zh"
 #: 本次要发的版本线。1.4.3 = 1.21.11 线。
-VERSION = "1.4.4"
+VERSION = "1.4.5"
 #: 另一条线（26.1）的版本号，用来写在 release 正文的下载表里
-VERSION_261 = "1.5.4"
+VERSION_261 = "1.5.5"
 #: 兼容旧名字（正文模板里还在用 {ver1211}）
 VERSION_1211 = VERSION
 BRANCH = "main"
@@ -248,7 +248,42 @@ def ensure_release(token):
 
     body = """Meteor Client 全界面简体中文汉化 v{ver}
 
-## 本版更新（1.4.4 / 1.5.4）
+## 本版更新（1.4.5 / 1.5.5）
+
+### 聊天栏消息正文汉化
+
+模块名和设置项早就变成中文了，但聊天栏里的**正文**一直是英文——因为那些消息是用
+`ChatUtils.info("Found stash at (highlight)%s(default), (highlight)%s(default).", x, z)`
+这样的 Java 字符串模板直接拼出来的，不是 `lang` 文件里的键，`GuiRenderer` 那条渲染路径管不到。
+
+本版把这类消息也接管了，**156 条模板**，覆盖：
+
+- Meteor 本体：通知器、仓库寻找器、命令回显、路径点、好友、配置档案
+- 第三方插件：Jefff 的仓库寻找器、Miku 的村民搬运、Baritone 的状态行等
+
+```
+改前：[Meteor] [仓库寻找器] Found stash at 5178744, 5296888.
+改后：[Meteor] [仓库寻找器] 在 5178744, 5296888 发现仓库。
+
+改前：[Meteor] [通知器] woo4005's pearl landed at 5179005, 128, 5296969 (80.0m away, travelled 0.1m).
+改后：[Meteor] [通知器] woo4005 的末影珍珠落在 5179005, 128, 5296969（距离 80.0m，移动 0.1m）。
+```
+
+实现上是钩住 `ChatUtils.formatMsg`——所有带文本的消息最后都经过它。这一层拿到的文本参数已经
+填好了，所以不能拿模板当 key 查表，而是把每条英文模板编译成整串锚定的正则（`%s` / `%d` / `%.1f`
+变成捕获组）再按捕获组拼回中文，`(highlight)` 这类高亮标记原样保留。构建期会硬校验中英模板的
+格式符个数与顺序一致，写错了构建直接失败。
+
+调试类输出（`resolveArea:`、`GoalNear{...}` 等）**故意不翻**：它们是诊断信息，翻译反而丢细节。
+
+### 顺带修复
+
+- `ChatDict.translate("")` 会抛 `StringIndexOutOfBoundsException`（空消息取首字符），已拦掉。
+- 新增 `scripts/verify_chat.py`（9 项断言），用真实填好参数的英文消息验证反查结果。
+
+---
+
+## 上一版（1.4.4 / 1.5.4）：官方译法优先 + 作者信息
 
 ### 官方译法优先
 
@@ -266,7 +301,7 @@ Jefff / Lotus 插件作者维护的官方简体中文语言文件与本站译法
 
 ---
 
-## 上一版（1.4.3 / 1.5.3）的修复，本版同样包含
+## 更早（1.4.3 / 1.5.3）的修复，本版同样包含
 
 ### 修复：Minecraft 1.21.11 上被 Fabric 判定「版本不兼容」
 
@@ -506,33 +541,31 @@ def main():
     print("tree:", new_tree["sha"], flush=True)
 
     message = (
-        "feat: 1.4.3 / 1.5.3 —— 修 1.21.11 版本不兼容，新增「关于汉化插件」与自动更新 (v%s)\n"
+        "feat: 1.4.5 / 1.5.5 —— 聊天栏消息正文汉化 (v%s)\n"
+        "\n"
+        "问题\n"
+        "- 模块名早已是中文，但聊天栏正文仍是英文：\n"
+        "  [Meteor] [仓库寻找器] Found stash at 5178744, 5296888.\n"
+        "  这些是 ChatUtils.info(模板, 参数...) 拼出来的字符串，不是 lang 键\n"
+        "\n"
+        "实现\n"
+        "- 钩 ChatUtils.formatMsg(String, ChatFormatting)：所有带文本消息的唯一汇聚点，\n"
+        "  方法名两版唯一且注解不含 MC 类型，因此 remap = false 在两条线都成立\n"
+        "- 该层收到的是已填好参数的文本，故用模板反查：英文模板编译成整串锚定正则\n"
+        "  （%%s/%%d/%%.1f 变捕获组），中文模板用 $n 拼回，(highlight) 原样保留\n"
+        "- dict/zh_chat.json 156 条；build_dict.py 的 sync_chat() 硬校验中英格式符个数与顺序\n"
+        "- .zh info / .zh reload 会报告并重载聊天模板\n"
         "\n"
         "修复\n"
-        "- fabric.mod.json 的 meteor-client 依赖由 >=1.21.11 改为 >=1.21.11-0\n"
-        "  Fabric 的 semver 把 1.21.11-86 判为 1.21.11 的预发布版（小于正式版），旧约束永不满足，\n"
-        "  游戏提示「将 Meteor Client 1.21.11-86 替换为 1.21.11 及以上版本」\n"
-        "- 1.21.11 线离线校验改用未 remap 的 build/addon-mojmap.jar（classpath 是 mojmap 命名）\n"
-        "- 构建/校验脚本的目录清理改成可重试的 wipe()（OneDrive 会攥住刚写过的目录）\n"
-        "\n"
-        "新增\n"
-        "- com.meteorzh.AboutModule：汉化分类下的「关于汉化插件」，界面全中文\n"
-        "- com.meteorzh.UpdateChecker：每次启动只查一次 GitHub，世界内走聊天栏、主菜单走\n"
-        "  SystemToast；可选后台静默下载并在退出游戏时替换 jar\n"
-        "- .zh check / .zh update / .zh about\n"
-        "- meteor-addon-list.json（meteoraddons.com 的补充数据）\n"
-        "\n"
-        "词典\n"
-        "- 合并 Jefff / Lotus 官方中文：18 模块 / 142 设置 / 138 说明\n"
-        "- 产物命名对齐：meteor-zh-<版本>-mc<游戏版本>.jar\n"
+        "- ChatDict.translate(\"\") 空串取首字符导致 StringIndexOutOfBoundsException\n"
+        "- 构建期格式符校验抓到 unstick 模板 %%s 与 %%d 顺序写反\n"
         "\n"
         "版本\n"
-        "- 1.21.11 线 1.4.2 -> %s\n"
-        "- 26.1 线 1.5.2 -> %s\n"
+        "- 1.21.11 线 1.4.4 -> %s\n"
+        "- 26.1 线 1.5.4 -> %s\n"
         "\n"
         "验证\n"
-        "- verify_dict.py 15 项 / verify_lexical.py 9 项 / verify_261.py 14 项断言全部通过\n"
-        "  两个 jar 的 fabric.mod.json / mixins.json 逐项核对\n"
+        "- verify_dict 15 项 / verify_lexical 9 项 / verify_261 14 项 / verify_chat 9 项全部通过\n"
         "\n"
         "Co-authored-by: deepseek-ai <noreply@deepseek.com>" % (VERSION, VERSION, VERSION_261)
     )

@@ -49,14 +49,17 @@ public class ZhCommand extends Command {
         builder.then(literal("reload").executes(context -> {
             // ZhDict.load() is a no-op once loaded, so this has to be reload().
             ZhDict.reload();
+            ChatDict.reload();
             Translator.init();
             int count = Translator.translateAll();
-            info("词典已重新加载：%d 条，重新翻译 %d 处文本", ZhDict.size(), count);
+            info("词典已重新加载：%d 条，聊天模板 %d 条，重新翻译 %d 处文本",
+                ZhDict.size(), ChatDict.size(), count);
             return SINGLE_SUCCESS;
         }));
 
         builder.then(literal("info").executes(context -> {
-            info("词典 %d 条，词表 %d 条", ZhDict.size(), WordTranslator.size());
+            info("词典 %d 条，词表 %d 条，聊天模板 %d 条",
+                ZhDict.size(), WordTranslator.size(), ChatDict.size());
             info("字体：%s", FontFixer.describe());
             info("界面文本渲染器：%s", FontFixer.usingVanilla()
                 ? "Minecraft 原版（可显示中文）"

@@ -114,6 +114,7 @@ public class MeteorZh extends MeteorAddon {
             FontFixer.ensureVanillaRenderer();
 
             ZhDict.load();
+            ChatDict.load();
             Translator.init();
             Translator.translateAll();
             Commands.add(new ZhCommand());

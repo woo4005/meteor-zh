@@ -10,6 +10,7 @@ Sources
 
 Output
   src/main/resources/assets/meteorzh/lang/zh.json
+  src/main/resources/assets/meteorzh/lang/chat.json   (dict/zh_chat.json, 格式符已校验)
 """
 import io
 import json
@@ -19,7 +20,12 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REF = os.path.join(ROOT, "i18n_ref")
 DICT = os.path.join(ROOT, "dict")
-OUT = os.path.join(ROOT, "src", "main", "resources", "assets", "meteorzh", "lang", "zh.json")
+LANG = os.path.join(ROOT, "src", "main", "resources", "assets", "meteorzh", "lang")
+OUT = os.path.join(LANG, "zh.json")
+CHAT_OUT = os.path.join(LANG, "chat.json")
+
+# 匹配 String.format 的格式符，例如 %s / %d / %02d / %.1f / %-5s / %n / %%
+FORMAT_SPEC = re.compile(r"%[-#+ 0,(]*\d*(?:\.\d+)?[a-zA-Z%]")
 
 
 def load_json(path):
@@ -221,6 +227,38 @@ def convert_lotus(modules, settings):
     return {"descriptions": descriptions}
 
 
+def sync_chat():
+    """dict/zh_chat.json -> assets/meteorzh/lang/chat.json，并校验格式符。
+
+    聊天模板的译文必须与原模板的格式符**个数与顺序完全一致**，否则
+    ChatUtils 里的 String.format 会把参数塞错位置（甚至抛
+    MissingFormatArgumentException）。这类错误没法靠肉眼逐条看，所以在这里
+    硬校验：不通过就直接 SystemExit，不让坏词典进 jar。
+    """
+    src = os.path.join(DICT, "zh_chat.json")
+    chat = load_json(src)
+    if not chat:
+        return 0
+
+    problems = []
+    for en, zh in chat.items():
+        want = FORMAT_SPEC.findall(en)
+        got = FORMAT_SPEC.findall(zh)
+        if want != got:
+            problems.append("%s\n    en=%s\n    zh=%s" % (en, "".join(want), "".join(got)))
+
+    if problems:
+        raise SystemExit(
+            "chat.json 格式符与原模板不一致（%d 条）：\n%s" % (len(problems), "\n".join(problems)))
+
+    os.makedirs(LANG, exist_ok=True)
+    with io.open(CHAT_OUT, "w", encoding="utf-8", newline="\n") as f:
+        json.dump(dict(sorted(chat.items())), f, ensure_ascii=False, indent=2)
+        f.write("\n")
+
+    return len(chat)
+
+
 def main():
     modules, settings = convert_core()
     groups, ui = convert_ui()
@@ -246,6 +284,8 @@ def main():
         json.dump(result, f, ensure_ascii=False, indent=1, sort_keys=False)
         f.write("\n")
 
+    chat_count = sync_chat()
+
     size = os.path.getsize(OUT)
     print("modules  : %d (with desc: %d)" % (
         len(result["modules"]), sum(1 for v in result["modules"].values() if "desc" in v)))
@@ -254,6 +294,7 @@ def main():
     print("groups   : %d" % len(result["groups"]))
     print("ui       : %d" % len(result["ui"]))
     print("descs    : %d" % len(result.get("descriptions") or {}))
+    print("chat     : %d" % chat_count)
     print("written  : %s (%d bytes)" % (OUT, size))
 
 

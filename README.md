@@ -4,14 +4,14 @@
 [![Build](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml/badge.svg)](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml)
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.1%20%7C%201.21.11-62b47a.svg)](#兼容性)
 [![Fabric](https://img.shields.io/badge/Fabric-0.20.1%20%7C%200.19.3-dbb69b.svg)](#兼容性)
-[![Version](https://img.shields.io/badge/26.1--%E7%BA%BF-1.5.4-a855f7.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/26.1--%E7%BA%BF-1.5.5-a855f7.svg)](CHANGELOG.md)
 [![Version](https://img.shields.io/badge/1.21.11--%E7%BA%BF-1.4.x-a855f7.svg)](CHANGELOG.md)
 
 **Meteor-ZH** 是一个 Meteor Client 附属模组（addon），把 Meteor 的整套界面翻成简体中文：模块名、功能描述、设置项名称与说明、设置分组、**按键名（Bind）**、HUD 元素、顶部标签页，以及 GUI 里写死在代码中的按钮与提示文字。
 
 装上即用 —— **启动游戏自动翻译，不点任何按钮，重启后依然生效**。新装的附属模组也会在下次启动时被自动识别并翻译。
 
-从 1.4.4 / 1.5.4 起还自带一个 **「关于汉化插件」** 模块：在游戏里就能查看版本与词典规模、检查更新、打开下载页，也可以让它每次启动自动查一次更新（可选后台静默下载，退出游戏时替换）。
+从 1.4.5 / 1.5.5 起还自带一个 **「关于汉化插件」** 模块：在游戏里就能查看版本与词典规模、检查更新、打开下载页，也可以让它每次启动自动查一次更新（可选后台静默下载，退出游戏时替换）。
 
 > 作者：[woo4005](https://github.com/woo4005)　·　AI 贡献者：[deepseek-ai](https://github.com/deepseek-ai)（DeepSeek V4.1 flash 1017）
 > 许可证：[GNU GPL v3.0](LICENSE)（GPL-3.0-or-later）　·　[开发者档案](DEVELOPERS.md)　·　[变更日志](CHANGELOG.md)　·　[贡献指南](CONTRIBUTING.md)
@@ -22,6 +22,7 @@
 
 - [为什么需要它](#为什么需要它)
 - [功能覆盖](#功能覆盖)
+- [聊天栏消息也汉化了](#聊天栏消息也汉化了)
 - [「关于汉化插件」模块与自动更新](#关于汉化插件模块与自动更新)
 - [兼容性](#兼容性)
 - [安装](#安装)
@@ -74,6 +75,7 @@ Meteor-ZH 把这些都补上了。
 | 第三方插件的模块与描述 | 词典 + 词法兜底引擎 | 134 名称 + 63 描述句 |
 | Jefff / Lotus 官方译文 | 直接采用插件作者维护的官方汉化文件 | 18 模块 + 142 设置 + 138 说明 |
 | 模块/设置说明文字 | `descriptions` 表按英文原句精确匹配 | 1357 条 |
+| 聊天栏消息正文 | `ChatUtils.formatMsg` 模板反查（`chat.json`） | 156 条模板 |
 | 词典未收录的新标识符 | 1069 词元的词法合成引擎 | — |
 
 **已经自带中文的插件（Lotus、Miku 的中文模块）会原样跳过，不会被二次翻译。** 这是词法引擎的
@@ -103,12 +105,38 @@ Meteor-ZH 把这些都补上了。
 
 ---
 
+## 聊天栏消息也汉化了
+
+模组名和设置项早就变成中文了，但聊天栏里的**正文**一直是英文 —— 因为那些消息是
+用 `ChatUtils.info("Found stash at %s, %s.", x, z)` 直接拼出来的字符串，不是 `lang` 文件里的键。
+从 **1.4.5 / 1.5.5** 起这些消息也会显示中文：
+
+```
+改前：[Meteor] [仓库寻找器] Found stash at 5178744, 5296888.
+改后：[Meteor] [仓库寻找器] 在 5178744, 5296888 发现仓库。
+
+改前：[Meteor] [通知器] woo4005's pearl landed at 5179005, 128, 5296969 (80.0m away, travelled 0.1m).
+改后：[Meteor] [通知器] woo4005 的末影珍珠落在 5179005, 128, 5296969（距离 80.0m，移动 0.1m）。
+```
+
+覆盖范围：Meteor 本体的通知器 / 仓库寻找器 / 命令回显 / 路径点 / 好友 / 配置档案，
+以及 Jefff（仓库寻找器）、Miku（村民搬运）、Baritone（状态行）等第三方插件的提示，
+共 156 条模板。
+
+实现方式：钩住 `ChatUtils.formatMsg`，把「英文模板 + 已填好的参数」反查回中文模板。
+因为消息到这一层参数已经被填进去了，所以不能拿模板当 key 查表，而是把每条英文模板
+编译成正则（`%s` / `%d` / `%.1f` 变成捕获组）再按捕获组拼回中文，`(highlight)` 这类
+高亮标记原样保留。构建期会硬校验中英模板的格式符个数与顺序一致，写错了构建就会失败。
+
+**故意不翻译**：`resolveArea:`、`GoalNear{...}`、`meteor.get_module_info() requires ...`
+这类调试输出 —— 它们是给开发者看的诊断信息，翻译反而丢掉细节，宁可原样显示英文。
+
 ## 兼容性
 
 | meteor-zh | Minecraft | Fabric Loader | Meteor Client | Java | 状态 |
 |---|---|---|---|---|---|
-| **1.5.4** | **26.1** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 26.1 专用线 |
-| **1.4.4** | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，build 82 及以上） | 21 | 1.21.11 专用线，继续维护 |
+| **1.5.5** | **26.1** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 26.1 专用线 |
+| **1.4.5** | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，build 82 及以上） | 21 | 1.21.11 专用线，继续维护 |
 | 1.3.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被 1.4.x 替代 |
 | ≤ 1.2.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被替代 |
 
@@ -116,11 +144,11 @@ Meteor-ZH 把这些都补上了。
 
 | 游戏版本 | 下载的 jar | 版本线 | 构建脚本 |
 |---|---|---|---|
-| Minecraft **26.1** | `meteor-zh-1.5.4-mc26.1.jar` | 1.5.x | `scripts/build_261.py` |
-| Minecraft **1.21.11** | `meteor-zh-1.4.4-mc1.21.11.jar` | 1.4.x | `scripts/build.py` |
+| Minecraft **26.1** | `meteor-zh-1.5.5-mc26.1.jar` | 1.5.x | `scripts/build_261.py` |
+| Minecraft **1.21.11** | `meteor-zh-1.4.5-mc1.21.11.jar` | 1.4.x | `scripts/build.py` |
 
-两条线的源码共用（同一份 `src/`），但**版本号各走各的**：1.21.11 线的后续更新发 1.4.4、1.4.5……，
-26.1 线的更新发 1.5.4、1.6.0……，互不牵连。词典是两条线共享的资源，会同时扩充到两个 jar 中。
+两条线的源码共用（同一份 `src/`），但**版本号各走各的**：1.21.11 线的后续更新发 1.4.5、1.4.6……，
+26.1 线的更新发 1.5.5、1.6.0……，互不牵连。词典是两条线共享的资源，会同时扩充到两个 jar 中。
 
 两个 jar 分别放进各自实例的 `mods` 目录即可；同一个实例里**不要同时放两个**（mod id 相同，Fabric 会报重复）。
 
@@ -164,8 +192,8 @@ Meteor-ZH 把这些都补上了。
 ## 安装
 
 1. 从 [Releases](https://github.com/woo4005/meteor-zh/releases) 下载对应你游戏版本的 jar：
-   - **Minecraft 26.1** → `meteor-zh-1.5.4-mc26.1.jar`
-   - **Minecraft 1.21.11** → `meteor-zh-1.4.4-mc1.21.11.jar`
+   - **Minecraft 26.1** → `meteor-zh-1.5.5-mc26.1.jar`
+   - **Minecraft 1.21.11** → `meteor-zh-1.4.5-mc1.21.11.jar`
 2. 放进 `mods/` 目录
    - 官方启动器：`.minecraft/mods/`
    - **PCL 版本隔离**：`<PCL目录>/.minecraft/versions/<版本名>/mods/`

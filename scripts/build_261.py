@@ -22,7 +22,7 @@ import zipfile
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VERSION = "1.5.3"
+VERSION = "1.5.5"
 MOD_ID = "meteor-zh"
 
 INSTANCE = os.environ.get("MC_INSTANCE") or r"E:\pcl\.minecraft\versions\26.1-Fabric 0.20.1"
@@ -273,15 +273,18 @@ REQUIRED_ENTRIES = (
     "fabric.mod.json",
     "meteor-zh.mixins.json",
     "assets/meteorzh/lang/zh.json",
+    "assets/meteorzh/lang/chat.json",
     "assets/meteorzh/lang/words.json",
     "assets/meteorzh/icon.png",
     "com/meteorzh/MeteorZh.class",
     "com/meteorzh/FontFixer.class",
     "com/meteorzh/Translator.class",
     "com/meteorzh/ZhDict.class",
+    "com/meteorzh/ChatDict.class",
     "com/meteorzh/ZhCommand.class",
     "com/meteorzh/WordTranslator.class",
     "com/meteorzh/mixin/GuiRendererMixin.class",
+    "com/meteorzh/mixin/ChatUtilsMixin.class",
 )
 
 

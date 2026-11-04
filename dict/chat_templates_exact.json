@@ -1,0 +1,191 @@
+{
+  "%d \\'%c\\': %s (from %s)": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "errorPrefix"
+    ]
+  },
+  "%d, %d \\'%c\\': %s (from %s)": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "errorPrefix"
+    ]
+  },
+  "%s (from %s)": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "errorPrefix"
+    ]
+  },
+  "(highlight)Worker %s(default): %s.": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "info"
+    ]
+  },
+  "--- Bound Modules ((highlight)%d(default)) ---": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "info"
+    ]
+  },
+  "--- Commands ((highlight)%d(default)) ---": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "info"
+    ]
+  },
+  "--- Modules ((highlight)%d(default)) ---": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "info"
+    ]
+  },
+  "--- Swarm Connections (highlight)(%s/%s)(default) ---": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "info"
+    ]
+  },
+  "Completion will take an estimated %02d hours %02d minutes %02d seconds with boatfly at a speed of %.2f and a gap of %d chunks between paths.": {
+    "jars": [
+      "jefff-mod-0.16.7-1.21.11(1).jar"
+    ],
+    "kinds": [
+      "info"
+    ]
+  },
+  "Connected to Swarm host on at %s on port %s.": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "infoPrefix"
+    ]
+  },
+  "Couldn\\'t start a server on port %s.": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "errorPrefix"
+    ]
+  },
+  "Error creating a connection with %s on port %s.": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "infoPrefix"
+    ]
+  },
+  "Listening for incoming connections on port %s.": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "infoPrefix"
+    ]
+  },
+  "New worker connected on %s.": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "infoPrefix"
+    ]
+  },
+  "Received command: (highlight)%s": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "infoPrefix"
+    ]
+  },
+  "Server closed on port %s.": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "infoPrefix"
+    ]
+  },
+  "Server not found at %s on port %s.": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "warningPrefix"
+    ]
+  },
+  "Setting (highlight)%s(default) changed to (highlight)%s(default).": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "infoPrefix"
+    ]
+  },
+  "Setting (highlight)%s(default) is (highlight)%s(default).": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "infoPrefix"
+    ]
+  },
+  "Toggled (highlight)%s(default) %s(default).": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "infoPrefix"
+    ]
+  },
+  "Worker disconnected on ip: %s.": {
+    "jars": [
+      "meteor-client-1.21.11-86.jar",
+      "meteor-client-26.1.2-42.jar"
+    ],
+    "kinds": [
+      "infoPrefix"
+    ]
+  },
+  "_note": "本文件是 1.4.5 之前调研「哪些类直接调 ChatUtils」的中间证据，不参与构建。其中一条 Baritone 模板（带 § 颜色码的中文串）在 javap 输出时有损解码、无法恢复，已剔除；最终方案改为钩 ChatUtils.formatMsg，证据见 dict/zh_chat.json 与 scripts/verify_chat.py。"
+}
