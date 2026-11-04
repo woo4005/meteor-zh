@@ -54,8 +54,20 @@ def main():
         show_status()
         return
 
-    st, _hs, payload = call("/login/device/code", {"client_id": CLIENT_ID, "scope": SCOPE})
-    info = json.loads(payload.decode("utf-8"))
+    info = None
+    last_err = None
+    st = None
+    for attempt in range(1, 6):
+        try:
+            st, _hs, payload = call("/login/device/code", {"client_id": CLIENT_ID, "scope": SCOPE})
+            info = json.loads(payload.decode("utf-8"))
+            break
+        except Exception as exc:  # noqa: BLE001
+            last_err = "%s: %s" % (type(exc).__name__, exc)
+            print("申请 device code 第 %d 次失败（%s），3 秒后重试" % (attempt, last_err), flush=True)
+            time.sleep(3)
+    if info is None:
+        raise SystemExit("申请 device code 失败（已重试 5 次）: %s" % last_err)
     if "user_code" not in info:
         raise SystemExit("申请 device code 失败: %s %r" % (st, info))
 
@@ -73,11 +85,17 @@ def main():
     deadline = time.time() + int(info["expires_in"]) - 10
     while time.time() < deadline:
         time.sleep(interval)
-        st, _hs, payload = call("/login/oauth/access_token", {
-            "client_id": CLIENT_ID,
-            "device_code": info["device_code"],
-            "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
-        })
+        try:
+            st, _hs, payload = call("/login/oauth/access_token", {
+                "client_id": CLIENT_ID,
+                "device_code": info["device_code"],
+                "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
+            })
+        except Exception:  # noqa: BLE001
+            # 网络抖动（断网、DNS 失败、某个 IP 不可达）不该让整个授权流程崩掉：
+            # device code 还在有效期内，等下一轮继续试即可
+            print("!", end="", flush=True)
+            continue
         try:
             resp = json.loads(payload.decode("utf-8"))
         except ValueError:

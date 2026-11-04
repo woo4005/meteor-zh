@@ -22,7 +22,7 @@ import zipfile
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VERSION = "1.5.2"
+VERSION = "1.5.3"
 MOD_ID = "meteor-zh"
 
 INSTANCE = os.environ.get("MC_INSTANCE") or r"E:\pcl\.minecraft\versions\26.1-Fabric 0.20.1"
@@ -149,9 +149,43 @@ def run(cmd, env_extra=None, cwd=None):
     return out
 
 
+def wipe(path):
+    """尽力删除目录树。
+
+    项目在 OneDrive 里，OneDrive/Defender 偶尔会攥住刚写过的文件夹，导致
+    shutil.rmtree 报 WinError 5（拒绝访问）—— 明明文件都能删。这里重试几次，
+    再退化成逐个文件删除：残留的旧 class 无害，javac 会覆盖它编译的那部分，
+    copy_resources() 也会把资源整份刷新。
+    """
+    import time
+    for attempt in range(5):
+        if not os.path.isdir(path):
+            return
+        try:
+            shutil.rmtree(path)
+            return
+        except OSError:
+            time.sleep(0.3 * (attempt + 1))
+
+    for base, dirs, files in os.walk(path, topdown=False):
+        for name in files:
+            try:
+                os.remove(os.path.join(base, name))
+            except OSError:
+                pass
+        for name in dirs:
+            try:
+                os.rmdir(os.path.join(base, name))
+            except OSError:
+                pass
+    try:
+        os.rmdir(path)
+    except OSError:
+        print("warning: 目录未完全删除（有文件被占用），继续构建: %s" % path)
+
+
 def compile_java():
-    if os.path.isdir(CLASSES):
-        shutil.rmtree(CLASSES)
+    wipe(CLASSES)
     os.makedirs(CLASSES, exist_ok=True)
     sources = java_sources()
     rel = [os.path.relpath(p, ROOT).replace(os.sep, "/") for p in sources]
@@ -169,8 +203,7 @@ def compile_java():
 
 
 def copy_resources():
-    if os.path.isdir(STAGE):
-        shutil.rmtree(STAGE)
+    wipe(STAGE)
     os.makedirs(STAGE, exist_ok=True)
     for base, _dirs, files in os.walk(RES):
         for f in files:

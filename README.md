@@ -4,7 +4,7 @@
 [![Build](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml/badge.svg)](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml)
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.1%20%7C%201.21.11-62b47a.svg)](#兼容性)
 [![Fabric](https://img.shields.io/badge/Fabric-0.20.1%20%7C%200.19.3-dbb69b.svg)](#兼容性)
-[![Version](https://img.shields.io/badge/26.1--%E7%BA%BF-1.5.2-a855f7.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/26.1--%E7%BA%BF-1.5.3-a855f7.svg)](CHANGELOG.md)
 [![Version](https://img.shields.io/badge/1.21.11--%E7%BA%BF-1.4.x-a855f7.svg)](CHANGELOG.md)
 
 **Meteor-ZH** 是一个 Meteor Client 附属模组（addon），把 Meteor 的整套界面翻成简体中文：模块名、功能描述、设置项名称与说明、设置分组、**按键名（Bind）**、HUD 元素、顶部标签页，以及 GUI 里写死在代码中的按钮与提示文字。
@@ -61,19 +61,41 @@ Meteor-ZH 把这些都补上了。
 
 | 位置 | 覆盖方式 | 词条数 |
 |---|---|---|
-| 模块名 + 模块描述 | 反射改写 `Module.title` / `Module.description` | 376 模块（另按英文原句匹配 1357 条说明） |
-| 设置项名称 + 说明 | 反射改写 `Setting.title` / `Setting.description` | 1335 条（说明同样走原句匹配） |
+| 模块名 + 模块描述 | 反射改写 `Module.title` / `Module.description` | 395 模块（另按英文原句匹配 1357 条说明） |
+| 设置项名称 + 说明 | 反射改写 `Setting.title` / `Setting.description` | 1444 条（说明同样走原句匹配） |
 | 设置分组标题 | 反射改写 `SettingGroup.name` 的**显示值** | 129 条 |
 | GUI 硬编码文字 | Mixin 拦截 `GuiRenderer#text` 做字符串替换 | 295 条 |
 | 按键名（Bind） | 同渲染层替换，`Left Shift`→`左Shift`、`None`→`无` | 66 条 |
 | 顶部标签页 | 反射改写 `Tab.name` | 7 条 |
 | HUD 元素名与分组 | 反射改写 `HudElementInfo.title/description`、`HudGroup.title` | — |
-| 第三方插件的模块与描述 | 词典 + 词法兜底引擎 | 96 名称 + 22 描述句 |
+| 第三方插件的模块与描述 | 词典 + 词法兜底引擎 | 134 名称 + 63 描述句（含 Jefff / Lotus 官方译文 18 模块、142 设置） |
 | 模块/设置说明文字 | `descriptions` 表按英文原句精确匹配 | 1357 条 |
-| 词典未收录的新标识符 | 1012 词元的词法合成引擎 | — |
+| 词典未收录的新标识符 | 1069 词元的词法合成引擎 | — |
 
 **已经自带中文的插件（Lotus、Miku 的中文模块）会原样跳过，不会被二次翻译。** 这是词法引擎的
 硬性设计：一个词都没命中时返回 `null`，调用方保留原文。
+
+---
+
+## 「关于汉化插件」模块与自动更新
+
+汉化插件自己也是 Meteor 的一个模块，位于新增的 **汉化** 分类下，名字叫「关于汉化插件」。它同时是一个
+信息面板和更新器：
+
+| 设置项 | 作用 |
+|---|---|
+| 显示插件信息 | 一次性开关。打开后列出插件版本、对应 Minecraft 版本、词典规模、词表规模、字体渲染状态、更新状态与下载页 |
+| 立即检查更新 | 一次性开关。立刻访问一次 GitHub Releases 检查新版本 |
+| 打开下载页面 | 一次性开关。用系统浏览器打开 Releases 页面 |
+| 自动检测更新 | 默认**开启**。**每次启动只访问一次** GitHub；失败或超时（8 秒连接 / 15 秒读取）就放弃，不会反复重试 |
+| 自动下载更新 | 默认**关闭**。勾选后，自动检测到新版本时在后台静默下载对应 jar；**退出游戏时**才替换旧 jar，下次启动生效。只下载与当前游戏版本匹配的那个（`-mc<版本>.jar`） |
+
+检测到新版本时的提示方式：**在世界里（单人 / 多人游戏）走聊天栏**，**在主菜单则弹出游戏右下角的系统提示框**，
+两者都带版本号和下载地址。命令行也可以随时用 `.zh check`（检查）、`.zh about`（信息）、`.zh update`（打开下载页）。
+
+> 自动更新只在能访问 `api.github.com` 时有效。国内网络打不开 GitHub 时，检测会静默失败，插件照常工作，
+> 手动更新走群文件或 Releases 页面即可。
+
 
 ---
 
@@ -81,8 +103,8 @@ Meteor-ZH 把这些都补上了。
 
 | meteor-zh | Minecraft | Fabric Loader | Meteor Client | Java | 状态 |
 |---|---|---|---|---|---|
-| **1.5.2** | **26.1** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 26.1 专用线 |
-| **1.4.x** | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，发布版 build 82） | 21 | 1.21.11 专用线，继续维护 |
+| **1.5.3** | **26.1** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 26.1 专用线 |
+| **1.4.3** | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，build 82 及以上） | 21 | 1.21.11 专用线，继续维护 |
 | 1.3.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被 1.4.x 替代 |
 | ≤ 1.2.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被替代 |
 
@@ -90,11 +112,11 @@ Meteor-ZH 把这些都补上了。
 
 | 游戏版本 | 下载的 jar | 版本线 | 构建脚本 |
 |---|---|---|---|
-| Minecraft **26.1** | `meteor-zh-1.5.2-mc26.1.jar` | 1.5.x | `scripts/build_261.py` |
-| Minecraft **1.21.11** | `meteor-zh-1.4.2.jar` | 1.4.x | `scripts/build.py` |
+| Minecraft **26.1** | `meteor-zh-1.5.3-mc26.1.jar` | 1.5.x | `scripts/build_261.py` |
+| Minecraft **1.21.11** | `meteor-zh-1.4.3-mc1.21.11.jar` | 1.4.x | `scripts/build.py` |
 
-两条线的源码共用（同一份 `src/`），但**版本号各走各的**：1.21.11 线的后续更新发 1.4.2、1.4.3……，
-26.1 线的更新发 1.5.2、1.6.0……，互不牵连。词典是两条线共享的资源，会同时扩充到两个 jar 中。
+两条线的源码共用（同一份 `src/`），但**版本号各走各的**：1.21.11 线的后续更新发 1.4.3、1.4.4……，
+26.1 线的更新发 1.5.3、1.6.0……，互不牵连。词典是两条线共享的资源，会同时扩充到两个 jar 中。
 
 两个 jar 分别放进各自实例的 `mods` 目录即可；同一个实例里**不要同时放两个**（mod id 相同，Fabric 会报重复）。
 
@@ -107,6 +129,9 @@ Meteor-ZH 把这些都补上了。
   数据层翻译会失效（Mixin 部分有 `required = false` 兜底，不会崩游戏）。
 - **不支持 Minecraft 1.20.x 及更早**：1.21 换了渲染管线与 mappings，跨大版本无法兼容。
 - **不支持服务端**：`environment: client`，纯客户端 mod。
+- **1.4.3 之前的 1.21.11 线会被 Fabric 判定为不兼容**：当时 `meteor-client` 依赖写成
+  `>=1.21.11`，而 Fabric 的 semver 把 `1.21.11-86` 当作 `1.21.11` 的**预发布版**，`1.21.11-86 < 1.21.11`，
+  于是报“不兼容”。1.4.3 起改成 `>=1.21.11-0`，两边都能满足。
 
 ### Mixin 注入点与冲突面
 
@@ -135,8 +160,8 @@ Meteor-ZH 把这些都补上了。
 ## 安装
 
 1. 从 [Releases](https://github.com/woo4005/meteor-zh/releases) 下载对应你游戏版本的 jar：
-   - **Minecraft 26.1** → `meteor-zh-1.5.2-mc26.1.jar`
-   - **Minecraft 1.21.11** → `meteor-zh-1.4.2.jar`
+   - **Minecraft 26.1** → `meteor-zh-1.5.3-mc26.1.jar`
+   - **Minecraft 1.21.11** → `meteor-zh-1.4.3-mc1.21.11.jar`
 2. 放进 `mods/` 目录
    - 官方启动器：`.minecraft/mods/`
    - **PCL 版本隔离**：`<PCL目录>/.minecraft/versions/<版本名>/mods/`
@@ -159,7 +184,7 @@ Greek、Cyrillic 和 ∞，**换成任何一款中文字体也不会多出中日
 图集里查不到的字符不画任何东西，只留一个空格宽度的空位，于是中文整段消失、
 数字和没翻译的英文照常显示。
 
-从 **1.5.2 / 1.4.2** 起插件会自己解决：启动时把 Meteor 的 `Config.customFont` 关掉，
+从 **1.5.3 / 1.4.3** 起插件会自己解决：启动时把 Meteor 的 `Config.customFont` 关掉，
 让它改用 Minecraft 原版字体渲染（`VanillaTextRenderer`，用 MC 自带的 `mc.font`，
 天然支持中文），并把 `scaleIndividually` 打开让双宽字符正确排布。
 代价是失去 Meteor 的自定义美术字体，界面换成原版字体样式——这是能显示中文的最小代价。

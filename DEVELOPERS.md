@@ -325,6 +325,83 @@ static TextRenderer get() {
 
 ---
 
+### 阶段 11 · 1.4.3 / 1.5.3：修不兼容、加「关于汉化插件」与自动更新（2026-11-04）
+
+**一、1.21.11 线被 Fabric 判定「版本不兼容」，但游戏本身是对的。**
+
+用户从启动器拿到的原话是「将 模组 'Meteor Client' (meteor-client) 1.21.11-86 替换为 1.21.11 及以上版本」。
+错误报告里的硬依赖那行才是根因：
+
+```
+Immediate reason: [HARD_DEP_NO_CANDIDATE meteor-zh 1.4.2 {depends meteor-client @ [>=1.21.11]}, ...]
+```
+
+Fabric 的版本解析遵循 semver：`1.21.11-86` 是 `1.21.11` 的**预发布版**，而 semver 规定
+`1.21.11-86 < 1.21.11`，所以 `>=1.21.11` 永远不成立。改成 `>=1.21.11-0` 后两边都满足
+（`1.21.11-86 > 1.21.11-0`，同时 `< 1.21.11`）。**这是个只靠读日志才能定位的问题**：
+游戏给出的提示是「换 Meteor」，而真正要改的是我们自己的依赖约束。
+
+教训：给依赖写下限时，遇到「主版本-构建号」形式的上游版本，下限要写 `-0` 而不是省略预发布段。
+
+**二、「关于汉化插件」模块与自动更新。**
+
+需求里有几条非功能约束，落地方式如下：
+
+| 需求 | 实现 |
+|---|---|
+| 界面全中文、不需要翻译 | 模块名/描述/设置名直接写中文常量；反射翻译识别不到英文，自然跳过 |
+| 在游戏里用聊天栏提示 | `mc.level != null` ⟹ `ChatUtils.info` |
+| 不在游戏里用右下角弹窗 | 否则 `SystemToast.add(mc.getToastManager(), TOAST_ID, title, sub)` |
+| 每次启动只访问一次、失败即放弃 | `AtomicBoolean AUTO_TRIED` + 8s/15s 超时 + 成功失败都不再重试 |
+| 可选「自动下载」 | 下载到 `mods/*.download`，退出时用批处理替换（绝不动正在被 JVM 加载的 jar） |
+
+三个细节值得记下来：
+
+1. **怎么判断「哪个 release 是给本游戏版本的」**：仓库同时有 1.4.x 与 1.5.x 两条线，
+   光看 tag 号会选错。真正的判据是「release 里有以 `-mc<当前 MC 版本>.jar` 结尾的资产」。
+2. **`Category` 的构造器两条线不一样**：1.21.11 是 `Category(String, ItemStack)`，
+   26.1 是 `Category(String, Supplier<ItemStack>)`。直接写 lambda 在 1.21.11 上编译不过
+   （`ItemStack 不是函数式接口`），写 `new ItemStack(...)` 在 26.1 上编译不过。
+   因此新分类用**反射遍历构造器**来创建，一份源码同时适配两条线。
+3. **一次性开关的坑**：`BoolSetting` 的值会随 `Systems.load()` 从配置里恢复。如果在
+   `onInitialize` 里就处理「立即检查更新」，玩家上次开着没关的勾选会让每次启动都联网。
+   所以一次性开关先在 `started` 标志置位之后才执行，并且执行前把三个开关复位成 false
+   （复位会触发 `onChanged(false)`，走同一个分支但被 `!value` 拦下，不会递归）。
+
+**三、词典：合并 Jefff / Lotus 官方中文文件。**
+
+用户提供了插件作者维护的 `Lotus-i18n-jefff-cn.properties`（368 条）。它的键没有类型标记：
+
+```
+jefffmod_<module>              模块名
+jefffmod_<module>_d            模块描述
+jefffmod_<module>_<setting>    设置名
+jefffmod_<module>_<setting>_d  设置描述
+Jefff\ Mod-<hud>_<setting>     HUD 元素自己的设置
+```
+
+模块名有两种写法：五个 CamelCase（`AFKVanillaFly` …），其余是 kebab（`auto-exp-plus` …）。
+一开始我按「模块名白名单」去切，把 `ElytraFlyPlusPlus_bounce` 误判成模块。正确的切分规则更简单：
+**先去末尾 `_d`，再按第一个 `_` 切成 模块/设置** —— 模块名与设置名里都不含下划线，两种写法都成立。
+
+产出 `dict/zh_lotus.json`（`scripts/merge_lotus.py` 生成），`build_dict.py` 用 `setdefault`
+语义合并，只有 `force` 列表里的 5 个名字允许覆盖我们已有的译法。判断标准是「官方给了真中文」：
+官方留英文的（`Mode` / `Shape Mode` / `Notification Mode`）以及在我们语境下含义不同的
+（`ping` 在 Meteor 里是延迟，官方那份是「@提醒」）一律保留原译。
+
+**四、两个构建/校验环境问题。**
+
+- **离线校验加载 remapped jar 会炸**：`dist/` 里的 1.21.11 产品已经 remap 成 intermediary 命名，
+  而离线校验的 classpath 是 mojmap 命名的 Minecraft。以前插件只引用 Meteor 类型，没暴露；
+  1.4.3 的 `AboutModule` 引用了 `ItemStack`/`Items`，于是
+  `ClassNotFoundException: net.minecraft.class_1935`。修法：1.21.11 线校验改用未 remap 的
+  `build/addon-mojmap.jar`。
+- **OneDrive 会攥住刚写过的目录**：`shutil.rmtree` 报 `PermissionError: [WinError 5]`，
+  而目录里的文件其实都能删。三个构建/校验脚本统一加 `wipe()`：重试 5 次 → 逐文件删除 →
+  打警告继续，绝不因为删不掉空目录而中断构建。
+
+---
+
 ## 4. AI 没有做到的事（承认局限）
 
 | 事情 | 为什么没做 |

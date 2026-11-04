@@ -41,3 +41,7 @@ desktop.ini
 # ---------- 本地凭据 / 环境（不要提交） ----------
 .env
 local.properties
+
+# 本地 GitHub 授权 token（勿提交，脚本只在临时目录保存副本）
+.gh_token_local
+gh_token.txt

@@ -20,6 +20,7 @@ import glob
 import io
 import os
 import shutil
+import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -78,7 +79,48 @@ def find_jar(prefer=None):
                   % (line, ", ".join(sorted(os.path.basename(p) for p in candidates))))
         candidates = picked
 
-    return os.path.abspath(max(candidates, key=os.path.getmtime))
+    picked = os.path.abspath(max(candidates, key=os.path.getmtime))
+
+    # 1.21.11 线的 dist jar 已经 remap 成 intermediary 命名，而离线校验的 classpath
+    # 用的是 mojmap 版 Minecraft/Meteor。插件一旦引用 MC 类型（1.4.3 起 AboutModule
+    # 用到 ItemStack/Items），加载 remapped jar 就会 ClassNotFoundException:
+    # net.minecraft.class_1935。build/addon-mojmap.jar 是 remap 之前的产物，
+    # 正好匹配离线 classpath。
+    if prefer and not prefer.replace(".", "").startswith("261"):
+        mojmap = os.path.join(ROOT, "build", "addon-mojmap.jar")
+        if os.path.isfile(mojmap) and os.path.getmtime(mojmap) >= os.path.getmtime(picked) - 60:
+            print("verify: 使用未 remap 的 build/addon-mojmap.jar（离线 classpath 是 mojmap 命名）")
+            return os.path.abspath(mojmap)
+
+    return picked
+
+
+def wipe(path):
+    """尽力删除目录树；OneDrive / Defender 会短时间攥住刚写过的目录（WinError 5）。"""
+    for attempt in range(5):
+        if not os.path.isdir(path):
+            return
+        try:
+            shutil.rmtree(path)
+            return
+        except OSError:
+            time.sleep(0.3 * (attempt + 1))
+
+    for base, dirs, files in os.walk(path, topdown=False):
+        for name in files:
+            try:
+                os.remove(os.path.join(base, name))
+            except OSError:
+                pass
+        for name in dirs:
+            try:
+                os.rmdir(os.path.join(base, name))
+            except OSError:
+                pass
+    try:
+        os.rmdir(path)
+    except OSError:
+        print("warning: 目录未完全删除（有文件被占用），继续: %s" % path)
 
 
 def _launcher_runtimes():

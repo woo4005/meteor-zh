@@ -53,7 +53,7 @@ def main():
     if not os.path.exists(PLUGIN_JAR):
         raise SystemExit("先跑 scripts/build_261.py 生成 " + PLUGIN_JAR)
     if os.path.isdir(TEST_DIR):
-        shutil.rmtree(TEST_DIR)
+        b.wipe(TEST_DIR)
     os.makedirs(TEST_DIR, exist_ok=True)
 
     cp_libs = b.classpath()

@@ -33,17 +33,20 @@ import github_publish_ip as ghp  # noqa: E402
 
 ROOT = ghp.ROOT
 REPO = "meteor-zh"
-VERSION = "1.5.2"
-#: 1.21.11 线仍停留在 1.4.0，两条线独立编号
-VERSION_1211 = "1.4.2"
+#: 本次要发的版本线。1.4.3 = 1.21.11 线。
+VERSION = "1.4.3"
+#: 另一条线（26.1）的版本号，用来写在 release 正文的下载表里
+VERSION_261 = "1.5.3"
+#: 兼容旧名字（正文模板里还在用 {ver1211}）
+VERSION_1211 = VERSION
 BRANCH = "main"
 
 #: 两条构建线的产物（26.1 线带 -mc26.1 后缀）——见同一个仓库的 dist/ 白名单
-JARS_ALL = ["meteor-zh-%s.jar" % VERSION_1211, "meteor-zh-%s-mc26.1.jar" % VERSION]
+JARS_ALL = ["meteor-zh-%s-mc1.21.11.jar" % VERSION_1211, "meteor-zh-%s-mc26.1.jar" % VERSION_261]
 
 #: 本次 release 应附上的 jar：只放属于本版本线的产物。
 #: 1.5.0 是 26.1 线，所以只上传 -mc26.1 那个；1.21.11 的 1.4.0 jar 归 v1.4.0 release。
-JARS_RELEASE = ["meteor-zh-%s-mc26.1.jar" % VERSION]
+JARS_RELEASE = ["meteor-zh-%s-mc1.21.11.jar" % VERSION]
 
 UPLOAD_IPS = ["20.27.177.119", "140.82.112.9", "140.82.113.9", "140.82.114.9"]
 BLOB_CACHE = os.path.join(os.environ.get("TEMP", "."), "meteor_zh_blobs.json")
@@ -53,6 +56,8 @@ ROOT_FILES = [
     "README.md", "LICENSE", "CHANGELOG.md", "NOTICE", "CONTRIBUTING.md",
     "SECURITY.md", "DEVELOPERS.md", ".gitignore",
     "build.gradle", "settings.gradle", "gradle.properties", "gradlew", "gradlew.bat",
+    # meteoraddons.com 的补充数据（无需审核即可覆盖站点上的描述 / 标签 / 支持版本）
+    "meteor-addon-list.json",
 ]
 
 #: 需要上传的目录及其过滤规则
@@ -243,58 +248,47 @@ def ensure_release(token):
 
     body = """Meteor Client 全界面简体中文汉化 v{ver}
 
-## 修复：Minecraft 26.1 上中文仍是空白（1.5.1 没修对，本版才是真修复）
+## 本版更新
 
-`v1.5.0` 在 26.1 上界面中文全部显示为空白；`v1.5.1` 尝试修复但**没有生效**。本版找到了真正的原因。
+### 修复：Minecraft 1.21.11 上被 Fabric 判定「版本不兼容」
 
-### 1.5.1 为什么没用
+旧版的 `fabric.mod.json` 把依赖写成 `meteor-client: >=1.21.11`。Fabric 的版本解析遵循 semver，
+而 `1.21.11-86` 是 `1.21.11` 的**预发布版**——semver 规定预发布版小于同号正式版，即
+`1.21.11-86 < 1.21.11`，所以这条约束永远不成立，游戏会提示：
 
-1.5.1 做的是「检测当前字体画不画得出中文，画不出就自动换一款系统里的中文字体」。这条路有两个致命问题：
+> 将 模组 'Meteor Client' (meteor-client) 1.21.11-86 替换为 1.21.11 及以上版本。
 
-**一、检测方法失效。** Meteor 的 `Font#getWidth` 对查不到字形的字符会**回退成空格（码位 32）的宽度**：
+本版改成 `>=1.21.11-0`：`1.21.11-86` 既大于 `1.21.11-0`、又小于 `1.21.11`，两个方向都满足。
+1.21.11 线从此可以正常加载，不再需要退回 Meteor-I18n-Support。
 
-```java
-CharData c = charMap.get(cp);
-if (c == null) c = charMap.get(32);
-width += c.xAdvance;
-```
+### 新增：「关于汉化插件」模块与自动更新
 
-四个汉字 = 四个空格宽度，永远大于 0，所以判断恒为真、换字体的分支一次都没执行，
-日志里那句 "can render Chinese" 是假的。
+Meteor 里多了一个 **汉化** 分类，里面是「关于汉化插件」模块，界面全中文：
 
-**二、换字体这条路根本走不通。** Meteor 在 `Font` 构造时就把要烘焙的码位范围写死了，只有
-Basic Latin、Latin-1、Latin Ext-A、Greek、Cyrillic 和 ∞ 六段。**换成任何一款中文字体，
-图集里都不会出现中日韩字形。**（1.21.11 与 26.1 的 `Font.java` 字节码完全相同，这条限制跟游戏版本无关。）
+| 设置项 | 作用 |
+|---|---|
+| 显示插件信息 | 一次性开关，列出插件版本、词典规模、词表规模、字体渲染状态、更新状态 |
+| 立即检查更新 | 一次性开关，立刻访问一次 GitHub Releases |
+| 打开下载页面 | 一次性开关，用系统浏览器打开 Releases 页面 |
+| 自动检测更新 | 默认开启。**每次启动只访问一次** GitHub，失败或超时就放弃，不反复重试 |
+| 自动下载更新 | 默认关闭。勾选后在后台静默下载对应 jar，**退出游戏时**才替换旧 jar |
 
-> 1.21.11 上之所以一直正常，也不是因为"设了等线字体"，而是那个实例里还装着一份 Meteor-I18n-Support，
-> 它的 Mixin 把文字渲染强制切到了 Minecraft 原版字体。
+检测到新版本时的提示方式：**在游戏世界里走聊天栏**，**在主菜单则弹出右下角的系统提示框**，
+两者都带版本号和下载地址。命令行另有 `.zh check` / `.zh about` / `.zh update`。
 
-### 本版的做法
+### 词典：合并 Jefff / Lotus 官方中文语言文件
 
-不再跟字体较劲，直接让 Meteor 改用 **Minecraft 原版字体渲染**。`TextRenderer.get()` 的实现本来就是
-`Config.customFont ? Fonts.RENDERER : VanillaTextRenderer.INSTANCE`，所以只要把 `Config.customFont` 关掉，
-文字就会走 `VanillaTextRenderer`（用 MC 自带的 `mc.font`，中文渲染是原版就支持的），
-再把 `scaleIndividually` 打开让双宽字符正确排布。
+插件作者维护的官方汉化文件（368 条）已并入词典：18 个模块、142 个设置、138 条说明。
+其中 5 条官方译法覆盖了我们原有的译法（`item-frames`、`exp-slot`、`blocks-per-tick`、
+`minimum-storage-count`、`storage-blocks`）；官方留英文的几条（`Mode` 等）以及语境不同的
+（`ping` 在 Meteor 里指延迟）保留原译。
 
-- 一行配置解决，**不需要 Mixin**，不会因为 Meteor 更新而失效
-- 代价：失去 Meteor 的自定义美术字体，界面变成原版字体样式——这是能显示中文的最小代价
-- `.zh font` 查看当前渲染状态，`.zh reload` 重新应用一次
-
-### 顺带修掉的问题
-
-- **`.zh reload` 之前是空操作**（`ZhDict.load()` 开头有 `if (loaded) return`），现在会真正重读词典
-- **词法兜底过度拼接**：未知标识符会被拼成「无 Such 模块 XYZ」这类半中半英的串；现在要求"未识别的词不超过已识别词的一半"，否则保留原文
-- **验证脚本从"只打印"改成"真断言"**：三个 Java 测试类以前 JVM 能启动就算通过（其中"9 个反射字段全部存在"是无条件打印），现在逐条断言并非 0 退出
-- **`build_261.py` 补 `--release 25`** 与产物校验（JSON 可解析、class major 版本、必需条目齐全）
-- **`fabric.mod.json` 补 `java` / `meteor-client` 依赖**，装错环境时 Fabric 会明确报错
-- **词典清理**：不再误删含"占位符"的正常词条；词表构建与来源文件闭合，`release` 等重复键不再静默互相覆盖
-
-### 两条线都已更新
+### 两条线的产物
 
 | 游戏版本 | 下载 | 版本线 | 前置要求 |
 |---|---|---|---|
-| **Minecraft 26.1** | `meteor-zh-{ver}-mc26.1.jar` | **1.5.x** | Fabric Loader ≥ 0.20.1、Java 25、Meteor Client 26.1.x |
-| **Minecraft 1.21.11** | `meteor-zh-{ver1211}.jar` | **1.4.x** | Fabric Loader ≥ 0.16.0、Java 21、Meteor Client 1.21.11 |
+| **Minecraft 26.1** | `meteor-zh-{ver261}-mc26.1.jar` | **1.5.x** | Fabric Loader ≥ 0.20.1、Java 25、Meteor Client 26.1.x |
+| **Minecraft 1.21.11** | `meteor-zh-{ver}-mc1.21.11.jar` | **1.4.x** | Fabric Loader ≥ 0.16.0、Java 21、Meteor Client 1.21.11 |
 
 两个 jar 的 mod id 相同，**分别放进对应实例的 `mods/`**，不要放在同一个实例里。
 
@@ -302,8 +296,8 @@ Basic Latin、Latin-1、Latin Ext-A、Greek、Cyrillic 和 ∞ 六段。**换成
 
 | 内容 | 条数 |
 |---|---|
-| 模块名 | 377 |
-| 设置项 | 1336 |
+| 模块名 | 395 |
+| 设置项 | 1444 |
 | 设置分组 | 129 |
 | GUI 固定文本（Bind / Active / Reset 等） | 295 |
 | 英文描述句（模块与设置说明） | 1357 |
@@ -316,7 +310,7 @@ Basic Latin、Latin-1、Latin Ext-A、Greek、Cyrillic 和 ∞ 六段。**换成
 - [README.md](https://github.com/{owner}/{repo}/blob/main/README.md)
 - [CHANGELOG.md](https://github.com/{owner}/{repo}/blob/main/CHANGELOG.md)
 - [DEVELOPERS.md](https://github.com/{owner}/{repo}/blob/main/DEVELOPERS.md)
-""".format(ver=VERSION, ver1211=VERSION_1211, owner=ghp.OWNER, repo=REPO)
+""".format(ver=VERSION, ver1211=VERSION_1211, ver261=VERSION_261, owner=ghp.OWNER, repo=REPO)
 
     if st == 200:
         print("release %s 已存在: %s" % (tag, rel.get("html_url")), flush=True)
@@ -365,7 +359,7 @@ Meteor 自带开关（`设置 → Visual → Font`）可以换成系统中文字
 
 本版的 jar 已从下载列表移除，不再提供下载。
 请使用 [{TAG}](https://github.com/{OWNER}/{REPO}/releases/tag/{TAG})：它会自动检测并切换到可用的中文字体。
-""".format(VERSION=VERSION, TAG="v" + VERSION, OWNER="{owner}", REPO="{repo}")
+""".format(VERSION=VERSION_261, TAG="v" + VERSION_261, OWNER="{owner}", REPO="{repo}")
 
 
 def retire_old_release(token):
@@ -494,26 +488,33 @@ def main():
     print("tree:", new_tree["sha"], flush=True)
 
     message = (
-        "fix: 26.1 上中文不显示，自动切换到可渲染中文的系统字体 (v%s)\n\n"
-        "问题\n"
-        "- 1.5.0 在 MC 26.1 上中文全部渲染为空白（模块名/设置项/分组标题消失）\n"
-        "- 根因：Meteor 的 GUI 用自烘焙字体图集，自带四款字体无 CJK 字形；\n"
-        "  图集缺字形时不生成绘制指令，整段中文静默消失\n"
-        "- 26.1 实例的 meteor-zh/config.nbt 里 font 为空（默认 Comfortaa），\n"
-        "  而 1.21.11 实例早先手动设成了 DengXian，所以旧版本没暴露该问题\n\n"
+        "feat: 1.4.3 / 1.5.3 —— 修 1.21.11 版本不兼容，新增「关于汉化插件」与自动更新 (v%s)\n"
+        "\n"
         "修复\n"
-        "- 新增 com.meteorzh.FontFixer：用中文探针测宽，为 0 则切换系统 CJK 字体\n"
-        "  （DengXian / Microsoft YaHei / SimHei / SimSun / Noto Sans CJK ...）\n"
-        "- 切换结果写回 Config.font，重启后保持；已能显示中文的机器不被动到\n"
-        "- 字体图集要等首次资源加载，MeteorZh 在最初 40 个 tick 内重试\n"
-        "- 新增 .zh font 手动重检；找不到字体时在日志与命令里给出指引\n\n"
+        "- fabric.mod.json 的 meteor-client 依赖由 >=1.21.11 改为 >=1.21.11-0\n"
+        "  Fabric 的 semver 把 1.21.11-86 判为 1.21.11 的预发布版（小于正式版），旧约束永不满足，\n"
+        "  游戏提示「将 Meteor Client 1.21.11-86 替换为 1.21.11 及以上版本」\n"
+        "- 1.21.11 线离线校验改用未 remap 的 build/addon-mojmap.jar（classpath 是 mojmap 命名）\n"
+        "- 构建/校验脚本的目录清理改成可重试的 wipe()（OneDrive 会攥住刚写过的目录）\n"
+        "\n"
+        "新增\n"
+        "- com.meteorzh.AboutModule：汉化分类下的「关于汉化插件」，界面全中文\n"
+        "- com.meteorzh.UpdateChecker：每次启动只查一次 GitHub，世界内走聊天栏、主菜单走\n"
+        "  SystemToast；可选后台静默下载并在退出游戏时替换 jar\n"
+        "- .zh check / .zh update / .zh about\n"
+        "- meteor-addon-list.json（meteoraddons.com 的补充数据）\n"
+        "\n"
+        "词典\n"
+        "- 合并 Jefff / Lotus 官方中文：18 模块 / 142 设置 / 138 说明\n"
+        "- 产物命名对齐：meteor-zh-<版本>-mc<游戏版本>.jar\n"
+        "\n"
         "版本\n"
-        "- 26.1 线 1.5.0 -> %s（v1.5.0 已撤回下载）\n"
-        "- 1.21.11 线 1.4.0 -> %s（同步 FontFixer）\n"
-        "- mixins.json 的 compatibilityLevel 改为按构建线设置：21 线 JAVA_21 / 26.1 线 JAVA_25\n\n"
+        "- 1.21.11 线 1.4.2 -> %s\n"
+        "- 26.1 线 1.5.2 -> %s\n"
+        "\n"
         "验证\n"
-        "- scripts/verify_261.py 增加 FontFixer 探针：无 GL 上下文时安全返回 false，不抛异常\n"
-        "- 两个 jar 的 fabric.mod.json / mixins.json 逐项核对" % (VERSION, VERSION, VERSION_1211)
+        "- verify_dict.py 15 项 / verify_lexical.py 9 项 / verify_261.py 14 项断言全部通过\n"
+        "  两个 jar 的 fabric.mod.json / mixins.json 逐项核对" % (VERSION, VERSION, VERSION_261)
     )
     st, new_commit = api_retry(
         "POST", "/repos/%s/%s/git/commits" % (ghp.OWNER, REPO),

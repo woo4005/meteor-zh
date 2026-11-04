@@ -75,5 +75,28 @@ public class ZhCommand extends Command {
             }
             return SINGLE_SUCCESS;
         }));
+
+        // 以下是与「关于汉化插件」模块等价的命令入口：不方便开界面时用命令更快。
+        builder.then(literal("check").executes(context -> {
+            info("正在检查更新（当前 v%s）…", UpdateChecker.currentVersion());
+            UpdateChecker.checkManual();
+            return SINGLE_SUCCESS;
+        }));
+
+        builder.then(literal("update").executes(context -> {
+            info("正在打开下载页面：%s", UpdateChecker.RELEASES_PAGE);
+            UpdateChecker.openDownloadPage();
+            return SINGLE_SUCCESS;
+        }));
+
+        builder.then(literal("about").executes(context -> {
+            info("Meteor 中文汉化 v%s（Minecraft %s）",
+                UpdateChecker.currentVersion(), UpdateChecker.mcVersion());
+            info("词典：%s；词表 %d 条", ZhDict.summaryText(), WordTranslator.size());
+            info("渲染：%s", FontFixer.describe());
+            info("更新：%s", UpdateChecker.statusText());
+            info("下载页：%s", UpdateChecker.RELEASES_PAGE);
+            return SINGLE_SUCCESS;
+        }));
     }
 }

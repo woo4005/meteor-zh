@@ -72,6 +72,18 @@ public final class ZhDict {
             + GROUPS.size() + UI.size() + DESCRIPTIONS.size();
     }
 
+    /**
+     * 给「关于汉化插件」面板用的一行摘要。
+     *
+     * <p>这里显示的是「每张表各有多少条」，而不是 {@link #size()} 的七表总和 ——
+     * 总和只说明词典多大，看不出覆盖结构；玩家看摘要更关心模块几条、设置几条。
+     */
+    public static String summaryText() {
+        if (!loaded) return "词典未加载";
+        return String.format("模块 %d · 设置 %d · 分组 %d · 界面 %d · 描述 %d",
+            MODULE_TITLES.size(), SETTING_TITLES.size(), GROUPS.size(), UI.size(), DESCRIPTIONS.size());
+    }
+
     public static void load() {
         if (loaded) return;
         loadInternal();

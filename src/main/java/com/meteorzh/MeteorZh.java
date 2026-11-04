@@ -23,9 +23,13 @@ package com.meteorzh;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.commands.Commands;
 import meteordevelopment.meteorclient.events.world.TickEvent;
+import meteordevelopment.meteorclient.systems.modules.Category;
+import meteordevelopment.meteorclient.systems.modules.Modules;
 import meteordevelopment.orbit.EventHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,11 +68,28 @@ public class MeteorZh extends MeteorAddon {
     public static final String MOD_ID = "meteor-zh";
     public static final Logger LOG = LoggerFactory.getLogger(MOD_ID);
 
+    /** 我们自己的模块分类（「汉化」），在 {@link #onRegisterCategories()} 里创建。 */
+    private static Category category;
+    /** 一次性初始化是否已完成，供「关于汉化插件」的一次性开关判断。 */
+    private static volatile boolean started;
+
     private boolean done;
 
     @Override
     public void onInitialize() {
         LOG.info("Meteor-zh: starting (Meteor addon)");
+
+        // 控制面板模块。分类在 onRegisterCategories 里已注册，此时可以安全入库。
+        try {
+            if (category != null) {
+                Modules.get().add(new AboutModule(category));
+                LOG.info("Meteor-zh: AboutModule registered");
+            } else {
+                LOG.warn("Meteor-zh: category missing, AboutModule skipped");
+            }
+        } catch (Throwable t) {
+            LOG.error("Meteor-zh: failed to register AboutModule", t);
+        }
 
         // Modules are registered after addons initialise, so the actual pass has to be
         // deferred to the first client tick.
@@ -96,15 +117,67 @@ public class MeteorZh extends MeteorAddon {
             Translator.init();
             Translator.translateAll();
             Commands.add(new ZhCommand());
+
+            // 到这里一次性初始化完成；之后配置里的「一次性开关」才允许真正触发动作。
+            started = true;
+
+            // 每次启动只查一次更新（内部有闸门），网络不通就安静放弃。
+            UpdateChecker.checkOnStartup();
+
             LOG.info("Meteor-zh: ready (.zh reload to re-apply, .zh info for stats)");
         } catch (Throwable t) {
+            started = true;
             LOG.error("Meteor-zh: initialisation failed", t);
         }
     }
 
+    /**
+     * 一次性初始化是否已经跑完。
+     *
+     * <p>{@link AboutModule} 的一次性开关（显示信息 / 立即检查 / 打开下载页）靠它来判断
+     * 「现在是玩家点的」还是「配置加载时把上次的 true 读回来了」—— 后者必须忽略，
+     * 否则每次启动都会莫名其妙访问一次网络或弹出信息。
+     */
+    public static boolean started() {
+        return started;
+    }
+
     @Override
     public void onRegisterCategories() {
-        // no categories of our own
+        // 自己的分类：翻译插件的控制面板都放在这里（「关于汉化插件」）。
+        // 必须在 REGISTERING 期间注册，否则 Modules.registerCategory 会拒绝。
+        try {
+            category = createCategory("汉化");
+            Modules.registerCategory(category);
+            LOG.info("Meteor-zh: category registered");
+        } catch (Throwable t) {
+            LOG.error("Meteor-zh: failed to register category", t);
+        }
+    }
+
+    /**
+     * 创建一个带图标的分类，兼容两条线的 API 差异。
+     *
+     * <p>1.21.11 的 Meteor 里 {@code Category} 的第二参数是 {@code ItemStack}，
+     * 26.1 起改成了 {@code Supplier<ItemStack>}。源码要一份编两个版本，所以这里按
+     * 构造器签名反射挑一个能用的；两个都对不上就退化成无图标构造器（图标变成空槽，
+     * 但分类仍然可用，不至于因为一个图标让插件起不来）。
+     */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static Category createCategory(String name) throws Exception {
+        for (java.lang.reflect.Constructor<?> constructor : Category.class.getConstructors()) {
+            Class<?>[] params = constructor.getParameterTypes();
+            if (params.length != 2 || params[0] != String.class) continue;
+
+            if (params[1] == ItemStack.class) {
+                return (Category) constructor.newInstance(name, new ItemStack(Items.WRITABLE_BOOK));
+            }
+            if (java.util.function.Supplier.class.isAssignableFrom(params[1])) {
+                java.util.function.Supplier<ItemStack> icon = () -> new ItemStack(Items.WRITABLE_BOOK);
+                return (Category) constructor.newInstance(name, icon);
+            }
+        }
+        return (Category) Category.class.getConstructor(String.class).newInstance(name);
     }
 
     @Override

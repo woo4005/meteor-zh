@@ -1,0 +1,14 @@
+{
+  "description": "Meteor Client 全界面中文汉化：模块名、功能描述、设置项与分组、Bind 按键名、标签页、HUD 标题以及写死在 GUI 代码里的文本，附带第三方 addon 与词法兜底。支持 Minecraft 26.1 与 1.21.11 两条版本线，装上即用，无需手动触发。",
+  "tags": [
+    "Utility",
+    "QoL",
+    "Misc"
+  ],
+  "supported_versions": [
+    "26.1",
+    "1.21.11"
+  ],
+  "icon": "https://raw.githubusercontent.com/woo4005/meteor-zh/main/src/main/resources/assets/meteorzh/icon.png",
+  "homepage": "https://github.com/woo4005/meteor-zh"
+}

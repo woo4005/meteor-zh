@@ -1,0 +1,649 @@
+{
+ "modules": {
+  "AFKVanillaFly": {
+   "title": "AFK原版飞行",
+   "desc": "使用烟花火箭和平滑俯仰控制维持固定Y轴高度的挂机飞行。"
+  },
+  "ElytraFlyPlusPlus": {
+   "title": "鞘翅飞行++",
+   "desc": "带有更多功能的鞘翅飞行。"
+  },
+  "Pitch40Util": {
+   "title": "Pitch40工具",
+   "desc": "确保在重新连接2b2t时俯仰40保持开启，并在每次爬升到最高点时设置你的飞行边界。"
+  },
+  "TrailFollower": {
+   "title": "轨迹追踪",
+   "desc": "在所有维度自动追踪路径痕迹。"
+  },
+  "VanityESP": {
+   "title": "装饰物透视",
+   "desc": "高亮显示地图画和旗帜"
+  },
+  "auto-exp-plus": {
+   "title": "自动修复+",
+   "desc": "在PVP中自动修复你的盔甲和工具。"
+  },
+  "auto-log-plus": {
+   "title": "自动断线+",
+   "desc": "提供额外的断线触发条件。"
+  },
+  "auto-portal": {
+   "title": "自动下界门",
+   "desc": "自动搭建下界传送门。"
+  },
+  "better-stash-finder": {
+   "title": "仓库寻找器",
+   "desc": "Meteor的物资库查找器，但带有更多功能。"
+  },
+  "chest-index": {
+   "title": "箱子索引",
+   "desc": "显示你箱子中方块的总量（有bug，箱子过多可能会崩溃）"
+  },
+  "discord-notifs": {
+   "title": "Discord通知",
+   "desc": "向Discord网络钩子发送通知。"
+  },
+  "goto-position": {
+   "title": "前往坐标",
+   "desc": "沿直线前往你指定的位置，到达后自动停止。"
+  },
+  "grim-air-place": {
+   "title": "Grim隔空放置",
+   "desc": "在你准星所指的位置放置方块。"
+  },
+  "highlight-old-lava": {
+   "title": "高亮旧岩浆",
+   "desc": "高亮显示已经流下来的岩浆"
+  },
+  "no-jump-delay": {
+   "title": "无跳跃延迟",
+   "desc": "移除跳跃之间的延迟。"
+  },
+  "old-chunk-notifier": {
+   "title": "旧区块通知",
+   "desc": "检测到旧区块时发送网络钩子消息，并可选择@提醒你。"
+  },
+  "search-area": {
+   "title": "区域搜索",
+   "desc": "从你所在位置以矩形加载区块到某一点，或围绕你无限螺旋加载。适用于物资库查找器或其他地图保存模组。"
+  },
+  "trail-maker": {
+   "title": "按标记追踪",
+   "desc": "允许你在地图上标记Xaero区块高亮，然后按顺序追踪它们。"
+  }
+ },
+ "settings": {
+  "2b2t-queue": {
+   "title": "2b2t排队",
+   "desc": "是否记录你在队列中的位置。"
+  },
+  "Circling-degrees-per-tick": {
+   "title": "盘旋每刻度数",
+   "desc": "盘旋时每刻改变的角度数。"
+  },
+  "advanced-logging": {
+   "title": "高级记录",
+   "desc": "会记录更多信息，包括每种容器的发现数量。"
+  },
+  "all-messages": {
+   "title": "所有消息",
+   "desc": "记录所有消息。"
+  },
+  "armor-percent": {
+   "title": "盔甲耐久百分比"
+  },
+  "auto-adjust-bounds": {
+   "title": "自动调整边界",
+   "desc": "调整你的飞行边界以继续获得高度。适用于修复重新连接或卡顿后的下落等问题。"
+  },
+  "auto-firework": {
+   "title": "自动烟花",
+   "desc": "当速度过低时自动使用烟花火箭。"
+  },
+  "auto-start-baritone-elytra": {
+   "title": "自动启动Baritone鞘翅",
+   "desc": "为你自动启动Baritone鞘翅飞行。"
+  },
+  "avoid-portal-traps": {
+   "title": "躲避传送门陷阱",
+   "desc": "尝试在区块加载时检测传送门陷阱并避开它们。"
+  },
+  "away-from-start-position": {
+   "title": "远离起始位置",
+   "desc": "如果开启，将远离起始位置而不是朝向它移动。如果未设置为自定义起始位置，则起始位置为(0,0)。"
+  },
+  "banner-fill": {
+   "title": "旗帜填充色",
+   "desc": "旗帜的填充颜色。"
+  },
+  "banner-outline": {
+   "title": "旗帜轮廓色",
+   "desc": "旗帜的轮廓颜色。"
+  },
+  "banners": {
+   "title": "旗帜",
+   "desc": "高亮旗帜。"
+  },
+  "baritone-path-update-ticks": {
+   "title": "Baritone路径更新刻数",
+   "desc": "Baritone目标更新的间隔刻数。数值过低可能导致不稳定。"
+  },
+  "blocks-per-tick": {
+   "title": "每刻放置方块数",
+   "desc": "每刻放置多少个方块。"
+  },
+  "bounce": {
+   "title": "弹跳",
+   "desc": "自动执行弹跳鞘翅飞行。"
+  },
+  "bound-gap": {
+   "title": "边界间隙",
+   "desc": "上下边界之间的间隙。用于重新连接时，或在启用自动调整边界时达到最大高度时。"
+  },
+  "box-render-mode": {
+   "title": "Box Render Mode",
+   "desc": "How the shape for the bounding box is rendered."
+  },
+  "chat-messages": {
+   "title": "聊天消息",
+   "desc": "记录聊天消息"
+  },
+  "chat-output-type": {
+   "title": "Chat Output Type",
+   "desc": "Unit to use when displaying results."
+  },
+  "chestplate-fakefly": {
+   "title": "胸甲伪飞行",
+   "desc": "让你使用胸甲飞行，几乎不消耗鞘翅耐久。必须在快捷栏中放有鞘翅。"
+  },
+  "chunk-cache-length": {
+   "title": "区块缓存长度",
+   "desc": "缓存中保留的区块数量。（需重新激活才能生效）"
+  },
+  "chunk-found-timeout": {
+   "title": "区块发现超时",
+   "desc": "未找到区块时触发盘旋的毫秒数。"
+  },
+  "chunk-timeframe": {
+   "title": "区块时间范围",
+   "desc": "开始追踪前必须在多少秒内发现这些区块。"
+  },
+  "chunk-type": {
+   "title": "Chunk Type",
+   "desc": "Which type of old chunks to detect."
+  },
+  "chunks-before-starting": {
+   "title": "启动前区块数",
+   "desc": "适用于挂机寻找轨迹。被检测为轨迹之前需要的区块数量。"
+  },
+  "color": {
+   "title": "颜色",
+   "desc": "文本颜色（仅在渐变色关闭时使用）。"
+  },
+  "commands-client-info": {
+   "title": "命令和客户端信息",
+   "desc": "记录命令和大多数来自客户端的消息。"
+  },
+  "cooldown-ticks": {
+   "title": "冷却刻数",
+   "desc": "使用烟花火箭后的冷却刻数。"
+  },
+  "crafter-instant-hit": {
+   "title": "合成器即时判定",
+   "desc": "单个自动合成器是否算作物资库。"
+  },
+  "custom-range": {
+   "title": "自定义范围",
+   "desc": "为隔空放置使用自定义范围。"
+  },
+  "death-messages": {
+   "title": "死亡消息",
+   "desc": "记录死亡消息。"
+  },
+  "debug": {
+   "title": "调试",
+   "desc": "调试模式。"
+  },
+  "delay": {
+   "title": "延迟",
+   "desc": "与箱子交互之间的刻数延迟。"
+  },
+  "dimension-mode": {
+   "title": "Dimension Mode",
+   "desc": "Choose where the module will detect old chunks."
+  },
+  "direction-of-travel": {
+   "title": "行进方向",
+   "desc": "行进方向（偏航角），以度为单位。"
+  },
+  "direction-weighting": {
+   "title": "Direction Weighting",
+   "desc": "How the chunks found should be weighted. Useful for path splits. Left will weight chunks to the left of the player higher, right will weigh chunks to the right higher, and none will be in the middle/random."
+  },
+  "direction-weighting-multiplier": {
+   "title": "方向权重乘数",
+   "desc": "对指定方向区块给予多少权重的乘数。数值被限制在[2, 最大轨迹长度]范围内。"
+  },
+  "disable-on-teleport-or-death": {
+   "title": "传送或死亡时禁用",
+   "desc": "如果开启，重生或传送时将禁用此模块，以防止坐标泄露。"
+  },
+  "disconnect": {
+   "title": "断线",
+   "desc": "离开服务器时是否记录消息。"
+  },
+  "disconnect-on-completion": {
+   "title": "完成时断线",
+   "desc": "路径完成后是否断开连接。这将在断开连接时关闭自动重连。"
+  },
+  "disconnect-on-found": {
+   "title": "发现时断线",
+   "desc": "如果发现旧岩浆将自动断开连接。（适合挂机使用）"
+  },
+  "disconnect-when-complete": {
+   "title": "完成时断线",
+   "desc": "到达目标后断开连接"
+  },
+  "discord-ID": {
+   "title": "Discord ID",
+   "desc": "你的Discord ID"
+  },
+  "distance": {
+   "title": "距离",
+   "desc": "设置Baritone目标以重新对齐路径的距离。"
+  },
+  "distance-off-axis": {
+   "title": "轴偏移距离",
+   "desc": "从玩家移动轴心线向两侧检查旧区块的区块距离。"
+  },
+  "end-position": {
+   "title": "结束位置",
+   "desc": "矩形结束处的坐标。Y坐标被忽略"
+  },
+  "exp-slot": {
+   "title": "经验瓶槽位",
+   "desc": "将经验瓶补充到的快捷栏槽位。"
+  },
+  "flight-method": {
+   "title": "Flight Method",
+   "desc": "Decided how the goals will be used. Leave this on AUTO unless you want to use yaw lock in the nether for example."
+  },
+  "follow-only-1.12": {
+   "title": "仅追踪1.12区块",
+   "desc": "仅追踪1.12版本的区块，忽略其他区块。"
+  },
+  "gradient": {
+   "title": "渐变色",
+   "desc": "启用垂直渐变色。"
+  },
+  "gradient-end": {
+   "title": "渐变结束色",
+   "desc": "渐变的底部颜色。"
+  },
+  "gradient-start": {
+   "title": "渐变起始色",
+   "desc": "渐变的顶部颜色。"
+  },
+  "highlight-searched-blocks": {
+   "title": "高亮搜索的方块"
+  },
+  "highway-obstacle-passer": {
+   "title": "高速路飞越障碍",
+   "desc": "使用Baritone越过障碍物。"
+  },
+  "ignore-elytra": {
+   "title": "忽略鞘翅",
+   "desc": "检查盔甲耐久时忽略鞘翅。"
+  },
+  "ignore-trial-chambers": {
+   "title": "忽略试炼密室",
+   "desc": "尝试忽略试炼密室，但如果有人把基地建得像试炼密室，可能会导致误判。"
+  },
+  "illegal-disconnect": {
+   "title": "非法断线",
+   "desc": "使用物品栏槽位方法从服务器断开连接。"
+  },
+  "item-frames": {
+   "title": "物品展示框",
+   "desc": "高亮包含地图的物品展示框。"
+  },
+  "lava-height": {
+   "title": "岩浆高度",
+   "desc": "算作已加载的岩浆的高度"
+  },
+  "line-color": {
+   "title": "线条颜色",
+   "desc": "边界框的线条颜色。"
+  },
+  "lock-pitch": {
+   "title": "锁定俯仰角",
+   "desc": "启用弹跳时是否锁定俯仰角。"
+  },
+  "lock-yaw": {
+   "title": "锁定偏航角",
+   "desc": "启用弹跳时是否锁定偏航角。"
+  },
+  "log-armor": {
+   "title": "盔甲耐久断线",
+   "desc": "如果盔甲耐久低于一定值则断开连接。"
+  },
+  "log-mode": {
+   "title": "Log Mode",
+   "desc": "How results are shown."
+  },
+  "log-on-portal": {
+   "title": "传送门断线",
+   "desc": "如果你在传送门中待太久则断开连接。"
+  },
+  "log-on-y": {
+   "title": "Y轴高度断线",
+   "desc": "如果你低于某个Y轴高度则断开连接。"
+  },
+  "log-position": {
+   "title": "坐标位置断线",
+   "desc": "如果你在距离此位置X个方块内则断开连接。Y坐标不参与计算"
+  },
+  "log-type": {
+   "title": "Log Type",
+   "desc": "What to do when an old chunk is detected."
+  },
+  "manual-y-level": {
+   "title": "手动Y轴高度",
+   "desc": "使用手动Y轴高度时维持的Y轴高度。"
+  },
+  "map-color": {
+   "title": "地图颜色",
+   "desc": "包含地图的物品展示框的填充颜色。"
+  },
+  "map-outline-color": {
+   "title": "地图轮廓颜色",
+   "desc": "包含地图的物品展示框的轮廓颜色。"
+  },
+  "max-threshold": {
+   "title": "最大阈值",
+   "desc": "修复物品到的最大耐久百分比。"
+  },
+  "max-trail-deviation": {
+   "title": "最大轨迹偏差",
+   "desc": "允许偏离原始轨迹方向的最大角度（度）。有助于避免切换到交叉轨迹。"
+  },
+  "max-trail-length": {
+   "title": "最大轨迹长度",
+   "desc": "保留用于平均值的轨迹点数量。调整以改变平均值变化的速度。更多不一定更好，因为如果列表太长，它会包含你身后的区块。"
+  },
+  "message-delay": {
+   "title": "消息延迟",
+   "desc": "消息之间的延迟，以毫秒为单位。"
+  },
+  "min-threshold": {
+   "title": "最小阈值",
+   "desc": "物品需要掉到的最小耐久百分比才会被修复。"
+  },
+  "minimum-distance": {
+   "title": "最小距离",
+   "desc": "记录某个区块时你必须距离出生点的最小距离。"
+  },
+  "minimum-storage-count": {
+   "title": "最小容器数量",
+   "desc": "一个区块中记录该区块所需的最少容器方块数量。"
+  },
+  "mode": {
+   "title": "Mode",
+   "desc": "Which items to repair."
+  },
+  "motion-y-boost": {
+   "title": "Y轴动量提升",
+   "desc": "通过取消Y轴动量大幅提升速度。"
+  },
+  "nether-path-mode": {
+   "title": "Nether Path Mode",
+   "desc": "Choose how TrailFollower does baritone pathing in Nether. If other is selected then nothing will be automatically enabled, instead just your yaw will be changed to point towards the trail."
+  },
+  "notification-mode": {
+   "title": "Notification Mode",
+   "desc": "The mode to use for notifications."
+  },
+  "notifications": {
+   "title": "通知",
+   "desc": "发现新物资库时发送Minecraft通知。"
+  },
+  "notify-any-chunks": {
+   "title": "通知任何旧区块",
+   "desc": "是否通知你任何旧区块。"
+  },
+  "notify-trails-off-highway": {
+   "title": "通知高速路旁轨迹",
+   "desc": "是否通知你高速路旁边的旧区块。"
+  },
+  "only-old-chunks": {
+   "title": "仅旧区块",
+   "desc": "检查扫描的区块是否已经被加载过。"
+  },
+  "only-while-colliding": {
+   "title": "仅在碰撞时",
+   "desc": "仅在撞墙时启用Y轴动量提升。"
+  },
+  "opposite-dimension": {
+   "title": "相反维度",
+   "desc": "从相反维度追踪轨迹（需要你已经用XP加载过另一个维度）。"
+  },
+  "overworld-flight-mode": {
+   "title": "Overworld Flight Mode",
+   "desc": "Choose how TrailFollower flies in Overworld. If other is selected then nothing will be automatically enabled, instead just your yaw will be changed to point towards the trail."
+  },
+  "path-distance": {
+   "title": "路径距离",
+   "desc": "在玩家面向方向添加轨迹位置的距离。（从地狱追踪主世界时忽略）"
+  },
+  "path-gap": {
+   "title": "路径间隔",
+   "desc": "每个区块路径之间的区块间隔数量。"
+  },
+  "ping": {
+   "title": "@提醒",
+   "desc": "是否@提醒你。"
+  },
+  "ping-for-stash-finder": {
+   "title": "物资库查找器@提醒",
+   "desc": "物资库查找器和基地查找器消息时@提醒你"
+  },
+  "ping-on-lava-found": {
+   "title": "发现岩浆时@提醒",
+   "desc": "发现符合搜索条件的岩浆时@提醒你。"
+  },
+  "pitch": {
+   "title": "俯仰角",
+   "desc": "启用弹跳时设置的俯仰角。"
+  },
+  "place-delay": {
+   "title": "放置延迟",
+   "desc": "方块放置之间的刻数延迟。"
+  },
+  "player-range": {
+   "title": "玩家范围",
+   "desc": "当玩家进入/离开你的渲染距离时是否记录消息。"
+  },
+  "portal-avoid-distance": {
+   "title": "传送门躲避距离",
+   "desc": "障碍物越过模块接管并绕开它的传送门陷阱距离。"
+  },
+  "portal-scan-width": {
+   "title": "传送门扫描宽度",
+   "desc": "沿高速路飞越轴扫描传送门陷阱的宽度。"
+  },
+  "portal-ticks": {
+   "title": "传送门刻数",
+   "desc": "在传送门中多少刻后踢出你（穿过传送门需要80刻）。"
+  },
+  "position": {
+   "title": "位置",
+   "desc": "断线的位置。Y坐标被忽略。"
+  },
+  "queue-messages": {
+   "title": "队列消息",
+   "desc": "如果消息发送太快将对其进行排队。如果队列太大，可能导致消息记录之间有很长的延迟。"
+  },
+  "range": {
+   "title": "范围",
+   "desc": "自定义放置范围。"
+  },
+  "reconnect-after-not-responding": {
+   "title": "无响应后重连",
+   "desc": "服务器无响应后重新连接。"
+  },
+  "reconnect-seconds": {
+   "title": "重连秒数",
+   "desc": "断开连接前等待的秒数（将临时覆盖Meteor的自动重连）。"
+  },
+  "render": {
+   "title": "渲染",
+   "desc": "在黑曜石将要放置的位置渲染方块覆盖层。"
+  },
+  "render-distance": {
+   "title": "渲染距离",
+   "desc": "渲染方块的远距离范围。"
+  },
+  "replenish": {
+   "title": "补充",
+   "desc": "自动将经验瓶补充到选定的快捷栏槽位。"
+  },
+  "rotate-scaling": {
+   "title": "旋转缩放",
+   "desc": "偏航角变化速度的缩放。1=瞬间，0=不变"
+  },
+  "rotation-scaling": {
+   "title": "旋转缩放",
+   "desc": "偏航角变化速度的缩放。1=瞬间，0=不变"
+  },
+  "save-name": {
+   "title": "保存名称",
+   "desc": "用于保存数据文件夹的名称，如果留空则不保存任何数据。"
+  },
+  "save-to-waypoints": {
+   "title": "保存到路径点",
+   "desc": "为物资库发现创建Xaero小地图路径点。"
+  },
+  "scale": {
+   "title": "缩放",
+   "desc": "自定义缩放。"
+  },
+  "search-above": {
+   "title": "向上搜索",
+   "desc": "向上查看的Y值"
+  },
+  "seconds-not-responding": {
+   "title": "无响应秒数",
+   "desc": "服务器无响应多少秒后使你断开连接。"
+  },
+  "send-webhook": {
+   "title": "发送Webhook",
+   "desc": "发现物资库时发送Webhook。"
+  },
+  "server-not-responding": {
+   "title": "服务器无响应",
+   "desc": "如果服务器无响应则断开连接。"
+  },
+  "shape-mode": {
+   "title": "Shape Mode",
+   "desc": "How the box is rendered."
+  },
+  "shulker-instant-hit": {
+   "title": "潜影盒即时判定",
+   "desc": "单个潜影盒是否算作物资库。"
+  },
+  "side-color": {
+   "title": "侧面颜色",
+   "desc": "边界框的侧面颜色。"
+  },
+  "speed": {
+   "title": "速度",
+   "desc": "保持的每秒方块速度。"
+  },
+  "start-direction-weight": {
+   "title": "起始方向权重",
+   "desc": "开始追踪时玩家面向方向的权重。0为无权重（不推荐），1为最大权重（方向改变需要一点时间）"
+  },
+  "start-position": {
+   "title": "起始位置",
+   "desc": "矩形起始处的坐标。Y坐标被忽略"
+  },
+  "storage-blocks": {
+   "title": "容器方块",
+   "desc": "选择要搜索的容器方块。"
+  },
+  "target-position": {
+   "title": "目标位置",
+   "desc": "前往的坐标。Y坐标被忽略。"
+  },
+  "timed-delay": {
+   "title": "定时延迟",
+   "desc": "使用烟花火箭之间的延迟，以毫秒为单位。"
+  },
+  "timestamp": {
+   "title": "时间戳",
+   "desc": "消息是否带有时间戳。"
+  },
+  "toggle-elytra": {
+   "title": "切换鞘翅",
+   "desc": "激活时装备鞘翅，停用时装备胸甲。"
+  },
+  "toggle-recording": {
+   "title": "切换记录",
+   "desc": "开启=记录中，关闭=未记录。"
+  },
+  "trail-end-behavior": {
+   "title": "Trail End Behavior",
+   "desc": "What to do when the trail ends."
+  },
+  "trail-end-yaw": {
+   "title": "轨迹结束偏航角",
+   "desc": "放弃轨迹后行进的方向。"
+  },
+  "trail-timeout": {
+   "title": "轨迹超时",
+   "desc": "未找到区块多少毫秒后停止追踪轨迹。"
+  },
+  "tunnel-bounce": {
+   "title": "隧道弹跳",
+   "desc": "允许你在1x2隧道中弹跳。如果你不在隧道中则不应开启此功能。"
+  },
+  "use-custom-start-position": {
+   "title": "使用自定义起始位置",
+   "desc": "仅在环形路或不希望被锁定到高速路上时启用并设置。否则(0,0)将作为起始位置并自动使用。"
+  },
+  "use-custom-yaw": {
+   "title": "使用自定义偏航角"
+  },
+  "use-manual-y-level": {
+   "title": "使用手动Y轴高度",
+   "desc": "使用手动设置的Y轴高度而不是激活时的Y轴高度。"
+  },
+  "velocity-threshold": {
+   "title": "速度阈值",
+   "desc": "上升时速度必须低于此值烟花火箭才会激活。"
+  },
+  "webhook-link": {
+   "title": "Webhook链接",
+   "desc": "将所有更新发送到该Webhook链接。留空以禁用。"
+  },
+  "whisper": {
+   "title": "私聊",
+   "desc": "是否记录私聊消息。"
+  },
+  "y-level": {
+   "title": "Y轴高度",
+   "desc": "弹跳的Y轴高度。必须设置正确，否则弹跳无法正常启动。"
+  },
+  "yaw": {
+   "title": "偏航角"
+  }
+ },
+ "force": [
+  "item-frames",
+  "exp-slot",
+  "blocks-per-tick",
+  "minimum-storage-count",
+  "storage-blocks"
+ ]
+}

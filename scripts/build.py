@@ -21,7 +21,9 @@ BUILD = os.path.join(ROOT, "build")
 CLASSES = os.path.join(BUILD, "classes")
 DIST = os.path.join(ROOT, "dist")
 MOD_ID = "meteor-zh"
-VERSION = "1.4.2"
+VERSION = "1.4.3"
+# 两条线共用一份源码，靠文件名区分：1.21.11 线 -mc1.21.11.jar，26.1 线 -mc26.1.jar。
+MC_VERSION = "1.21.11"
 
 
 def read_classpath():
@@ -53,10 +55,45 @@ def sources():
     return out
 
 
+def wipe(path):
+    """Best-effort delete of a directory tree.
+
+    The project lives inside OneDrive, and OneDrive/Defender sometimes keep a handle on
+    a freshly written folder — shutil.rmtree then dies with WinError 5 even though every
+    file is removable. Retry a few times, then fall back to deleting file by file and
+    carrying on: stale class files are harmless because javac overwrites whatever it
+    compiles and copy_resources() refreshes every resource.
+    """
+    import time
+    for attempt in range(5):
+        if not os.path.isdir(path):
+            return
+        try:
+            shutil.rmtree(path)
+            return
+        except OSError:
+            time.sleep(0.3 * (attempt + 1))
+
+    for base, dirs, files in os.walk(path, topdown=False):
+        for name in files:
+            try:
+                os.remove(os.path.join(base, name))
+            except OSError:
+                pass
+        for name in dirs:
+            try:
+                os.rmdir(os.path.join(base, name))
+            except OSError:
+                pass
+    try:
+        os.rmdir(path)
+    except OSError:
+        print("warning: could not fully remove %s (a file is locked); continuing" % path)
+
+
 def compile_java():
-    if os.path.isdir(CLASSES):
-        shutil.rmtree(CLASSES)
-    os.makedirs(CLASSES)
+    wipe(CLASSES)
+    os.makedirs(CLASSES, exist_ok=True)
 
     files = sources()
 
@@ -109,7 +146,11 @@ def copy_resources():
                 if '"java"' not in text:
                     extra.append('"java": ">=21"')
                 if '"meteor-client"' not in text:
-                    extra.append('"meteor-client": ">=1.21.11"')
+                    # 注意是 ">=1.21.11-0" 而不是 ">=1.21.11"：Fabric 的 semver 把
+                    # meteor-client 的 "1.21.11-86" 当成 1.21.11 的预发布版，按规则
+                    # 预发布版 < 正式版，于是 ">=1.21.11" 反而不满足，启动时报
+                    # HARD_DEP_NO_CANDIDATE。加 -0 后 "1.21.11-86" 正好落在区间内。
+                    extra.append('"meteor-client": ">=1.21.11-0"')
                 if extra:
                     text = text.replace(
                         '"minecraft": "~1.21.11"',
@@ -171,7 +212,7 @@ def main():
     remap(mojmap_jar, inter_jar)
     print("remapped: %d bytes" % os.path.getsize(inter_jar))
 
-    final = os.path.join(DIST, "%s-%s.jar" % (MOD_ID, VERSION))
+    final = os.path.join(DIST, "%s-%s-mc%s.jar" % (MOD_ID, VERSION, MC_VERSION))
     shutil.copy2(inter_jar, final)
     print("output: %s (%d bytes)" % (final, os.path.getsize(final)))
 
