@@ -4,14 +4,16 @@
 [![Build](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml/badge.svg)](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml)
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.1%20%7C%201.21.11-62b47a.svg)](#兼容性)
 [![Fabric](https://img.shields.io/badge/Fabric-0.20.1%20%7C%200.19.3-dbb69b.svg)](#兼容性)
-[![Version](https://img.shields.io/badge/26.1--%E7%BA%BF-1.5.3-a855f7.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/26.1--%E7%BA%BF-1.5.4-a855f7.svg)](CHANGELOG.md)
 [![Version](https://img.shields.io/badge/1.21.11--%E7%BA%BF-1.4.x-a855f7.svg)](CHANGELOG.md)
 
 **Meteor-ZH** 是一个 Meteor Client 附属模组（addon），把 Meteor 的整套界面翻成简体中文：模块名、功能描述、设置项名称与说明、设置分组、**按键名（Bind）**、HUD 元素、顶部标签页，以及 GUI 里写死在代码中的按钮与提示文字。
 
 装上即用 —— **启动游戏自动翻译，不点任何按钮，重启后依然生效**。新装的附属模组也会在下次启动时被自动识别并翻译。
 
-> 作者：[woo4005](https://github.com/woo4005)　·　开发协助：DeepSeek V4.1 flash 1017
+从 1.4.4 / 1.5.4 起还自带一个 **「关于汉化插件」** 模块：在游戏里就能查看版本与词典规模、检查更新、打开下载页，也可以让它每次启动自动查一次更新（可选后台静默下载，退出游戏时替换）。
+
+> 作者：[woo4005](https://github.com/woo4005)　·　AI 贡献者：[deepseek-ai](https://github.com/deepseek-ai)（DeepSeek V4.1 flash 1017）
 > 许可证：[GNU GPL v3.0](LICENSE)（GPL-3.0-or-later）　·　[开发者档案](DEVELOPERS.md)　·　[变更日志](CHANGELOG.md)　·　[贡献指南](CONTRIBUTING.md)
 
 ---
@@ -20,6 +22,7 @@
 
 - [为什么需要它](#为什么需要它)
 - [功能覆盖](#功能覆盖)
+- [「关于汉化插件」模块与自动更新](#关于汉化插件模块与自动更新)
 - [兼容性](#兼容性)
 - [安装](#安装)
 - [游戏内命令](#游戏内命令)
@@ -68,7 +71,8 @@ Meteor-ZH 把这些都补上了。
 | 按键名（Bind） | 同渲染层替换，`Left Shift`→`左Shift`、`None`→`无` | 66 条 |
 | 顶部标签页 | 反射改写 `Tab.name` | 7 条 |
 | HUD 元素名与分组 | 反射改写 `HudElementInfo.title/description`、`HudGroup.title` | — |
-| 第三方插件的模块与描述 | 词典 + 词法兜底引擎 | 134 名称 + 63 描述句（含 Jefff / Lotus 官方译文 18 模块、142 设置） |
+| 第三方插件的模块与描述 | 词典 + 词法兜底引擎 | 134 名称 + 63 描述句 |
+| Jefff / Lotus 官方译文 | 直接采用插件作者维护的官方汉化文件 | 18 模块 + 142 设置 + 138 说明 |
 | 模块/设置说明文字 | `descriptions` 表按英文原句精确匹配 | 1357 条 |
 | 词典未收录的新标识符 | 1069 词元的词法合成引擎 | — |
 
@@ -103,8 +107,8 @@ Meteor-ZH 把这些都补上了。
 
 | meteor-zh | Minecraft | Fabric Loader | Meteor Client | Java | 状态 |
 |---|---|---|---|---|---|
-| **1.5.3** | **26.1** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 26.1 专用线 |
-| **1.4.3** | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，build 82 及以上） | 21 | 1.21.11 专用线，继续维护 |
+| **1.5.4** | **26.1** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 26.1 专用线 |
+| **1.4.4** | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，build 82 及以上） | 21 | 1.21.11 专用线，继续维护 |
 | 1.3.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被 1.4.x 替代 |
 | ≤ 1.2.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被替代 |
 
@@ -112,11 +116,11 @@ Meteor-ZH 把这些都补上了。
 
 | 游戏版本 | 下载的 jar | 版本线 | 构建脚本 |
 |---|---|---|---|
-| Minecraft **26.1** | `meteor-zh-1.5.3-mc26.1.jar` | 1.5.x | `scripts/build_261.py` |
-| Minecraft **1.21.11** | `meteor-zh-1.4.3-mc1.21.11.jar` | 1.4.x | `scripts/build.py` |
+| Minecraft **26.1** | `meteor-zh-1.5.4-mc26.1.jar` | 1.5.x | `scripts/build_261.py` |
+| Minecraft **1.21.11** | `meteor-zh-1.4.4-mc1.21.11.jar` | 1.4.x | `scripts/build.py` |
 
-两条线的源码共用（同一份 `src/`），但**版本号各走各的**：1.21.11 线的后续更新发 1.4.3、1.4.4……，
-26.1 线的更新发 1.5.3、1.6.0……，互不牵连。词典是两条线共享的资源，会同时扩充到两个 jar 中。
+两条线的源码共用（同一份 `src/`），但**版本号各走各的**：1.21.11 线的后续更新发 1.4.4、1.4.4……，
+26.1 线的更新发 1.5.4、1.6.0……，互不牵连。词典是两条线共享的资源，会同时扩充到两个 jar 中。
 
 两个 jar 分别放进各自实例的 `mods` 目录即可；同一个实例里**不要同时放两个**（mod id 相同，Fabric 会报重复）。
 
@@ -129,9 +133,9 @@ Meteor-ZH 把这些都补上了。
   数据层翻译会失效（Mixin 部分有 `required = false` 兜底，不会崩游戏）。
 - **不支持 Minecraft 1.20.x 及更早**：1.21 换了渲染管线与 mappings，跨大版本无法兼容。
 - **不支持服务端**：`environment: client`，纯客户端 mod。
-- **1.4.3 之前的 1.21.11 线会被 Fabric 判定为不兼容**：当时 `meteor-client` 依赖写成
+- **1.4.4 之前的 1.21.11 线会被 Fabric 判定为不兼容**：当时 `meteor-client` 依赖写成
   `>=1.21.11`，而 Fabric 的 semver 把 `1.21.11-86` 当作 `1.21.11` 的**预发布版**，`1.21.11-86 < 1.21.11`，
-  于是报“不兼容”。1.4.3 起改成 `>=1.21.11-0`，两边都能满足。
+  于是报“不兼容”。1.4.4 起改成 `>=1.21.11-0`，两边都能满足。
 
 ### Mixin 注入点与冲突面
 
@@ -160,8 +164,8 @@ Meteor-ZH 把这些都补上了。
 ## 安装
 
 1. 从 [Releases](https://github.com/woo4005/meteor-zh/releases) 下载对应你游戏版本的 jar：
-   - **Minecraft 26.1** → `meteor-zh-1.5.3-mc26.1.jar`
-   - **Minecraft 1.21.11** → `meteor-zh-1.4.3-mc1.21.11.jar`
+   - **Minecraft 26.1** → `meteor-zh-1.5.4-mc26.1.jar`
+   - **Minecraft 1.21.11** → `meteor-zh-1.4.4-mc1.21.11.jar`
 2. 放进 `mods/` 目录
    - 官方启动器：`.minecraft/mods/`
    - **PCL 版本隔离**：`<PCL目录>/.minecraft/versions/<版本名>/mods/`
@@ -184,7 +188,7 @@ Greek、Cyrillic 和 ∞，**换成任何一款中文字体也不会多出中日
 图集里查不到的字符不画任何东西，只留一个空格宽度的空位，于是中文整段消失、
 数字和没翻译的英文照常显示。
 
-从 **1.5.3 / 1.4.3** 起插件会自己解决：启动时把 Meteor 的 `Config.customFont` 关掉，
+从 **1.5.4 / 1.4.4** 起插件会自己解决：启动时把 Meteor 的 `Config.customFont` 关掉，
 让它改用 Minecraft 原版字体渲染（`VanillaTextRenderer`，用 MC 自带的 `mc.font`，
 天然支持中文），并把 `scaleIndividually` 打开让双宽字符正确排布。
 代价是失去 Meteor 的自定义美术字体，界面换成原版字体样式——这是能显示中文的最小代价。
@@ -315,6 +319,23 @@ python scripts/verify_lexical.py
 
 微基准源码在 `scripts/bench/`（`PerfBench.java` 测反射 set 与 HashMap 查表，
 `MemoryZh.java` 测词典加载耗时与堆占用）。
+
+---
+
+## 自动更新是怎么工作的
+
+「关于汉化插件」里的更新器刻意做得很保守：
+
+| 行为 | 细节 |
+|---|---|
+| 什么时候查 | 每次**启动游戏**查一次（默认开启）；失败、超时、没网都直接放弃，不重试、不打扰 |
+| 查什么 | `api.github.com` 上本仓库最近的 Releases，**按游戏版本筛**：只认资产名以 `-mc<你的游戏版本>.jar` 结尾的那个 |
+| 怎么提示 | 在游戏世界里 → 聊天栏；在主菜单 → 右下角系统提示框。都带版本号与下载地址 |
+| 会自己装吗 | 默认不会。勾选「自动下载更新」后才会后台下载，并且**只在退出游戏时**替换 jar（不会动正在被加载的文件），下次启动生效 |
+| 装了 I18n 之类会冲突吗 | 不会。走的是同一套反射改字段，重复执行是幂等的 |
+
+> 国内网络常常连不上 `api.github.com`，这种情况下检测会静默失败，插件功能完全不受影响，
+> 手动去 Releases 或群文件更新即可。
 
 ---
 
@@ -465,6 +486,9 @@ the Free Software Foundation, either version 3 of the License, or
 本项目由 **woo4005** 提出需求、决定产品方向并验收，具体的设计、编码、词典整理、构建工具链与
 文档由 **DeepSeek V4.1 flash 1017** 在 [DeepSeek Harness](https://github.com/deepseek-ai) 中完成。
 
+AI 侧账号标注为 **[deepseek-ai](https://github.com/deepseek-ai)**（GitHub 上的 DeepSeek 官方组织），
+与 `fabric.mod.json` 里的 `authors` / `contributors` 一致，模组列表里也能看到。
+
 > 这不是一句客套话——**代码、词表、脚本、文档实际上全部由 AI 生成**，作者的角色是提出需求、
 > 提供真实环境（游戏目录、截图、日志）、逐轮验收与纠正方向。
 
@@ -480,6 +504,10 @@ the Free Software Foundation, either version 3 of the License, or
 - [Meteor Development](https://github.com/MeteorDevelopment/meteor-client) —— Meteor Client 本体
 - [yalu](https://github.com/yalu-owo/Meteor-I18n-Support) —— `Meteor-I18n-Support` 的 2454 条
   Meteor 本体词条（该项目以 CC0 1.0 发布，本项目在此基础上扩展并重新组织）
+- **Jefff / Lotus 插件作者** —— 官方简体中文语言文件（368 条）。冲突条目一律以官方译法为准，
+  让用过这两个插件的玩家看到熟悉的词；官方未翻译或在本项目语境下含义不同的少数条目保留本站译法
+- 以及 [meteoraddons.com](https://meteoraddons.com/) 的收录（通过仓库根目录的 `meteor-addon-list.json`
+  修正站点上的描述、标签与支持版本，无需审核）
 - Fabric 团队 —— Fabric Loader / Loom
 - 以及所有在群里反馈翻译问题的玩家
 

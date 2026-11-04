@@ -46,13 +46,19 @@ OUT = os.path.join(DICT, "zh_lotus.json")
 
 # 官方译法更好、要覆盖我们现有译法的设置名。
 # 只列「官方给了真中文」的；官方留英文的（mode / shape-mode /
-# notification-mode）以及含义在本项目里不同的（ping -> 延迟）都不覆盖。
+# notification-mode）不覆盖，否则界面会退化成英文；
+# `ping` 也例外——官方那份在 Discord 通知模块里指「@提醒」，
+# 而 Meteor 本体的 ping 设置指网络延迟，全局 key 无法区分，保留「延迟」。
 FORCE = [
     "item-frames",
     "exp-slot",
     "blocks-per-tick",
     "minimum-storage-count",
     "storage-blocks",
+    # 2026-11-04：按用户要求，剩余的中文差异一律改用官方译法
+    "bounce",       # 反弹 -> 弹跳
+    "scale",        # 比例 -> 缩放
+    "yaw",          # 偏航 -> 偏航角
 ]
 
 

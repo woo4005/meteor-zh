@@ -10,6 +10,28 @@
 
 ## [未发布]
 
+## [1.5.4] - 2026-11-04
+
+### 变更
+
+- **官方译法优先**：Jefff / Lotus 官方汉化文件与本站译法不一致的条目，一律改用官方译法
+  （`bounce` 弹跳、`scale` 缩放、`yaw` 偏航角）。官方未翻译（`Mode` / `Shape Mode` /
+  `Notification Mode`）以及在本项目语境下含义不同的（`ping` 在 Meteor 里指网络延迟）保留原译。
+- **作者信息**：`fabric.mod.json` 的 `authors` 加入 `deepseek-ai`，并新增 `contributors` 字段，
+  模组列表里可以直接看到 AI 侧账号。
+
+---
+
+## [1.4.4] - 2026-11-04
+
+1.21.11 线，内容与 1.5.4 相同（同一份源码、同一个词典）：
+
+- 官方译法优先（同上）。
+- `fabric.mod.json` 作者栏加入 `deepseek-ai`。
+- README 补齐「关于汉化插件」「自动更新是怎么工作的」「meteor-addon-list.json」等说明。
+
+---
+
 ## [1.5.3] - 2026-11-04
 
 ### 新增

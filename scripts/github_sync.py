@@ -34,9 +34,9 @@ import github_publish_ip as ghp  # noqa: E402
 ROOT = ghp.ROOT
 REPO = "meteor-zh"
 #: 本次要发的版本线。1.4.3 = 1.21.11 线。
-VERSION = "1.4.3"
+VERSION = "1.4.4"
 #: 另一条线（26.1）的版本号，用来写在 release 正文的下载表里
-VERSION_261 = "1.5.3"
+VERSION_261 = "1.5.4"
 #: 兼容旧名字（正文模板里还在用 {ver1211}）
 VERSION_1211 = VERSION
 BRANCH = "main"
@@ -248,7 +248,25 @@ def ensure_release(token):
 
     body = """Meteor Client 全界面简体中文汉化 v{ver}
 
-## 本版更新
+## 本版更新（1.4.4 / 1.5.4）
+
+### 官方译法优先
+
+Jefff / Lotus 插件作者维护的官方简体中文语言文件与本站译法不一致的条目，本版一律改用官方译法：
+`bounce` 弹跳、`scale` 缩放、`yaw` 偏航角。这样用过这两个插件的玩家看到的是熟悉的词。
+
+官方未翻译的（`Mode` / `Shape Mode` / `Notification Mode`）以及在本项目语境下含义不同的
+（`ping` 在 Meteor 本体里指网络延迟，官方那份在 Discord 通知模块里指「@提醒」）保留本站译法
+——全局设置名无法区分上下文，改成官方词反而会误导 Meteor 本体的使用者。
+
+### 作者信息
+
+`fabric.mod.json` 的 `authors` 加入 **deepseek-ai**（DeepSeek 官方 GitHub 组织），并新增 `contributors`
+字段。模组列表里现在显示 `woo4005 / deepseek-ai / DeepSeek V4.1 flash 1017`。
+
+---
+
+## 上一版（1.4.3 / 1.5.3）的修复，本版同样包含
 
 ### 修复：Minecraft 1.21.11 上被 Fabric 判定「版本不兼容」
 
@@ -514,7 +532,9 @@ def main():
         "\n"
         "验证\n"
         "- verify_dict.py 15 项 / verify_lexical.py 9 项 / verify_261.py 14 项断言全部通过\n"
-        "  两个 jar 的 fabric.mod.json / mixins.json 逐项核对" % (VERSION, VERSION, VERSION_261)
+        "  两个 jar 的 fabric.mod.json / mixins.json 逐项核对\n"
+        "\n"
+        "Co-authored-by: deepseek-ai <noreply@deepseek.com>" % (VERSION, VERSION, VERSION_261)
     )
     st, new_commit = api_retry(
         "POST", "/repos/%s/%s/git/commits" % (ghp.OWNER, REPO),
