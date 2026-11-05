@@ -23,7 +23,7 @@ ROOT = b.ROOT
 TEST_SRC = os.path.join(ROOT, "scripts", "jvm-test", "Test261.java")
 TEST_DIR = os.path.join(b.BUILD, "test-classes")
 JAVA = os.path.join(b.JDK, "java.exe")
-PLUGIN_JAR = os.path.join(b.DIST, "meteor-zh-%s-mc26.1~26.1.2.jar" % b.VERSION)
+PLUGIN_JAR = os.path.join(b.DIST, "meteor-zh-%s-mc26.1.x.jar" % b.VERSION)
 
 
 def _newest_source_mtime():

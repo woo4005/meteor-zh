@@ -19,7 +19,7 @@
 用法：
     python scripts/build_261.py
 产物：
-    dist/meteor-zh-<版本>-mc26.1~26.1.2.jar（同一个 jar 覆盖 26.1 / 26.1.1 / 26.1.2）
+    dist/meteor-zh-<版本>-mc26.1.x.jar（同一个 jar 覆盖 26.1 / 26.1.1 / 26.1.2）
 """
 import glob
 import json
@@ -281,7 +281,7 @@ def copy_resources():
 def pack():
     os.makedirs(DIST, exist_ok=True)
     # 1.6.x 线一个 jar 覆盖 26.1 / 26.1.1 / 26.1.2，产物名里的游戏版本写成 26.1.x
-    out = os.path.join(DIST, "meteor-zh-%s-mc26.1~26.1.2.jar" % VERSION)
+    out = os.path.join(DIST, "meteor-zh-%s-mc26.1.x.jar" % VERSION)
     if os.path.exists(out):
         os.remove(out)
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:

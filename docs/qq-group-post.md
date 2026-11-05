@@ -2,7 +2,7 @@
 
 > 用于在 Meteor / MC 插件群推广。三个版本按场景取用。
 > 发布前请先把两个 jar 传到**群文件**，因为群里不少人打不开 GitHub：
-> `meteor-zh-1.5.7-mc26.1~26.1.2.jar`（Minecraft 26.1）与 `meteor-zh-1.4.7-mc1.21.11.jar`（Minecraft 1.21.11）。
+> `meteor-zh-1.5.7-mc26.1.x.jar`（Minecraft 26.1）与 `meteor-zh-1.4.7-mc1.21.11.jar`（Minecraft 1.21.11）。
 
 ---
 
@@ -79,7 +79,7 @@ GUI 里 Bind、Modules、Reset、Chat Feedback 这些还是英文，按键名也
 
 【安装】
 1. 按游戏版本选 jar，放进 .minecraft/mods/
-   · Minecraft 26.1     → meteor-zh-1.5.7-mc26.1~26.1.2.jar
+   · Minecraft 26.1     → meteor-zh-1.5.7-mc26.1.x.jar
    · Minecraft 1.21.11  → meteor-zh-1.4.7-mc1.21.11.jar
    （PCL 版本隔离的话是 PCL 目录/minecraft/versions/<版本>/mods/）
 2. 建议删掉旧的 Meteor-I18n-Support-*.jar（共存不崩，但功能重复）
@@ -98,7 +98,7 @@ GUI 里 Bind、Modules、Reset、Chat Feedback 这些还是英文，按键名也
 .zh info    看词典条目数
 
 【下载】
-群文件：meteor-zh-1.5.7-mc26.1~26.1.2.jar（MC 26.1） / meteor-zh-1.4.7-mc1.21.11.jar（MC 1.21.11）
+群文件：meteor-zh-1.5.7-mc26.1.x.jar（MC 26.1） / meteor-zh-1.4.7-mc1.21.11.jar（MC 1.21.11）
 GitHub：https://github.com/woo4005/meteor-zh/releases
 源码：https://github.com/woo4005/meteor-zh
 反馈：https://github.com/woo4005/meteor-zh/issues

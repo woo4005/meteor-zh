@@ -42,7 +42,7 @@ VERSION_1211 = VERSION
 BRANCH = "main"
 
 #: 两条构建线的产物（一个 jar 覆盖 26.1 / 26.1.1 / 26.1.2）——见同一个仓库的 dist/ 白名单
-JARS_ALL = ["meteor-zh-%s-mc1.21.11.jar" % VERSION_1211, "meteor-zh-%s-mc26.1~26.1.2.jar" % VERSION_261]
+JARS_ALL = ["meteor-zh-%s-mc1.21.11.jar" % VERSION_1211, "meteor-zh-%s-mc26.1.x.jar" % VERSION_261]
 
 #: 本次 release 应附上的 jar：只放属于本版本线的产物。
 #: 1.5.0 是 26.1 线，所以只上传 -mc26.1 那个；1.21.11 的 1.4.0 jar 归 v1.4.0 release。
@@ -271,7 +271,7 @@ if (!name.endsWith(targetSuffix)) continue;
 | `26.1~26.1.2` | 区间，含两端 | `26.1` 到 `26.1.2` |
 | `26.1.x` | 等价 `26.1` | 整条线 |
 
-资产名也跟着改成 `meteor-zh-1.5.7-mc26.1~26.1.2.jar`——文件名本身就说明覆盖哪几个小版本。
+资产名也跟着改成 `meteor-zh-1.5.7-mc26.1.x.jar`——文件名本身就说明覆盖哪几个小版本。
 
 ### 顺带
 
@@ -282,7 +282,7 @@ if (!name.endsWith(targetSuffix)) continue;
 
 | 游戏版本 | 文件 |
 | --- | --- |
-| Minecraft 26.1 / 26.1.1 / 26.1.2 | `meteor-zh-1.5.7-mc26.1~26.1.2.jar` |
+| Minecraft 26.1 / 26.1.1 / 26.1.2 | `meteor-zh-1.5.7-mc26.1.x.jar` |
 | Minecraft 1.21.11 | `meteor-zh-1.4.7-mc1.21.11.jar` |
 
 ## 上一版（1.4.6 / 1.5.6）的更新
