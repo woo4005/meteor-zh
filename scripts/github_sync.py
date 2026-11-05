@@ -257,11 +257,11 @@ def ensure_release(token):
 那些第三方条目：
 
 ```json
-{
+{{
   "addon": "jefff", "category": "Misc", "name": "better-stash-finder",
   "title": "更好的仓库寻找器", "description": "...",
   "translated": true, "inDictionary": true
-}
+}}
 ```
 
 `name` 是查表用的英文标识符，`inDictionary: false` 表示这个词还没收录。
