@@ -1,15 +1,25 @@
 # -*- coding: utf-8 -*-
-"""为 Minecraft 26.1 构建 meteor-zh。
+"""为 Minecraft 26.1.x 构建 meteor-zh（1.6.x 线）。
 
 与 1.21.11 的 build.py 的关键差别：
   1. MC 26.x 起游戏不再混淆，运行时就是官方名，所以 **不需要** mojmap -> intermediary 的 remap。
   2. Meteor 26.1 的 class 文件是 major 69（Java 25），javac 21 读不了，必须用 JDK 25。
   3. fabric.mod.json 的 minecraft 依赖从 ~1.21.11 变成 ~26.1。
 
+关于「一个 jar 覆盖 26.1.1 与 26.1.2」：
+  Meteor 官方 26.1 线只发布了 26.1.2-42 一个客户端（它的 fabric.mod.json 声明
+  minecraft "~26.1"），26.1.1 玩家用的就是同一个客户端。
+  实测对比 26.1.1 与 26.1.2 两个客户端 jar：class 集合完全相同（各 10682 个），
+  只有 8 个类有差异（DetectedVersion / SharedConstants / Checkbox 三个 /
+  AbstractReportScreen 两个 / ServerGamePacketListenerImpl），
+  其中没有一个被 Meteor 的 211 个 mixin 触及，本插件引用的类也逐字节相同。
+  所以按 26.1.2 编译出的 jar 可以直接放到 26.1.1 上跑。
+  scripts/verify_261_cross.py 会把这一点固化成可重复的检查。
+
 用法：
     python scripts/build_261.py
 产物：
-    dist/meteor-zh-1.5.0-mc26.1.jar
+    dist/meteor-zh-<版本>-mc26.1.x.jar（26.1 / 26.1.1 / 26.1.2 通用）
 """
 import glob
 import json
@@ -22,13 +32,29 @@ import zipfile
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VERSION = "1.5.5"
+VERSION = "1.6.0"
 MOD_ID = "meteor-zh"
 
-INSTANCE = os.environ.get("MC_INSTANCE") or r"E:\pcl\.minecraft\versions\26.1-Fabric 0.20.1"
-MC_JAR = os.path.join(INSTANCE, "26.1-Fabric 0.20.1.jar")
-VERSION_JSON = os.path.join(INSTANCE, "26.1-Fabric 0.20.1.json")
+DEFAULT_INSTANCE = r"E:\pcl\.minecraft\versions\zh插件制作版本\versions\26.1.2-Fabric 0.20.1"
+INSTANCE = os.environ.get("MC_INSTANCE") or DEFAULT_INSTANCE
 LIB_ROOT = os.environ.get("MC_LIB_ROOT") or r"E:\pcl\.minecraft\libraries"
+
+
+def _instance_file(ext):
+    """在实例目录里找客户端 jar / version json（只看顶层文件，不碰 mods）。"""
+    name = os.path.basename(INSTANCE.rstrip("\\/"))
+    cand = os.path.join(INSTANCE, name + ext)
+    if os.path.exists(cand):
+        return cand
+    cands = sorted(os.path.join(INSTANCE, f) for f in os.listdir(INSTANCE)
+                   if f.lower().endswith(ext) and os.path.isfile(os.path.join(INSTANCE, f)))
+    if not cands:
+        raise SystemExit("找不到实例文件 %s（目录：%s）" % (ext, INSTANCE))
+    return cands[0]
+
+
+MC_JAR = _instance_file(".jar")
+VERSION_JSON = _instance_file(".json")
 
 
 def _find_meteor_jar():
@@ -254,7 +280,8 @@ def copy_resources():
 
 def pack():
     os.makedirs(DIST, exist_ok=True)
-    out = os.path.join(DIST, "meteor-zh-%s-mc26.1.jar" % VERSION)
+    # 1.6.x 线一个 jar 覆盖 26.1 / 26.1.1 / 26.1.2，产物名里的游戏版本写成 26.1.x
+    out = os.path.join(DIST, "meteor-zh-%s-mc26.1.x.jar" % VERSION)
     if os.path.exists(out):
         os.remove(out)
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:

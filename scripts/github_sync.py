@@ -36,13 +36,13 @@ REPO = "meteor-zh"
 #: 本次要发的版本线。1.4.3 = 1.21.11 线。
 VERSION = "1.4.5"
 #: 另一条线（26.1）的版本号，用来写在 release 正文的下载表里
-VERSION_261 = "1.5.5"
+VERSION_261 = "1.6.0"
 #: 兼容旧名字（正文模板里还在用 {ver1211}）
 VERSION_1211 = VERSION
 BRANCH = "main"
 
-#: 两条构建线的产物（26.1 线带 -mc26.1 后缀）——见同一个仓库的 dist/ 白名单
-JARS_ALL = ["meteor-zh-%s-mc1.21.11.jar" % VERSION_1211, "meteor-zh-%s-mc26.1.jar" % VERSION_261]
+#: 两条构建线的产物（26.1 线带 -mc26.1.x 后缀，一个 jar 覆盖 26.1 / 26.1.1 / 26.1.2）——见同一个仓库的 dist/ 白名单
+JARS_ALL = ["meteor-zh-%s-mc1.21.11.jar" % VERSION_1211, "meteor-zh-%s-mc26.1.x.jar" % VERSION_261]
 
 #: 本次 release 应附上的 jar：只放属于本版本线的产物。
 #: 1.5.0 是 26.1 线，所以只上传 -mc26.1 那个；1.21.11 的 1.4.0 jar 归 v1.4.0 release。
@@ -248,9 +248,31 @@ def ensure_release(token):
 
     body = """Meteor Client 全界面简体中文汉化 v{ver}
 
-## 本版更新（1.4.5 / 1.5.5）
+## 本版更新（1.4.5 / 1.6.0）
 
-### 聊天栏消息正文汉化
+### 26.1 线开新版本号：一个 jar 同时支持 26.1 / 26.1.1 / 26.1.2
+
+Meteor 官方 26.1 线**只发布过一个客户端**（`26.1.2-42`，声明 `minecraft: "~26.1"`），
+所以 26.1.1 的玩家装的本来就是它。我把两个客户端 jar 逐字节比过：
+
+- class 集合完全相同（各 10682 个）
+- 只有 **8 个类**有差异：`DetectedVersion`、`SharedConstants`、`Checkbox`（+2 内部类）、
+  `AbstractReportScreen`（+1 内部类）、`ServerGamePacketListenerImpl`
+- Meteor 的 **211 个 mixin 没有一个**碰这 8 个类；插件引用的类也逐字节相同
+
+所以按 26.1.2 编译的 jar 可以直接放到 26.1.1 上。这不是「分析上应该行」，而是做成了
+可重复的检查：`scripts/verify_261_cross.py` 会用 26.1.1 的客户端 jar 重新编译同一份源码，
+断言两套 classpath 产出的 class **逐字节相同**，并校验 mixin 目标没落在差异类里（10 项断言）。
+
+产物因此改名 `meteor-zh-{ver261}-mc26.1.x.jar`（`26.1.x` = 26.1 全系通用）。
+1.5.x 线在 1.5.5 收尾，26.1 线后续都在 1.6.x 上发。
+
+> 在 26.1.1 实例里如果 Fabric 报缺少 `meteor-client`，那是没装 Meteor 客户端本人——
+> 把 `meteor-client-26.1.2-42.jar` 放进 `mods/` 即可，26.1.1 用的就是它。
+
+---
+
+## 上一版（1.4.5 / 1.5.5）：聊天栏消息正文汉化
 
 模块名和设置项早就变成中文了，但聊天栏里的**正文**一直是英文——因为那些消息是用
 `ChatUtils.info("Found stash at (highlight)%s(default), (highlight)%s(default).", x, z)`
@@ -340,7 +362,7 @@ Meteor 里多了一个 **汉化** 分类，里面是「关于汉化插件」模�
 
 | 游戏版本 | 下载 | 版本线 | 前置要求 |
 |---|---|---|---|
-| **Minecraft 26.1** | `meteor-zh-{ver261}-mc26.1.jar` | **1.5.x** | Fabric Loader ≥ 0.20.1、Java 25、Meteor Client 26.1.x |
+| **Minecraft 26.1 / 26.1.1 / 26.1.2** | `meteor-zh-{ver261}-mc26.1.x.jar` | **1.6.x** | Fabric Loader ≥ 0.20.1、Java 25、Meteor Client 26.1.x |
 | **Minecraft 1.21.11** | `meteor-zh-{ver}-mc1.21.11.jar` | **1.4.x** | Fabric Loader ≥ 0.16.0、Java 21、Meteor Client 1.21.11 |
 
 两个 jar 的 mod id 相同，**分别放进对应实例的 `mods/`**，不要放在同一个实例里。

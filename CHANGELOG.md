@@ -10,6 +10,34 @@
 
 ## [未发布]
 
+## [1.6.0] - 2026-11-05
+
+从这一版起，26.1 线开新的大版本号 **1.6.x**，一个 jar 同时支持 **Minecraft 26.1 / 26.1.1 / 26.1.2**。
+
+### 为什么可以一个 jar 覆盖三个 26.1.x 版本
+
+- Meteor 官方 26.1 线**只发布了 `26.1.2-42` 一个客户端**，它的 `fabric.mod.json` 声明
+  `minecraft: "~26.1"`，26.1.1 的玩家用的本来就是同一个客户端；
+- 实测对比两个客户端 jar：**class 集合完全相同**（各 10682 个），只有 **8 个类有差异**
+  （`DetectedVersion` / `SharedConstants` / `Checkbox` 及其两个内部类 /
+  `AbstractReportScreen` 及其内部类 / `ServerGamePacketListenerImpl`）；
+- Meteor 的 **211 个 mixin 没有一个**针对这 8 个类，本插件引用的类也逐字节相同。
+
+因此按 26.1.2 编译的 jar 可以直接放到 26.1.1 上。这一点已固化为可重复的检查：
+`scripts/verify_261_cross.py` 会用 26.1.1 的客户端 jar 重新编译同一份源码，
+断言两边产出的 class **逐字节相同**，并校验 mixin 目标没有落在差异类里。
+
+### 变更
+
+- 产物改名：`meteor-zh-1.6.0-mc26.1.x.jar`（`mc26.1.x` 表示 26.1 全系通用）。
+- `scripts/build_261.py` 的实例路径不再写死：自动在实例目录里找客户端 jar 与 version json，
+  支持 `MC_INSTANCE` 环境变量覆盖；`VERSION` 升到 `1.6.0`。
+- 新增 `scripts/verify_261_cross.py`（10 项断言）：跨版本 class 差异、mixin 目标冲突、
+  双 classpath 编译结果一致性、jar 内依赖声明。
+- 1.5.x 线至此收尾，26.1 线后续都在 1.6.x 上发。
+
+---
+
 ## [1.5.5] - 2026-11-04
 
 ### 新增
