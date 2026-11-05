@@ -153,6 +153,7 @@ W = {
     "simulate": "模拟", "spoof": "欺骗", "safe": "安全", "danger": "危险",
     "confirm": "确认", "warning": "警告", "dangerous": "危险",
     "chord": "和弦", "note": "音符", "sound": "声音", "volume": "音量",
+    "cowbell": "牛铃", "didgeridoo": "迪吉里杜管", "chime": "管钟",
     "music": "音乐", "play": "播放", "loop": "循环", "repeat": "重复",
     "scale": "缩放", "rotate": "旋转", "flip": "翻转", "mirror": "镜像",
     # 第二轮补充（按真实词典未命中词频补充）

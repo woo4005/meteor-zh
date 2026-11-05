@@ -300,7 +300,6 @@ public final class UpdateChecker {
         }
 
         String mc = mcVersion();
-        String targetSuffix = "-mc" + mc + ".jar";
         List<Release> candidates = new ArrayList<>();
 
         for (JsonElement element : array) {
@@ -324,8 +323,7 @@ public final class UpdateChecker {
                 if (!assetElement.isJsonObject()) continue;
                 JsonObject asset = assetElement.getAsJsonObject();
                 String name = str(asset, "name");
-                if (name == null || !name.endsWith(".jar")) continue;
-                if (!name.endsWith(targetSuffix)) continue;
+                if (!assetMatches(name, mc)) continue;
                 assetName = name;
                 assetUrl = str(asset, "browser_download_url");
                 assetSize = number(asset, "size");
@@ -340,6 +338,44 @@ public final class UpdateChecker {
 
         candidates.sort((a, b) -> compare(b.version, a.version));
         return candidates.isEmpty() ? null : candidates.get(0);
+    }
+
+    /**
+     * 判断发布资产是否适配当前游戏版本。
+     *
+     * <p>资产名形如 {@code meteor-zh-1.5.7-mc26.1~26.1.2.jar}：{@code -mc} 之后、
+     * {@code .jar} 之前是「适配的 MC 版本表达式」，支持四种写法：
+     * <ul>
+     *   <li>{@code 1.21.11} —— 精确匹配</li>
+     *   <li>{@code 26.1} —— 前缀匹配：{@code 26.1} / {@code 26.1.1} / {@code 26.1.2} 都算</li>
+     *   <li>{@code 26.1~26.1.2} —— 区间匹配，含两端</li>
+     *   <li>{@code 26.1.x} —— 与 {@code 26.1} 等价</li>
+     * </ul>
+     *
+     * <p>以前是「{@code -mc<当前版本>.jar} 精确匹配」，于是 26.1 线一个 jar 覆盖多个小版本时，
+     * 26.1.1 的玩家会看到「未找到适配 26.1.1 的发布版本」——这不是没更新，是匹配写窄了。
+     */
+    public static boolean assetMatches(String name, String mc) {
+        if (name == null || !name.endsWith(".jar")) return false;
+        int idx = name.lastIndexOf("-mc");
+        if (idx < 0) return false;
+        String spec = name.substring(idx + 3, name.length() - 4).trim();
+        return specMatches(spec, mc);
+    }
+
+    public static boolean specMatches(String spec, String mc) {
+        if (spec == null || spec.isEmpty() || mc == null || mc.isEmpty()) return false;
+
+        int tilde = spec.indexOf('~');
+        if (tilde >= 0) {
+            String low = spec.substring(0, tilde).trim();
+            String high = spec.substring(tilde + 1).trim();
+            return compare(mc, low) >= 0 && compare(mc, high) <= 0;
+        }
+
+        String base = spec.endsWith(".x") ? spec.substring(0, spec.length() - 2) : spec;
+        // 精确命中，或者「资产版本是当前版本的前缀」——即覆盖整条小版本线
+        return mc.equals(base) || mc.startsWith(base + ".");
     }
 
     private static String normaliseTag(String tag) {

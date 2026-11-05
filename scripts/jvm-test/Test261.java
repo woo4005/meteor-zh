@@ -1,5 +1,6 @@
 import com.meteorzh.FontFixer;
 import com.meteorzh.Translator;
+import com.meteorzh.UpdateChecker;
 import com.meteorzh.WordTranslator;
 import com.meteorzh.ZhDict;
 
@@ -60,6 +61,21 @@ public class Test261 {
         check("desc sentence", ZhDict.moduleDesc("excavator", "Excavate a selection area."), "挖掘选定的区域。");
         check("lexical chunk-render-distance", WordTranslator.translate("chunk-render-distance"), "区块渲染距离");
         check("lexical keeps chinese", WordTranslator.translate("\u81ea\u52a8\u8ddf\u968f"), null);
+
+        // 更新器版本匹配：一个 jar 覆盖 26.1 / 26.1.1 / 26.1.2
+        String jar261 = "meteor-zh-1.5.7-mc26.1~26.1.2.jar";
+        checkTrue("asset 26.1~26.1.2 匹配 26.1", UpdateChecker.assetMatches(jar261, "26.1"));
+        checkTrue("asset 26.1~26.1.2 匹配 26.1.1", UpdateChecker.assetMatches(jar261, "26.1.1"));
+        checkTrue("asset 26.1~26.1.2 匹配 26.1.2", UpdateChecker.assetMatches(jar261, "26.1.2"));
+        checkTrue("asset 26.1~26.1.2 不匹配 26.1.3", !UpdateChecker.assetMatches(jar261, "26.1.3"));
+        checkTrue("asset 1.21.11 匹配 1.21.11",
+            UpdateChecker.assetMatches("meteor-zh-1.4.7-mc1.21.11.jar", "1.21.11"));
+        checkTrue("asset 1.21.11 不匹配 1.21.10",
+            !UpdateChecker.assetMatches("meteor-zh-1.4.7-mc1.21.11.jar", "1.21.10"));
+        checkTrue("asset 26.1 前缀覆盖 26.1.2",
+            UpdateChecker.assetMatches("meteor-zh-1.5.6-mc26.1.jar", "26.1.2"));
+        checkTrue("asset 26.1.x 等价 26.1",
+            UpdateChecker.assetMatches("meteor-zh-1.6.0-mc26.1.x.jar", "26.1.2"));
 
         System.out.println();
         fontProbe();

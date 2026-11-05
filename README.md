@@ -4,7 +4,7 @@
 [![Build](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml/badge.svg)](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml)
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.1%20%7C%201.21.11-62b47a.svg)](#兼容性)
 [![Fabric](https://img.shields.io/badge/Fabric-0.20.1%20%7C%200.19.3-dbb69b.svg)](#兼容性)
-[![Version](https://img.shields.io/badge/26.1--%E7%BA%BF-1.5.6-a855f7.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/26.1--%E7%BA%BF-1.5.7-a855f7.svg)](CHANGELOG.md)
 [![Version](https://img.shields.io/badge/1.21.11--%E7%BA%BF-1.4.x-a855f7.svg)](CHANGELOG.md)
 
 **Meteor-ZH** 是一个 Meteor Client 附属模组（addon），把 Meteor 的整套界面翻成简体中文：模块名、功能描述、设置项名称与说明、设置分组、**按键名（Bind）**、HUD 元素、顶部标签页，以及 GUI 里写死在代码中的按钮与提示文字。
@@ -135,6 +135,9 @@ Meteor-ZH 把这些都补上了。
 
 从 **1.5.6** 起，26.1 线一个 jar 同时支持这三个版本，不需要按小版本分别下载。
 
+更新器判断「哪个资产适配我」的方式是读资产名里 `-mc` 到 `.jar` 之间那段：`26.1` 表示整条 26.1.x 线，
+`26.1~26.1.2` 表示区间，所以 26.1 线一个 jar 就能让三个小版本都识别到更新（1.5.7 起）。
+
 原因是 Meteor 官方 26.1 线只发布了 `26.1.2-42` 一个客户端（声明 `minecraft: "~26.1"`），
 26.1.1 玩家用的就是同一个客户端。我对比过两个客户端 jar：
 
@@ -154,8 +157,8 @@ Meteor-ZH 把这些都补上了。
 
 | meteor-zh | Minecraft | Fabric Loader | Meteor Client | Java | 状态 |
 |---|---|---|---|---|---|
-| **1.5.6** | **26.1 / 26.1.1 / 26.1.2** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 26.1.x 全系通用 |
-| **1.4.5** | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，build 82 及以上） | 21 | 1.21.11 专用线，继续维护 |
+| **1.5.7** | **26.1 / 26.1.1 / 26.1.2** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 26.1.x 全系通用 |
+| **1.4.7** | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，build 82 及以上） | 21 | 1.21.11 专用线，继续维护 |
 | 1.3.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被 1.4.x 替代 |
 | ≤ 1.2.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被替代 |
 
@@ -163,11 +166,11 @@ Meteor-ZH 把这些都补上了。
 
 | 游戏版本 | 下载的 jar | 版本线 | 构建脚本 |
 |---|---|---|---|
-| Minecraft **26.1 / 26.1.1 / 26.1.2** | `meteor-zh-1.5.6-mc26.1.jar` | 1.5.x | `scripts/build_261.py` |
-| Minecraft **1.21.11** | `meteor-zh-1.4.5-mc1.21.11.jar` | 1.4.x | `scripts/build.py` |
+| Minecraft **26.1 / 26.1.1 / 26.1.2** | `meteor-zh-1.5.7-mc26.1~26.1.2.jar` | 1.5.x | `scripts/build_261.py` |
+| Minecraft **1.21.11** | `meteor-zh-1.4.7-mc1.21.11.jar` | 1.4.x | `scripts/build.py` |
 
-两条线的源码共用（同一份 `src/`），但**版本号各走各的**：1.21.11 线的后续更新发 1.4.5、1.4.6……，
-26.1 线的更新发 1.5.6、1.5.7……，互不牵连。词典是两条线共享的资源，会同时扩充到两个 jar 中。
+两条线的源码共用（同一份 `src/`），但**版本号各走各的**：1.21.11 线的后续更新发 1.4.7、1.4.8……，
+26.1 线的更新发 1.5.7、1.5.8……，互不牵连。词典是两条线共享的资源，会同时扩充到两个 jar 中。
 
 两个 jar 分别放进各自实例的 `mods` 目录即可；同一个实例里**不要同时放两个**（mod id 相同，Fabric 会报重复）。
 
@@ -211,8 +214,8 @@ Meteor-ZH 把这些都补上了。
 ## 安装
 
 1. 从 [Releases](https://github.com/woo4005/meteor-zh/releases) 下载对应你游戏版本的 jar：
-   - **Minecraft 26.1** → `meteor-zh-1.5.6-mc26.1.jar`
-   - **Minecraft 1.21.11** → `meteor-zh-1.4.5-mc1.21.11.jar`
+    - **Minecraft 26.1 / 26.1.1 / 26.1.2** → `meteor-zh-1.5.7-mc26.1~26.1.2.jar`
+    - **Minecraft 1.21.11** → `meteor-zh-1.4.7-mc1.21.11.jar`
 2. 放进 `mods/` 目录
    - 官方启动器：`.minecraft/mods/`
    - **PCL 版本隔离**：`<PCL目录>/.minecraft/versions/<版本名>/mods/`

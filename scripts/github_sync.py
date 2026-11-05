@@ -34,15 +34,15 @@ import github_publish_ip as ghp  # noqa: E402
 ROOT = ghp.ROOT
 REPO = "meteor-zh"
 #: 本次要发的版本线。1.4.3 = 1.21.11 线。
-VERSION = "1.4.6"
+VERSION = "1.4.7"
 #: 另一条线（26.1）的版本号，用来写在 release 正文的下载表里
-VERSION_261 = "1.5.6"
+VERSION_261 = "1.5.7"
 #: 兼容旧名字（正文模板里还在用 {ver1211}）
 VERSION_1211 = VERSION
 BRANCH = "main"
 
 #: 两条构建线的产物（一个 jar 覆盖 26.1 / 26.1.1 / 26.1.2）——见同一个仓库的 dist/ 白名单
-JARS_ALL = ["meteor-zh-%s-mc1.21.11.jar" % VERSION_1211, "meteor-zh-%s-mc26.1.jar" % VERSION_261]
+JARS_ALL = ["meteor-zh-%s-mc1.21.11.jar" % VERSION_1211, "meteor-zh-%s-mc26.1~26.1.2.jar" % VERSION_261]
 
 #: 本次 release 应附上的 jar：只放属于本版本线的产物。
 #: 1.5.0 是 26.1 线，所以只上传 -mc26.1 那个；1.21.11 的 1.4.0 jar 归 v1.4.0 release。
@@ -248,7 +248,44 @@ def ensure_release(token):
 
     body = """Meteor Client 全界面简体中文汉化 v{ver}
 
-## 本版更新（1.4.6 / 1.5.6）
+## 本版更新（1.4.7 / 1.5.7）
+
+### 修掉「未找到适配 26.1.1 的发布版本」
+
+更新器原来用「资产名必须以 `-mc<当前游戏版本>.jar` 结尾」来挑资产：
+
+```java
+String targetSuffix = "-mc" + mcVersion() + ".jar";
+if (!name.endsWith(targetSuffix)) continue;
+```
+
+而 26.1 线的资产叫 `meteor-zh-1.5.6-mc26.1.jar`：在 26.1.1 上要找 `-mc26.1.1.jar`，
+在 26.1.2 上要找 `-mc26.1.2.jar`，永远找不到。插件本身没坏，是匹配条件写窄了。
+
+现在 `UpdateChecker.assetMatches()` 把资产名 `-mc` 到 `.jar` 之间那段当**版本范围**解析：
+
+| 表达式 | 含义 | 匹配 |
+| --- | --- | --- |
+| `1.21.11` | 精确 | 只匹配 `1.21.11` |
+| `26.1` | 前缀 | `26.1` / `26.1.1` / `26.1.2` |
+| `26.1~26.1.2` | 区间，含两端 | `26.1` 到 `26.1.2` |
+| `26.1.x` | 等价 `26.1` | 整条线 |
+
+资产名也跟着改成 `meteor-zh-1.5.7-mc26.1~26.1.2.jar`——文件名本身就说明覆盖哪几个小版本。
+
+### 顺带
+
+- 词表补 `CowBell` → 牛铃、`Didgeridoo` → 迪吉里杜管、`Chime` → 管钟（原版音符盒乐器名之前显示英文）。
+- `Test261` 增加 8 条更新器匹配断言，其中「`26.1~26.1.2` 不匹配 `26.1.3`」确保区间有上界。
+
+### 下载
+
+| 游戏版本 | 文件 |
+| --- | --- |
+| Minecraft 26.1 / 26.1.1 / 26.1.2 | `meteor-zh-1.5.7-mc26.1~26.1.2.jar` |
+| Minecraft 1.21.11 | `meteor-zh-1.4.7-mc1.21.11.jar` |
+
+## 上一版（1.4.6 / 1.5.6）的更新
 
 ### 新增 `.zh dump`：导出模块与设置清单
 
