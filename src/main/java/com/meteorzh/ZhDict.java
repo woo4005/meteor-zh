@@ -191,6 +191,16 @@ public final class ZhDict {
         return v != null ? v : fallback;
     }
 
+    /** 只查词典、不走词法兜底——{@code .zh dump} 用它判断「这个词条是否已收录」。 */
+    public static boolean hasModuleTitle(String name) {
+        return MODULE_TITLES.containsKey(name) || SETTING_TITLES.containsKey(name);
+    }
+
+    /** 只查词典、不走词法兜底。 */
+    public static boolean hasSettingTitle(String name) {
+        return SETTING_TITLES.containsKey(name) || MODULE_TITLES.containsKey(name);
+    }
+
     /** @param original the untranslated description, also used as a plain-text key. */
     public static String moduleDesc(String name, String original) {
         String v = MODULE_DESCS.get(name);

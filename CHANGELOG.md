@@ -10,33 +10,58 @@
 
 ## [未发布]
 
-## [1.6.0] - 2026-11-05
+## [1.5.6] - 2026-11-05
 
-从这一版起，26.1 线开新的大版本号 **1.6.x**，一个 jar 同时支持 **Minecraft 26.1 / 26.1.1 / 26.1.2**。
+这一版把原本要单开 1.6.x 的「26.1.1 兼容」并回了 1.5.x 线——因为确认了
+**26.1.1 与 26.1.2 用的是同一个 Meteor 客户端**，没必要为它单开版本号。
 
-### 为什么可以一个 jar 覆盖三个 26.1.x 版本
+### 一个 jar 同时支持 26.1 / 26.1.1 / 26.1.2
 
-- Meteor 官方 26.1 线**只发布了 `26.1.2-42` 一个客户端**，它的 `fabric.mod.json` 声明
-  `minecraft: "~26.1"`，26.1.1 的玩家用的本来就是同一个客户端；
-- 实测对比两个客户端 jar：**class 集合完全相同**（各 10682 个），只有 **8 个类有差异**
-  （`DetectedVersion` / `SharedConstants` / `Checkbox` 及其两个内部类 /
-  `AbstractReportScreen` 及其内部类 / `ServerGamePacketListenerImpl`）；
-- Meteor 的 **211 个 mixin 没有一个**针对这 8 个类，本插件引用的类也逐字节相同。
+Meteor 官方 26.1 线只发布过 `26.1.2-42` 一个客户端（`fabric.mod.json` 写 `minecraft: "~26.1"`）。
+我把两个 MC 客户端 jar 逐字节比过：
 
-因此按 26.1.2 编译的 jar 可以直接放到 26.1.1 上。这一点已固化为可重复的检查：
-`scripts/verify_261_cross.py` 会用 26.1.1 的客户端 jar 重新编译同一份源码，
-断言两边产出的 class **逐字节相同**，并校验 mixin 目标没有落在差异类里。
+- class 集合完全相同（各 10682 个）
+- 只有 **8 个类**有差异：`DetectedVersion`、`SharedConstants`、`Checkbox`（+2 内部类）、
+  `AbstractReportScreen`（+1 内部类）、`ServerGamePacketListenerImpl`
+- Meteor 的 **211 个 mixin 没有一个**碰这 8 个类；插件引用的类也逐字节相同
 
-### 变更
+`scripts/verify_261_cross.py` 把这件事固化成了检查（10 项断言）：用 26.1.1 的客户端 jar
+重新编译同一份源码，断言两套 classpath 产出的 class **逐字节相同**。
 
-- 产物改名：`meteor-zh-1.6.0-mc26.1.x.jar`（`mc26.1.x` 表示 26.1 全系通用）。
-- `scripts/build_261.py` 的实例路径不再写死：自动在实例目录里找客户端 jar 与 version json，
-  支持 `MC_INSTANCE` 环境变量覆盖；`VERSION` 升到 `1.6.0`。
-- 新增 `scripts/verify_261_cross.py`（10 项断言）：跨版本 class 差异、mixin 目标冲突、
-  双 classpath 编译结果一致性、jar 内依赖声明。
-- 1.5.x 线至此收尾，26.1 线后续都在 1.6.x 上发。
+> 26.1.1 实例里如果 Fabric 报缺少 `meteor-client`，那是没装 Meteor 客户端本人——
+> 把 `meteor-client-26.1.2-42.jar` 放进 `mods/` 即可，26.1.1 用的就是它。
+
+### 新增 `.zh dump`：导出模块与设置清单
+
+借鉴 [Nippaku-Zanmu/meteor-translation-addon](https://github.com/Nippaku-Zanmu/meteor-translation-addon)
+的 `JsonDump`。执行后会在游戏目录下写出 `meteor-zh/dump-<版本>-<时间>.json`，包含：
+
+- 每个模块：所属 addon、分类、`name`（翻译用的英文标识符）、当前标题与描述、`inDictionary` 标记
+- 每个设置：所属模块、分组、`name`、当前标题与描述、类型（`BoolSetting` 等）、`inDictionary` 标记
+- 汇总：模块数、设置数、未命中词典的模块数、词典与词表规模
+
+用途很实际：玩家装了什么 addon 我这边看不到，让对方跑一次 `.zh dump` 把文件发过来，
+就能直接看出哪些标识符缺中文，不用再靠猜测补词条。
+`inDictionary` 只查词典、不含词法兜底，所以能真实反映「收录了没有」。
+
+### 顺带
+
+- `scripts/build_261.py` 的产物名回到 `-mc26.1.jar`（不再用 `-mc26.1.x`），
+  兼容范围写在 README 与本页说明里；
+- `REQUIRED_ENTRIES` 补上 `Dumper` / `AboutModule` / `UpdateChecker`，构建时少一条就直接失败。
 
 ---
+
+## [1.4.6] - 2026-11-05
+
+与 1.5.6 对应的 1.21.11 线版本，包含同样的 `.zh dump` 功能。
+
+---
+
+## [1.6.0] 已被撤销
+
+1.6.0 曾短暂发布，随后确认 26.1.1 与 26.1.2 共用同一个 Meteor 客户端，
+没有必要为「26.1.x 兼容」单开大版本号，于是把内容并回 **1.5.6** 并删除该版本。
 
 ## [1.5.5] - 2026-11-04
 

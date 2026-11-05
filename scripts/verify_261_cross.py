@@ -97,7 +97,7 @@ hit = [c for c in changed if c[:-len(".class")] in targets]
 check("Meteor 的 mixin 不触碰这 8 个差异类", not hit, "冲突=%s" % hit)
 
 # 插件自己引用的类
-jar_out = os.path.join(ROOT, "dist", "meteor-zh-%s-mc26.1.x.jar" % b.VERSION)
+jar_out = os.path.join(ROOT, "dist", "meteor-zh-%s-mc26.1.jar" % b.VERSION)
 if not os.path.exists(jar_out):
     raise SystemExit("先跑 build_261.py，找不到 %s" % jar_out)
 

@@ -34,15 +34,15 @@ import github_publish_ip as ghp  # noqa: E402
 ROOT = ghp.ROOT
 REPO = "meteor-zh"
 #: 本次要发的版本线。1.4.3 = 1.21.11 线。
-VERSION = "1.4.5"
+VERSION = "1.4.6"
 #: 另一条线（26.1）的版本号，用来写在 release 正文的下载表里
-VERSION_261 = "1.6.0"
+VERSION_261 = "1.5.6"
 #: 兼容旧名字（正文模板里还在用 {ver1211}）
 VERSION_1211 = VERSION
 BRANCH = "main"
 
-#: 两条构建线的产物（26.1 线带 -mc26.1.x 后缀，一个 jar 覆盖 26.1 / 26.1.1 / 26.1.2）——见同一个仓库的 dist/ 白名单
-JARS_ALL = ["meteor-zh-%s-mc1.21.11.jar" % VERSION_1211, "meteor-zh-%s-mc26.1.x.jar" % VERSION_261]
+#: 两条构建线的产物（一个 jar 覆盖 26.1 / 26.1.1 / 26.1.2）——见同一个仓库的 dist/ 白名单
+JARS_ALL = ["meteor-zh-%s-mc1.21.11.jar" % VERSION_1211, "meteor-zh-%s-mc26.1.jar" % VERSION_261]
 
 #: 本次 release 应附上的 jar：只放属于本版本线的产物。
 #: 1.5.0 是 26.1 线，所以只上传 -mc26.1 那个；1.21.11 的 1.4.0 jar 归 v1.4.0 release。
@@ -248,27 +248,46 @@ def ensure_release(token):
 
     body = """Meteor Client 全界面简体中文汉化 v{ver}
 
-## 本版更新（1.4.5 / 1.6.0）
+## 本版更新（1.4.6 / 1.5.6）
 
-### 26.1 线开新版本号：一个 jar 同时支持 26.1 / 26.1.1 / 26.1.2
+### 新增 `.zh dump`：导出模块与设置清单
 
-Meteor 官方 26.1 线**只发布过一个客户端**（`26.1.2-42`，声明 `minecraft: "~26.1"`），
-所以 26.1.1 的玩家装的本来就是它。我把两个客户端 jar 逐字节比过：
+玩家装了什么 addon，我这边装不到那么全。所以加了这个命令：执行后会在游戏目录写出
+`meteor-zh/dump-<版本>-<时间>.json`，包含**当前所有**模块与设置——包括不在内置词典里的
+那些第三方条目：
 
-- class 集合完全相同（各 10682 个）
-- 只有 **8 个类**有差异：`DetectedVersion`、`SharedConstants`、`Checkbox`（+2 内部类）、
-  `AbstractReportScreen`（+1 内部类）、`ServerGamePacketListenerImpl`
-- Meteor 的 **211 个 mixin 没有一个**碰这 8 个类；插件引用的类也逐字节相同
+```json
+{
+  "addon": "jefff", "category": "Misc", "name": "better-stash-finder",
+  "title": "更好的仓库寻找器", "description": "...",
+  "translated": true, "inDictionary": true
+}
+```
 
-所以按 26.1.2 编译的 jar 可以直接放到 26.1.1 上。这不是「分析上应该行」，而是做成了
-可重复的检查：`scripts/verify_261_cross.py` 会用 26.1.1 的客户端 jar 重新编译同一份源码，
-断言两套 classpath 产出的 class **逐字节相同**，并校验 mixin 目标没落在差异类里（10 项断言）。
+`name` 是查表用的英文标识符，`inDictionary: false` 表示这个词还没收录。
+把这个文件发给我，就能精准补词条，不用再靠猜。
 
-产物因此改名 `meteor-zh-{ver261}-mc26.1.x.jar`（`26.1.x` = 26.1 全系通用）。
-1.5.x 线在 1.5.5 收尾，26.1 线后续都在 1.6.x 上发。
+功能借鉴自 [Nippaku-Zanmu/meteor-translation-addon](https://github.com/Nippaku-Zanmu/meteor-translation-addon)
+的 `JsonDump`。
 
-> 在 26.1.1 实例里如果 Fabric 报缺少 `meteor-client`，那是没装 Meteor 客户端本人——
-> 把 `meteor-client-26.1.2-42.jar` 放进 `mods/` 即可，26.1.1 用的就是它。
+### 26.1 线：一个 jar 同时支持 26.1 / 26.1.1 / 26.1.2
+
+Meteor 官方 26.1 线只发布过 `26.1.2-42` 一个客户端（声明 `minecraft: "~26.1"`），
+26.1.1 玩家装的本来就是它。我把两个客户端 jar 逐字节比过：class 集合完全相同（各 10682 个），
+只有 **8 个类**有差异（`DetectedVersion`、`SharedConstants`、`Checkbox`+2 内部类、
+`AbstractReportScreen`+1 内部类、`ServerGamePacketListenerImpl`），
+而 Meteor 的 **211 个 mixin 没有一个**碰这 8 个类。
+
+`scripts/verify_261_cross.py` 把这条结论做成了检查（10 项断言）：用 26.1.1 的客户端 jar
+重新编译同一份源码，断言两套 classpath 产出的 class **逐字节相同**。
+
+> 26.1.1 实例里如果 Fabric 报缺少 `meteor-client`，那是没装 Meteor 客户端本人——
+> 把 `meteor-client-26.1.2-42.jar` 放进 `mods/` 即可。
+
+### 版本号说明
+
+1.6.0 曾短暂发布，随后确认 26.1.1 与 26.1.2 共用同一个 Meteor 客户端，没必要为「26.1.x 兼容」
+单开大版本号，于是把内容并回 **1.5.6** 并删除了 1.6.0。26.1 线继续按 1.5.x 递增。
 
 ---
 
@@ -362,7 +381,7 @@ Meteor 里多了一个 **汉化** 分类，里面是「关于汉化插件」模�
 
 | 游戏版本 | 下载 | 版本线 | 前置要求 |
 |---|---|---|---|
-| **Minecraft 26.1 / 26.1.1 / 26.1.2** | `meteor-zh-{ver261}-mc26.1.x.jar` | **1.6.x** | Fabric Loader ≥ 0.20.1、Java 25、Meteor Client 26.1.x |
+| **Minecraft 26.1 / 26.1.1 / 26.1.2** | `meteor-zh-{ver261}-mc26.1.jar` | **1.5.x** | Fabric Loader ≥ 0.20.1、Java 25、Meteor Client 26.1.x |
 | **Minecraft 1.21.11** | `meteor-zh-{ver}-mc1.21.11.jar` | **1.4.x** | Fabric Loader ≥ 0.16.0、Java 21、Meteor Client 1.21.11 |
 
 两个 jar 的 mod id 相同，**分别放进对应实例的 `mods/`**，不要放在同一个实例里。

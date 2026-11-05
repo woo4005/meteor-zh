@@ -19,7 +19,7 @@
 用法：
     python scripts/build_261.py
 产物：
-    dist/meteor-zh-<版本>-mc26.1.x.jar（26.1 / 26.1.1 / 26.1.2 通用）
+    dist/meteor-zh-<版本>-mc26.1.jar（同一个 jar 覆盖 26.1 / 26.1.1 / 26.1.2）
 """
 import glob
 import json
@@ -32,7 +32,7 @@ import zipfile
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VERSION = "1.6.0"
+VERSION = "1.5.6"
 MOD_ID = "meteor-zh"
 
 DEFAULT_INSTANCE = r"E:\pcl\.minecraft\versions\zh插件制作版本\versions\26.1.2-Fabric 0.20.1"
@@ -281,7 +281,7 @@ def copy_resources():
 def pack():
     os.makedirs(DIST, exist_ok=True)
     # 1.6.x 线一个 jar 覆盖 26.1 / 26.1.1 / 26.1.2，产物名里的游戏版本写成 26.1.x
-    out = os.path.join(DIST, "meteor-zh-%s-mc26.1.x.jar" % VERSION)
+    out = os.path.join(DIST, "meteor-zh-%s-mc26.1.jar" % VERSION)
     if os.path.exists(out):
         os.remove(out)
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
@@ -308,6 +308,9 @@ REQUIRED_ENTRIES = (
     "com/meteorzh/Translator.class",
     "com/meteorzh/ZhDict.class",
     "com/meteorzh/ChatDict.class",
+    "com/meteorzh/Dumper.class",
+    "com/meteorzh/AboutModule.class",
+    "com/meteorzh/UpdateChecker.class",
     "com/meteorzh/ZhCommand.class",
     "com/meteorzh/WordTranslator.class",
     "com/meteorzh/mixin/GuiRendererMixin.class",

@@ -92,6 +92,18 @@ public class ZhCommand extends Command {
             return SINGLE_SUCCESS;
         }));
 
+        builder.then(literal("dump").executes(context -> {
+            info("正在导出模块与设置清单（包含当前译文）…");
+            java.nio.file.Path out = Dumper.dump();
+            if (out == null) {
+                error("导出失败，详情见日志");
+            } else {
+                info("已导出到：%s", out.toAbsolutePath());
+                info("把这个文件发给作者，就能看出哪些 addon 还缺中文词条。");
+            }
+            return SINGLE_SUCCESS;
+        }));
+
         builder.then(literal("about").executes(context -> {
             info("Meteor 中文汉化 v%s（Minecraft %s）",
                 UpdateChecker.currentVersion(), UpdateChecker.mcVersion());
