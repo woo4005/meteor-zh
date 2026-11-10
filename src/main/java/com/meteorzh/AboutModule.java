@@ -174,7 +174,8 @@ public class AboutModule extends Module {
         };
 
         if (inWorld()) {
-            for (String line : lines) ChatUtils.info(line);
+            // ChatUtils.info 内部会做 String.format，文案里一旦出现 % 就会抛异常 —— 统一走 %s。
+            for (String line : lines) ChatUtils.info("%s", line);
         } else {
             toast("Meteor 中文汉化", lines[0] + " · " + UpdateChecker.statusText());
         }

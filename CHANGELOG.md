@@ -10,6 +10,84 @@
 
 ## [未发布]
 
+## [1.5.8] / [1.4.8] - 2026-11-10
+
+一次「自己给自己做代码评审」的产物。仓库的 [issue #1](https://github.com/woo4005/meteor-zh/issues/1)
+列了 10 条可复现问题，另有一份针对更新器的供应链安全评审。这个版本把两边都处理了。
+
+### 安全 · 更新器的完整性校验（供应链）
+
+1.5.7 及更早的更新器只检查「下载的文件大于 1 KB」就把 jar 覆盖进 `mods/`，没有哈希、没有域名限制、
+没有备份。只要 release 资产被替换（账号被盗、资产被改、可信证书代理），就能在你的客户端执行任意代码，
+且全程无提示。现在：
+
+- **域名白名单**：重定向自己跟（最多 3 跳），每跳都检查主机是 `github.com` /
+  `api.github.com` / `objects.githubusercontent.com` / `release-assets.githubusercontent.com`，
+  或它们的子域名。判断是「等于」或「以 `.github.com` 结尾」，`github.com.evil.example` 会被拒。
+- **大小校验**：下载字节数必须等于 GitHub API 给的 `size`。
+- **sha256 校验**：必须等于 API 给的 `digest`（`sha256:` 前缀会剥掉、大小写不敏感）。
+- **拿不到 `digest` 就不自动替换**：只下载，提示「为安全起见不会自动替换，请到下载页手动安装」。
+- **替换前备份 `.bak`，失败自动回滚**：重试 60 次仍失败就把旧 jar 改名还原，日志写
+  `mods/meteor-zh-update.log`。
+- 批处理里的 `start` 补了空标题参数（`start "" /min "<脚本>"`）——原先 `%TEMP%` 路径含空格时
+  这条命令会把脚本路径当成窗口标题，结果什么都没执行。
+- `SystemToast.add` 改为在渲染线程上执行（原先在更新检查线程直接改 Toast 队列）。
+- 动态文本一律走 `ChatUtils.info("%s", text)`——`ChatUtils.info` 内部会 `String.format`，
+  URL 里的 `%20` 会抛 `UnknownFormatConversionException`。
+
+`SECURITY.md` 整份重写：上一版还写着「无网络通信、不检查更新」，那是 1.4.0 之前的状态。
+
+### 修复
+
+- **左侧分类漏了 `Player`**：`groups` 表补 `Player`→玩家（现在是 130 条），左侧不再出现英文 `Player`。
+- **`Category.name` 不再被反射改写**：删掉 `Translator.translateCategories()`。改名会让
+  `Category.toString()`、`.zh dump` 的 `category` 字段、以及按名字比较分类的 addon 看到中文；
+  分类显示改由渲染层替换（`ui`/`groups` 表）。
+- **词表重建会静默丢词**：`scripts/build_words.py` 原来只写 `W` 字面量（798 条），跑一次就把
+  `words.json` 从 1069 条打成 798 条，唯一的断言是 `len(W) >= 700`。现在改成「外部词 + 现有产物 +
+  W」三源合并、`W` 优先，断言现有产物的键一条不少、总条数 ≥ 1000，并打印各源贡献。
+- **词法回归指标不再虚高**：旧的「部分命中」判据只看字符集合（`len(set(gen) & set(title)) >= 2`），
+  把 `强调色→强调色颜色`、`加速→加速度` 也算命中，于是对外宣称 83.6%。现在改成 Levenshtein
+  编辑距离 ≤ 长度/3 记为 `close`，并明确写「close 不等于译对」。诚实的数字是
+  `exact 30.4% / close 14.7% / miss 55.0%`（对 1825 条已有官方译名做回测）。
+  **这不是功能退化，是把指标改对了**——词法引擎的目标是覆盖新 addon，不是复现已有译名。
+- **`modules` 表不再混入设置名**：外部词典里认不出来的标识符原先同时写进 `modules` 和 `settings`，
+  导致模块表虚高到 395（真实模块 169）。现在只写 `settings`，模块表回到 **193**（169 本体 + addon/官方译文）。
+- **`modsDirectory()` 分支恒真**：改成 `if (Files.isDirectory(mods)) return mods; return null;`，
+  否则 `mods/` 不存在时会返回一个不存在的路径，然后报「下载失败」而不是「定位 mods 目录失败」。
+
+### 构建
+
+- **两条构建路径语义一致**：`fabric.mod.json` 与 `meteor-zh.mixins.json` 里的 `depends`
+  （`minecraft` / `java` / `meteor-client`）与 `compatibilityLevel` 全部改成占位符，由
+  `gradle.properties` 提供取值：Gradle 走 `processResources.expand`，离线脚本走 `expand()`。
+  原先 Gradle 只 expand `${version}`，产物里缺 `java`/`meteor-client`，和发布出去的离线 jar 不是一回事。
+- **版本号单点**：`gradle.properties` 的 `mod_version`（1.21.11 线）/ `mod_version_261`（26.1 线）
+  是唯一来源，脚本里的 `VERSION` 常量改为读它（以前 `build.py` 写着 1.4.3 而 dist 里是 1.4.7）。
+- **`scripts/_jarcheck.py`**：两条线共用的产物自检——必需条目齐全、两个 JSON 可解析、`version` 正确、
+  `depends` 四项齐全且无未展开占位符、`compatibilityLevel` 正确、每个 class 的字节码 major 正确。
+  不通过则构建失败（以前只查条目和 class 版本，`depends` 漂了也不会报）。
+- **`build_261.py` 不再硬编码已删除的目录**：实例不存在时列出可用实例并提示用 `MC_INSTANCE` 指定，
+  而不是甩一句 `FileNotFoundError`。
+- **`verify_261_cross.py` 支持跳过**：26.1.1 / 26.1.2 的实例被删掉时，跨版本对比会 SKIP 并继续跑
+  「依赖声明」那部分，而不是直接失败。
+
+### 验证
+
+新增 `scripts/verify_update_integrity.py` + `scripts/jvm-test/TestUpdateIntegrity.java`，21 项断言：
+sha256 与 FIPS 180 标准向量一致（`"abc"` / `""`）、`digest` 解析（去前缀/转小写/缺字段）、
+域名白名单（含 `github.com.evil.example`、`notgithub.com` 这类后缀欺骗）、资产版本表达式匹配
+（`.x` / 区间 / 精确）。
+
+离线验证总览（全部 exit 0）：
+`verify_dict` 15 项、`verify_lexical` 9 项、`verify_chat` 9 项、`verify_261` 22 项、
+`verify_261_cross` 4～10 项（取决于本机是否有 26.1.1/26.1.2 实例）、`verify_update_integrity` 21 项。
+
+### 产物
+
+- 26.1 线：`meteor-zh-1.5.8-mc26.1.x.jar`（148851 B，Java 25 / major 69）
+- 1.21.11 线：`meteor-zh-1.4.8-mc1.21.11.jar`（149668 B，Java 21 / major 65）
+
 ## [1.5.7] - 2026-11-05
 
 修掉一个让 26.1.1 / 26.1.2 玩家误以为「没有新版」的 bug，并把资产名改成带版本区间。

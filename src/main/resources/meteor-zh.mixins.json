@@ -2,7 +2,7 @@
   "required": false,
   "minVersion": "0.8",
   "package": "com.meteorzh.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "${compatibility_level}",
   "client": [
     "ChatUtilsMixin",
     "GuiRendererMixin"

@@ -4,7 +4,7 @@
 [![Build](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml/badge.svg)](https://github.com/woo4005/meteor-zh/actions/workflows/build.yml)
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.1%20%7C%201.21.11-62b47a.svg)](#兼容性)
 [![Fabric](https://img.shields.io/badge/Fabric-0.20.1%20%7C%200.19.3-dbb69b.svg)](#兼容性)
-[![Version](https://img.shields.io/badge/26.1--%E7%BA%BF-1.5.7-a855f7.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/26.1--%E7%BA%BF-1.5.8-a855f7.svg)](CHANGELOG.md)
 [![Version](https://img.shields.io/badge/1.21.11--%E7%BA%BF-1.4.x-a855f7.svg)](CHANGELOG.md)
 
 **Meteor-ZH** 是一个 Meteor Client 附属模组（addon），把 Meteor 的整套界面翻成简体中文：模块名、功能描述、设置项名称与说明、设置分组、**按键名（Bind）**、HUD 元素、顶部标签页，以及 GUI 里写死在代码中的按钮与提示文字。
@@ -65,14 +65,13 @@ Meteor-ZH 把这些都补上了。
 
 | 位置 | 覆盖方式 | 词条数 |
 |---|---|---|
-| 模块名 + 模块描述 | 反射改写 `Module.title` / `Module.description` | 395 模块（另按英文原句匹配 1357 条说明） |
-| 设置项名称 + 说明 | 反射改写 `Setting.title` / `Setting.description` | 1444 条（说明同样走原句匹配） |
-| 设置分组标题 | 反射改写 `SettingGroup.name` 的**显示值** | 129 条 |
-| GUI 硬编码文字 | Mixin 拦截 `GuiRenderer#text` 做字符串替换 | 295 条 |
+| 模块名 + 模块描述 | 反射改写 `Module.title` / `Module.description` | **193** 个模块名（其中 Meteor 本体 169）+ 1357 条说明 |
+| 设置项名称 + 说明 | 反射改写 `Setting.title` / `Setting.description` | **1464** 条（说明同样走原句匹配） |
+| 设置分组标题 | 渲染层按 `groups` 表替换（`SettingGroup.name` 参与反序列化，**故意不改**） | **130** 条 |
+| GUI 硬编码文字 | Mixin 拦截 `GuiRenderer#text` 做字符串替换 | **296** 条 |
 | 按键名（Bind） | 同渲染层替换，`Left Shift`→`左Shift`、`None`→`无` | 66 条 |
 | 顶部标签页 | 反射改写 `Tab.name` | 7 条 |
-| HUD 元素名与分组 | 反射改写 `HudElementInfo.title/description`、`HudGroup.title` | — |
-| 第三方插件的模块与描述 | 词典 + 词法兜底引擎 | 134 名称 + 63 描述句 |
+| HUD 元素名与分组 | 反射改写 `HudElementInfo.title/description`；`HudGroup` 是 record 改不了，走渲染层 | — |
 | Jefff / Lotus 官方译文 | 直接采用插件作者维护的官方汉化文件 | 18 模块 + 142 设置 + 138 说明 |
 | 模块/设置说明文字 | `descriptions` 表按英文原句精确匹配 | 1357 条 |
 | 聊天栏消息正文 | `ChatUtils.formatMsg` 模板反查（`chat.json`） | 156 条模板 |
@@ -136,7 +135,7 @@ Meteor-ZH 把这些都补上了。
 从 **1.5.6** 起，26.1 线一个 jar 同时支持这三个版本，不需要按小版本分别下载。
 
 更新器判断「哪个资产适配我」的方式是读资产名里 `-mc` 到 `.jar` 之间那段：`26.1` 表示整条 26.1.x 线，
-`26.1.x` 表示整条 26.1.x 线（也支持 `26.1~26.1.2` 这种区间写法），所以 26.1 线一个 jar 就能让三个小版本都识别到更新（1.5.7 起）。
+`26.1.x` 表示整条 26.1.x 线（也支持 `26.1~26.1.2` 这种区间写法），所以 26.1 线一个 jar 就能让三个小版本都识别到更新（1.5.8 起）。
 
 原因是 Meteor 官方 26.1 线只发布了 `26.1.2-42` 一个客户端（声明 `minecraft: "~26.1"`），
 26.1.1 玩家用的就是同一个客户端。我对比过两个客户端 jar：
@@ -157,8 +156,8 @@ Meteor-ZH 把这些都补上了。
 
 | meteor-zh | Minecraft | Fabric Loader | Meteor Client | Java | 状态 |
 |---|---|---|---|---|---|
-| **1.5.7** | **26.1 / 26.1.1 / 26.1.2** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 26.1.x 全系通用 |
-| **1.4.7** | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，build 82 及以上） | 21 | 1.21.11 专用线，继续维护 |
+| **1.5.8** | **26.1 / 26.1.1 / 26.1.2** | ≥ 0.20.1 | **26.1.2**（`26.1.2-SNAPSHOT` build 42） | **25** | 26.1.x 全系通用 |
+| **1.4.8** | 1.21.11 | ≥ 0.16.0 | 1.21.11（`1.21.11-SNAPSHOT`，build 82 及以上） | 21 | 1.21.11 专用线，继续维护 |
 | 1.3.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被 1.4.x 替代 |
 | ≤ 1.2.x | 1.21.11 | ≥ 0.16.0 | 1.21.11 | 21 | 已被替代 |
 
@@ -166,11 +165,11 @@ Meteor-ZH 把这些都补上了。
 
 | 游戏版本 | 下载的 jar | 版本线 | 构建脚本 |
 |---|---|---|---|
-| Minecraft **26.1 / 26.1.1 / 26.1.2** | `meteor-zh-1.5.7-mc26.1.x.jar` | 1.5.x | `scripts/build_261.py` |
-| Minecraft **1.21.11** | `meteor-zh-1.4.7-mc1.21.11.jar` | 1.4.x | `scripts/build.py` |
+| Minecraft **26.1 / 26.1.1 / 26.1.2** | `meteor-zh-1.5.8-mc26.1.x.jar` | 1.5.x | `scripts/build_261.py` |
+| Minecraft **1.21.11** | `meteor-zh-1.4.8-mc1.21.11.jar` | 1.4.x | `scripts/build.py` |
 
-两条线的源码共用（同一份 `src/`），但**版本号各走各的**：1.21.11 线的后续更新发 1.4.7、1.4.8……，
-26.1 线的更新发 1.5.7、1.5.8……，互不牵连。词典是两条线共享的资源，会同时扩充到两个 jar 中。
+两条线的源码共用（同一份 `src/`），但**版本号各走各的**：1.21.11 线的后续更新发 1.4.8、1.4.9……，
+26.1 线的更新发 1.5.8、1.5.9……，互不牵连。词典是两条线共享的资源，会同时扩充到两个 jar 中。
 
 两个 jar 分别放进各自实例的 `mods` 目录即可；同一个实例里**不要同时放两个**（mod id 相同，Fabric 会报重复）。
 
@@ -214,8 +213,8 @@ Meteor-ZH 把这些都补上了。
 ## 安装
 
 1. 从 [Releases](https://github.com/woo4005/meteor-zh/releases) 下载对应你游戏版本的 jar：
-    - **Minecraft 26.1 / 26.1.1 / 26.1.2** → `meteor-zh-1.5.7-mc26.1.x.jar`
-    - **Minecraft 1.21.11** → `meteor-zh-1.4.7-mc1.21.11.jar`
+    - **Minecraft 26.1 / 26.1.1 / 26.1.2** → `meteor-zh-1.5.8-mc26.1.x.jar`
+    - **Minecraft 1.21.11** → `meteor-zh-1.4.8-mc1.21.11.jar`
 2. 放进 `mods/` 目录
    - 官方启动器：`.minecraft/mods/`
    - **PCL 版本隔离**：`<PCL目录>/.minecraft/versions/<版本名>/mods/`
@@ -256,8 +255,16 @@ Greek、Cyrillic 和 ∞，**换成任何一款中文字体也不会多出中日
 
 删掉 jar 即完全恢复英文。
 
-本插件**不写入任何配置**——不改 `modules.nbt`、`config.nbt`、键位、HUD 布局，也不在游戏目录落盘任何文件。
-所以卸载后你原有的设置全部保持原样。
+本插件**不修改 Meteor 的模块配置**——不动 `modules.nbt`、键位、HUD 布局，所以卸载后你原有的设置全部保持原样。
+
+它确实会有几处写操作，主动列在这里，别让「不写配置」这句话盖过去：
+
+| 写什么 | 什么时候 | 怎么撤销 |
+|---|---|---|
+| Meteor 的 `config.nbt` 里 `customFont=false` | 每次启动（不关掉就显示不出中文） | 在 Meteor 的「设置 → Visual」里把「自定义字体」打开 |
+| `meteor-zh/dump-*.json` | 你手动执行 `.zh dump` | 删掉即可 |
+| `mods/<新版本名>.download`、`mods/meteor-zh-update.log` | 勾选「自动下载更新」并成功下载 | 删掉即可 |
+| `%TEMP%\meteor-zh-update-*.bat` | 同上（退出游戏后执行一次，跑完自删） | 不用管 |
 
 ---
 
@@ -366,8 +373,8 @@ min-height-log          ->  最小高度记录
 | 启动期字段改写 | **0.43 ms / 2200 次** | 反射 `Field.set`，约 197 ns/次 |
 | 运行期 GUI 文本查表 | 命中 **3.3 ns**，未命中 **19.4 ns** | 2000 万次 `HashMap.get` |
 | 词法合成（仅词典未命中时） | **≈ 2 µs / 标识符** | 含正则拆词 + 逐词查表 + 拼接 |
-| jar 体积 | 63 KB | — |
-| 运行期线程 | 0 个新增 | 只用主线程首次 tick 一次 |
+| jar 体积 | 约 145 KB | — |
+| 运行期线程 | 翻译路径 **0 个新增**；更新检查会短暂起一个后台线程（每次启动最多一次） | 翻译只用主线程首次 tick |
 
 **怎么读这些数字：**
 
@@ -418,8 +425,9 @@ python scripts/verify_lexical.py
    `General` 的**标题**显示为「通用」，但存储里仍是 `General`。
 2. **按键名与 GUI 文字在渲染层替换**，配置文件里存的还是英文键名。这不影响使用，
    但你在 `.nbt` 里看到的仍是英文。
-3. **`Category`（左侧一级分类）不翻译。** 分类名不在配置里，但 Meteor 的分类列表是硬编码枚举，
-   改名收益低、风险高（部分 addon 会按名字查找分类）。
+3. **左侧分类（`Category`）的显示名走渲染层，`Category.name` 字段本身保持英文。** 分类名不在配置里，
+   但 `Category.toString()`、`.zh dump` 的 `category` 字段、以及按名字比较分类的 addon 都会看到这个字段，
+   所以只在画到屏幕上时替换（`Player`→玩家、`Combat`→战斗……）。
 4. **少数第三方设置的缩写含义不明确**（`enable-rp`、`min-dur`、`dt-max`），采用保守译法，
    宁可留可疑译法也不用长句猜测。
 5. **词法合成是逐词拼合**，个别专有名词（`Pitch40`、`Xaero`、`Baritone`）会保留英文，
@@ -438,8 +446,15 @@ python scripts/verify_lexical.py
     想再试一次就点「关于汉化插件」里的「立即检查更新」（手动检查不受这个限制）。
 14. **静默下载的替换发生在退出游戏之后**：更新器把新 jar 下载成 `.download`，退出时启动一个批处理
     等游戏进程释放文件后再改名，所以「下载完成」不等于「已经生效」，要重启一次游戏。
-15. **更新器按文件名里的 `-mc<你的游戏版本>.jar` 选资产**，两条线互不干扰：26.1 的客户端只认
-    `-mc26.1.jar`，1.21.11 的只认 `-mc1.21.11.jar`；因此两条线的 release 必须都带对应后缀的产物。
+15. **更新器按资产名里的版本表达式选资产**，两条线互不干扰。支持的写法：
+    精确（`-mc1.21.11.jar`）、前缀（`-mc26.1.jar` 覆盖 26.1 / 26.1.1 / 26.1.2）、
+    `.x` 简写（`-mc26.1.x.jar` 等价于前缀）、区间（`-mc26.1~26.1.2.jar`）。
+    发布时两条线必须各带对应后缀的产物，否则对应那条线检查不到更新。
+16. **模块搜索只认中文标题，英文原名搜不到了。** 反射把 `Module.title` 改成了中文，
+    Meteor 的搜索与排序都基于这个字段，所以搜 `killaura` 找不到「杀戮光环」。
+    有人建议把英文原名塞进 `Module.aliases`——但 `aliases` 是 `final String[]`，
+    且 Meteor 只在「设置里打开模块别名」时才读它（默认关），做了等于改用户行为，
+    所以暂不做。想搜英文可以先在设置里打开别名，或按分类翻。
 
 ---
 

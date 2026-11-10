@@ -267,6 +267,25 @@ def _conflicting_keys():
     return {}
 
 
+EXTERNAL_WORDS = os.path.join(ROOT, "dict", "zh_external_words.json")
+WORDS_OUT = os.path.join(ROOT, "src", "main", "resources", "assets", "meteorzh", "lang", "words.json")
+
+# 词表条目数的下限。当前是 1069（W 798 + 外部词 274，去重后 1069）。
+# 这个数只增不减：第三方 addon 的词法兜底全靠它，悄悄变少等于悄悄降低覆盖率。
+MIN_WORDS = 1000
+
+
+def _read_json_dict(path):
+    if not os.path.exists(path):
+        return {}
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
 def build_words():
     if len(W) < 700:
         raise SystemExit("W 字面量只有 %d 条（少于 700），词表八成被误删了" % len(W))
@@ -277,12 +296,35 @@ def build_words():
                            for k, vs in sorted(conflicts.items()))
         raise SystemExit("W 字面量里有同键不同值（后写的会静默覆盖前写的）: " + detail)
 
-    out = os.path.join(ROOT, "src", "main", "resources", "assets", "meteorzh", "lang", "words.json")
+    # 单一事实来源：产物 = 现有产物 ∪ 外部词表 ∪ W 字面量。
+    # 以前只写 W，于是「跑一次 build_words.py」会把 merge_external.py 并进来的
+    # 200 多个外部词元静默抹掉（issue #1 的 P1-1：1069 -> 798）。
+    baseline = _read_json_dict(WORDS_OUT)
+    external = _read_json_dict(EXTERNAL_WORDS)
+
+    merged = {}
+    merged.update(external)   # 外部项目的译名，优先级最低
+    merged.update(baseline)   # 现有产物（可能包含历史上手工补的词）
+    merged.update(W)          # W 是人工维护的词根，永远最高优先级
+
+    lost = sorted(set(baseline) - set(merged))
+    if lost:
+        raise SystemExit("词表重建会丢掉 %d 个已有词元（前 10 个：%s）"
+                         % (len(lost), ", ".join(lost[:10])))
+
+    if len(merged) < MIN_WORDS:
+        raise SystemExit("词表只有 %d 条（下限 %d），第三方 addon 的兜底会明显退化"
+                         % (len(merged), MIN_WORDS))
+
+    out = WORDS_OUT
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, "w", encoding="utf-8", newline="\n") as f:
-        json.dump(dict(sorted(W.items())), f, ensure_ascii=False, indent=1)
+        json.dump(dict(sorted(merged.items())), f, ensure_ascii=False, indent=1)
         f.write("\n")
-    print(f"words: {len(W)} entries -> {out}")
+
+    only_w = len([k for k in W if k not in baseline and k not in external])
+    print("words: %d entries (W %d + external %d + baseline %d; W 新增 %d) -> %s"
+          % (len(merged), len(W), len(external), len(baseline), only_w, out))
     return out
 
 def tokenize(name):
@@ -329,11 +371,29 @@ def join_cn(parts):
 
 SKIP = {"to", "in", "of", "for", "and", "or", "the", "a", "an", "on", "at", "by", "with", "from", "is", "are", "as"}
 
+
+def _edit_distance(a, b):
+    """Levenshtein 距离。字符串都很短（<40 字符），直接 O(n*m) DP 够用。"""
+    if a == b:
+        return 0
+    if not a:
+        return len(b)
+    if not b:
+        return len(a)
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i]
+        for j, cb in enumerate(b, 1):
+            cur.append(min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (ca != cb)))
+        prev = cur
+    return prev[-1]
+
+
 def regress():
     path = os.path.join(ROOT, "src", "main", "resources", "assets", "meteorzh", "lang", "zh.json")
     with open(path, encoding="utf-8") as f:
         d = json.load(f)
-    total = hit = partial = miss = 0
+    total = hit = close = miss = 0
     samples = []
     for section in ("modules", "settings"):
         for name, v in d.get(section, {}).items():
@@ -345,20 +405,30 @@ def regress():
             if gen is None:
                 miss += 1
                 continue
-            # 命中判定：生成的串与官方译名有 >=2 个共同字符（中文）
-            common = len(set(gen) & set(title) - set("的了为与和"))
             if gen == title:
                 hit += 1
-            elif common >= 2:
-                partial += 1
+                continue
+            # 旧判据是「共同字符 >= 2」，只看字符集合、不看顺序与数量，
+            # 于是「强调色 -> 强调色颜色」「加速 -> 加速度」这类也算命中，虚高。
+            # 现在用编辑距离：整体结构接近才算 close，且明确它不等于「译对」。
+            if _edit_distance(gen, title) <= max(1, len(title) // 3):
+                close += 1
                 if len(samples) < 12:
                     samples.append((name, title, gen))
             else:
                 miss += 1
-    print(f"\nregress: total={total} exact={hit} partial={partial} miss={miss}")
-    print(f"  exact+partial = {(hit+partial)*100.0/total:.1f}%")
+    if total == 0:
+        print("\nregress: 词典为空，跳过")
+        return
+    print("\nregress（用已有官方译名回测词法兜底，total=%d）" % total)
+    print("  exact = %d (%.1f%%)  与官方译名完全一致" % (hit, hit * 100.0 / total))
+    print("  close = %d (%.1f%%)  编辑距离 <= 长度的 1/3，结构接近但用词不同"
+          % (close, close * 100.0 / total))
+    print("  miss  = %d (%.1f%%)  词表里缺词，输出保留英文" % (miss, miss * 100.0 / total))
+    print("  说明：这是对「已经有官方中文」的条目的回测，词法引擎的目标其实是覆盖词典里")
+    print("        没有的新 addon，所以 exact 偏低是正常的；close 不等于译对，仅供对比。")
     for s in samples:
-        print(f"  {s[0]:32s} off={s[1]:<14s} lex={s[2]}")
+        print("  %-32s off=%s  lex=%s" % (s[0], s[1], s[2]))
 
 if __name__ == "__main__":
     build_words()

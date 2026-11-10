@@ -41,8 +41,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -80,6 +82,24 @@ public final class UpdateChecker {
 
     private static final int CONNECT_TIMEOUT_MS = 8000;
     private static final int READ_TIMEOUT_MS = 15000;
+
+    /** 下载资产时最多跟随几次跳转（正常只有一次：github.com → release-assets…）。 */
+    private static final int MAX_REDIRECTS = 3;
+
+    /**
+     * 下载只允许落在这些域名（含子域）。GitHub 的 release 下载会 302 到
+     * {@code release-assets.githubusercontent.com}，除此之外不该出现别的跳转目标。
+     */
+    private static final List<String> ALLOWED_DOWNLOAD_HOSTS = List.of(
+        "github.com",
+        "api.github.com",
+        "objects.githubusercontent.com",
+        "release-assets.githubusercontent.com",
+        "github-releases.githubusercontent.com"
+    );
+
+    /** 替换脚本最多重试多少次（每次约 1 秒）；超过就放弃并把旧 jar 恢复回去。 */
+    private static final int INSTALL_RETRIES = 60;
 
     /** 「每次启动只自动检查一次」的闸门。手动检查不走这个。 */
     private static final AtomicBoolean AUTO_TRIED = new AtomicBoolean(false);
@@ -318,6 +338,7 @@ public final class UpdateChecker {
             String assetName = null;
             String assetUrl = null;
             long assetSize = 0;
+            String assetDigest = null;
 
             for (JsonElement assetElement : assets) {
                 if (!assetElement.isJsonObject()) continue;
@@ -327,13 +348,15 @@ public final class UpdateChecker {
                 assetName = name;
                 assetUrl = str(asset, "browser_download_url");
                 assetSize = number(asset, "size");
+                assetDigest = sha256Of(asset);
                 break;
             }
 
             if (assetUrl == null || assetUrl.isEmpty()) continue;
 
             String htmlUrl = str(release, "html_url");
-            candidates.add(new Release(version, htmlUrl == null ? RELEASES_PAGE : htmlUrl, assetName, assetUrl, assetSize));
+            candidates.add(new Release(version, htmlUrl == null ? RELEASES_PAGE : htmlUrl,
+                assetName, assetUrl, assetSize, assetDigest));
         }
 
         candidates.sort((a, b) -> compare(b.version, a.version));
@@ -397,50 +420,56 @@ public final class UpdateChecker {
                 return;
             }
 
+            // 完整性校验必须有依据。GitHub 的 asset.digest 由服务端计算、改 payload 改不了它，
+            // 所以「下载内容 == digest」就足以排除投毒/截断/错误页。拿不到 digest 时只下载、不替换：
+            // 宁可让玩家手动点两下，也不把来路不明的 jar 静默塞进 mods。
+            boolean verifiable = release.assetDigest != null && !release.assetDigest.isEmpty();
+
             Path target = mods.resolve(release.assetName);
             Path temp = mods.resolve(release.assetName + ".download");
             Files.deleteIfExists(temp);
 
             status = "发现 " + release.version + "，正在后台下载…";
-            MeteorZh.LOG.info("Meteor-zh: downloading {}", release.assetUrl);
+            MeteorZh.LOG.info("Meteor-zh: downloading {} ({} bytes, digest={})",
+                release.assetUrl, release.assetSize, release.assetDigest);
 
-            HttpURLConnection connection = (HttpURLConnection) URI.create(release.assetUrl).toURL().openConnection();
-            try {
-                connection.setConnectTimeout(CONNECT_TIMEOUT_MS);
-                connection.setReadTimeout(60000);
-                connection.setRequestProperty("Accept", "application/octet-stream");
-                connection.setRequestProperty("User-Agent", "meteor-zh/" + currentVersion());
-                connection.setInstanceFollowRedirects(true);
+            long written = fetchToFile(release.assetUrl, temp);
 
-                int code = connection.getResponseCode();
-                if (code != 200) throw new IOException("下载失败 HTTP " + code);
-
-                try (InputStream in = connection.getInputStream();
-                     OutputStream out = Files.newOutputStream(temp)) {
-                    byte[] buffer = new byte[16 * 1024];
-                    int read;
-                    while ((read = in.read(buffer)) > 0) {
-                        out.write(buffer, 0, read);
-                    }
-                }
-            } finally {
-                connection.disconnect();
+            if (release.assetSize > 0 && written != release.assetSize) {
+                Files.deleteIfExists(temp);
+                throw new IOException("下载大小不符（期望 " + release.assetSize + " 字节，实际 " + written + " 字节）");
             }
-
-            if (Files.size(temp) < 1024) {
+            if (written < 1024) {
                 Files.deleteIfExists(temp);
                 throw new IOException("下载内容过小，可能是错误页");
+            }
+            if (verifiable) {
+                String actual = sha256Hex(temp);
+                if (!actual.equalsIgnoreCase(release.assetDigest)) {
+                    Files.deleteIfExists(temp);
+                    throw new IOException("完整性校验失败（sha256 与发布方提供的不一致）");
+                }
+                MeteorZh.LOG.info("Meteor-zh: sha256 verified {}", actual);
             }
 
             downloaded = true;
             downloadedPath = temp;
             downloadError = null;
 
+            if (!verifiable) {
+                String message = "更新已下载（v" + release.version + "），但发布方未提供校验值，"
+                    + "为安全起见不会自动替换，请到下载页手动安装";
+                status = message;
+                MeteorZh.LOG.warn("Meteor-zh: asset has no digest, auto-install disabled");
+                notifyLater(message, "Meteor 汉化 · 请手动安装");
+                return;
+            }
+
             // 老的 jar（正在被 JVM 使用的那一个），退出后要删掉，否则两个同 id 的模组会打架。
             Path oldJar = currentJar();
             registerInstaller(temp, target, oldJar);
 
-            String message = "更新已下载完成（v" + release.version + "），关闭游戏后会自动替换并生效";
+            String message = "更新已下载完成（v" + release.version + "，已校验），关闭游戏后会自动替换并生效";
             status = message;
             notifyLater(message, "Meteor 汉化 · 更新就绪");
         } catch (Throwable t) {
@@ -453,36 +482,171 @@ public final class UpdateChecker {
     }
 
     /**
-     * 注册退出钩子：游戏正常关闭后，由一个独立 cmd 进程完成「替换 + 删旧 + 自删」。
+     * 把 {@code url} 的内容写到 {@code dest}，返回写入的字节数。
+     *
+     * <p>刻意关掉 {@code HttpURLConnection} 的自动重定向：release 资产的下载地址会 302 到
+     * {@code release-assets.githubusercontent.com}，只有逐跳自己跟，才能校验每一跳都还在 GitHub
+     * 名下 —— 自动跟随等于把任意跳转都当可信来源。
+     */
+    private static long fetchToFile(String url, Path dest) throws IOException {
+        String current = url;
+        for (int hop = 0; hop <= MAX_REDIRECTS; hop++) {
+            URI uri = URI.create(current);
+            requireAllowedHost(uri);
+
+            HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
+            try {
+                connection.setConnectTimeout(CONNECT_TIMEOUT_MS);
+                connection.setReadTimeout(60000);
+                connection.setInstanceFollowRedirects(false);
+                connection.setRequestProperty("Accept", "application/octet-stream");
+                connection.setRequestProperty("User-Agent", "meteor-zh/" + currentVersion());
+
+                int code = connection.getResponseCode();
+                if (code == 301 || code == 302 || code == 303 || code == 307 || code == 308) {
+                    String location = connection.getHeaderField("Location");
+                    if (location == null || location.isEmpty()) {
+                        throw new IOException("重定向缺少 Location");
+                    }
+                    current = location;
+                    continue;
+                }
+                if (code != 200) throw new IOException("下载失败 HTTP " + code);
+                return copyTo(connection.getInputStream(), dest);
+            } finally {
+                connection.disconnect();
+            }
+        }
+        throw new IOException("重定向次数过多（超过 " + MAX_REDIRECTS + " 跳）");
+    }
+
+    /** 下载目标域名是否在 GitHub 白名单内（public 以便离线断言）。 */
+    public static boolean isAllowedDownloadHost(String host) {
+        if (host == null || host.isEmpty()) return false;
+        String lower = host.toLowerCase(Locale.ROOT);
+        for (String allowed : ALLOWED_DOWNLOAD_HOSTS) {
+            // 精确匹配或子域名匹配。"github.com.evil.example" 不会命中 "github.com"，
+            // 因为它既不 equals 也不以 ".github.com" 结尾。
+            if (lower.equals(allowed) || lower.endsWith("." + allowed)) return true;
+        }
+        return false;
+    }
+
+    private static void requireAllowedHost(URI uri) throws IOException {
+        String host = uri.getHost();
+        if (host == null || host.isEmpty()) throw new IOException("下载地址没有主机名");
+        if (isAllowedDownloadHost(host)) return;
+        throw new IOException("拒绝从非 GitHub 域名下载：" + host);
+    }
+
+    private static long copyTo(InputStream in, Path dest) throws IOException {
+        try (InputStream source = in; OutputStream out = Files.newOutputStream(dest)) {
+            byte[] buffer = new byte[16 * 1024];
+            long total = 0;
+            int read;
+            while ((read = source.read(buffer)) > 0) {
+                out.write(buffer, 0, read);
+                total += read;
+            }
+            return total;
+        }
+    }
+
+    /** 计算文件的 sha256 小写十六进制串（供下载校验与离线测试使用）。 */
+    public static String sha256Hex(Path file) throws IOException {
+        MessageDigest digest;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (Exception e) {
+            throw new IOException("当前 JVM 不支持 SHA-256", e);
+        }
+        try (InputStream in = Files.newInputStream(file)) {
+            byte[] buffer = new byte[64 * 1024];
+            int read;
+            while ((read = in.read(buffer)) > 0) digest.update(buffer, 0, read);
+        }
+        byte[] bytes = digest.digest();
+        StringBuilder sb = new StringBuilder(bytes.length * 2);
+        for (byte b : bytes) {
+            sb.append(Character.forDigit((b >> 4) & 0xF, 16));
+            sb.append(Character.forDigit(b & 0xF, 16));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 取 GitHub asset 的 {@code digest} 里的 sha256 段（原始形如 {@code sha256:abc…}）。
+     * 老版本 GitHub Enterprise / 旧 API 可能没有这个字段，返回 null 表示「无法校验」。
+     */
+    public static String sha256Of(JsonObject asset) {
+        String raw = str(asset, "digest");
+        if (raw == null || raw.isEmpty()) return null;
+        int colon = raw.indexOf(':');
+        String value = (colon >= 0 ? raw.substring(colon + 1) : raw).trim().toLowerCase(Locale.ROOT);
+        return value.isEmpty() ? null : value;
+    }
+
+    /**
+     * 注册退出钩子：游戏正常关闭后，由一个独立 cmd 进程完成「备份旧 jar → 换上新的 → 清理」。
      *
      * <p>用脚本而不是 Java 直接操作，是因为正在运行的 jar 在 Windows 上被 JVM 独占，
-     * 只有主进程彻底退出、句柄释放后才能动。脚本会循环重试到成功为止。
+     * 只有主进程彻底退出、句柄释放后才能动。
+     *
+     * <p>三个安全阀：旧 jar 先改名为 {@code .bak}（替换失败时玩家还能改回去）、重试上限
+     * {@link #INSTALL_RETRIES} 次（文件被锁死时不要留一个永远转圈的黑窗口）、全过程写日志到
+     * {@code mods/meteor-zh-update.log}（出问题时能查）。
      */
     private static void registerInstaller(Path temp, Path target, Path oldJar) {
         try {
             Path script = Files.createTempFile("meteor-zh-update-", ".bat");
+            Path log = target.getParent().resolve("meteor-zh-update.log");
+            boolean hasOld = oldJar != null && !oldJar.equals(target);
+            Path backup = hasOld ? oldJar.resolveSibling(oldJar.getFileName() + ".bak") : null;
 
             StringBuilder sb = new StringBuilder();
             sb.append("@echo off\r\n");
             sb.append("chcp 65001 >nul\r\n");
-            sb.append("setlocal\r\n");
+            // 延迟展开：:retry 里要读「刚刚自增过的」计数器，%N% 会在整块解析时就定死。
+            sb.append("setlocal enabledelayedexpansion\r\n");
+            sb.append("set \"LOG=").append(log).append("\"\r\n");
+            sb.append("set /a N=0\r\n");
+            sb.append("echo [!DATE! !TIME!] installer start >> \"!LOG!\"\r\n");
+            if (hasOld) {
+                // 先备份：替换失败时玩家的旧插件还在（只需把 .bak 改回 .jar）。
+                sb.append("move /y \"").append(oldJar).append("\" \"").append(backup)
+                    .append("\" >> \"!LOG!\" 2>&1\r\n");
+            }
             sb.append(":retry\r\n");
-            sb.append("move /y \"").append(temp).append("\" \"").append(target).append("\" >nul 2>&1\r\n");
+            sb.append("set /a N+=1\r\n");
+            sb.append("move /y \"").append(temp).append("\" \"").append(target)
+                .append("\" >> \"!LOG!\" 2>&1\r\n");
             sb.append("if errorlevel 1 (\r\n");
+            sb.append("  if !N! GEQ ").append(INSTALL_RETRIES).append(" (\r\n");
+            sb.append("    echo [!DATE! !TIME!] give up after !N! tries >> \"!LOG!\"\r\n");
+            if (hasOld) {
+                sb.append("    move /y \"").append(backup).append("\" \"").append(oldJar)
+                    .append("\" >> \"!LOG!\" 2>&1\r\n");
+            }
+            sb.append("    goto done\r\n");
+            sb.append("  )\r\n");
             sb.append("  ping -n 2 127.0.0.1 >nul\r\n");
             sb.append("  goto retry\r\n");
             sb.append(")\r\n");
-            if (oldJar != null && !oldJar.equals(target)) {
-                sb.append("del /q \"").append(oldJar).append("\" >nul 2>&1\r\n");
+            sb.append("echo [!DATE! !TIME!] installed >> \"!LOG!\"\r\n");
+            if (hasOld) {
+                sb.append("del /q \"").append(backup).append("\" >> \"!LOG!\" 2>&1\r\n");
             }
+            sb.append(":done\r\n");
             sb.append("(goto) 2>nul & del \"%~f0\"\r\n");
 
             Files.write(script, sb.toString().getBytes(StandardCharsets.UTF_8));
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
-                    // start /min 让脚本脱离本进程的生命周期
-                    new ProcessBuilder("cmd", "/c", "start", "/min", script.toString())
+                    // start 会把第一个带引号的参数当窗口标题，所以必须显式传一个空标题 ""：
+                    // 否则脚本路径含空格（C:\Users\John Doe\AppData\...）时，cmd 只会开一个空窗口、
+                    // 脚本一行都不执行，玩家看到「更新就绪」但重启后什么都没变。
+                    new ProcessBuilder("cmd", "/c", "start", "", "/min", script.toString())
                         .redirectOutput(ProcessBuilder.Redirect.DISCARD)
                         .redirectError(ProcessBuilder.Redirect.DISCARD)
                         .start();
@@ -527,8 +691,8 @@ public final class UpdateChecker {
             Path gameDir = FabricLoader.getInstance().getGameDir();
             Path mods = gameDir.resolve("mods");
             if (Files.isDirectory(mods)) return mods;
-            // 少数整合包把 mods 放在版本隔离目录里，游戏目录本身就是那一层，所以这里再直接试一次。
-            return Files.isDirectory(gameDir) ? mods : null;
+            // gameDir 存在不代表 mods 存在（有些启动器把 mods 放在别处），这里必须单独判。
+            return null;
         } catch (Throwable t) {
             return null;
         }
@@ -540,6 +704,10 @@ public final class UpdateChecker {
 
     /**
      * 发现新版本时的提示。玩家在世界里 → 聊天栏；在主菜单 → 右下角弹窗。
+     *
+     * <p>注意：{@code ChatUtils.info} 内部会对文案做 {@code String.format}，所以动态文本
+     * 一律走 {@code info("%s", text)}；直接拼接会让 URL 里的 {@code %20}、{@code %2F}
+     * 触发 {@code UnknownFormatConversionException}，提示只发出去一半。
      */
     private static void announce(Release release) {
         String title = "Meteor 汉化 有新版本";
@@ -547,8 +715,8 @@ public final class UpdateChecker {
         String url = release.htmlUrl;
 
         if (inWorld()) {
-            ChatUtils.info(title + "：" + detail);
-            ChatUtils.info("下载地址：" + url);
+            ChatUtils.info("%s：%s", title, detail);
+            ChatUtils.info("下载地址：%s", url);
             ChatUtils.info("也可以在「关于汉化插件」里点「立即检查更新」或「打开下载页面」");
         } else {
             toast(title, detail + " · " + url);
@@ -559,7 +727,7 @@ public final class UpdateChecker {
     static void notifyLater(String message, String title) {
         try {
             if (inWorld()) {
-                ChatUtils.info(message);
+                ChatUtils.info("%s", message);
             } else {
                 toast(title, message);
             }
@@ -572,10 +740,18 @@ public final class UpdateChecker {
         try {
             Minecraft mc = Minecraft.getInstance();
             if (mc == null) return;
-            SystemToast.add(mc.getToastManager(), TOAST_ID,
-                Component.literal(title), Component.literal(subtitle));
+            // ToastManager 的队列是渲染线程的容器；本方法常在更新检查线程里被调用，
+            // 必须回主线程，否则就是跨线程改共享状态。
+            mc.execute(() -> {
+                try {
+                    SystemToast.add(mc.getToastManager(), TOAST_ID,
+                        Component.literal(title), Component.literal(subtitle));
+                } catch (Throwable t) {
+                    MeteorZh.LOG.warn("Meteor-zh: failed to show toast", t);
+                }
+            });
         } catch (Throwable t) {
-            MeteorZh.LOG.warn("Meteor-zh: failed to show toast", t);
+            MeteorZh.LOG.warn("Meteor-zh: failed to queue toast", t);
         }
     }
 
@@ -663,15 +839,19 @@ public final class UpdateChecker {
         final String htmlUrl;
         final String assetName;
         final String assetUrl;
-        @SuppressWarnings("unused")
+        /** 资产字节数，0 表示 API 没给。 */
         final long assetSize;
+        /** 资产的 sha256（小写十六进制），null 表示 API 没给 —— 那就不能自动替换。 */
+        final String assetDigest;
 
-        Release(String version, String htmlUrl, String assetName, String assetUrl, long assetSize) {
+        Release(String version, String htmlUrl, String assetName, String assetUrl,
+                long assetSize, String assetDigest) {
             this.version = version;
             this.htmlUrl = htmlUrl;
             this.assetName = assetName;
             this.assetUrl = assetUrl;
             this.assetSize = assetSize;
+            this.assetDigest = assetDigest;
         }
     }
 

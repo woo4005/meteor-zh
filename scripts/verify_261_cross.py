@@ -25,9 +25,19 @@ sys.path.insert(0, os.path.join(ROOT, "scripts"))
 
 import build_261 as b  # noqa: E402
 
-BASE = r"E:\pcl\.minecraft\versions\zh插件制作版本\versions"
+BASE = os.environ.get("MC_261_BASE") or r"E:\pcl\.minecraft\versions"
 MC11 = os.path.join(BASE, "26.1.1-Fabric 0.20.1", "26.1.1-Fabric 0.20.1.jar")
 MC12 = os.path.join(BASE, "26.1.2-Fabric 0.20.1", "26.1.2-Fabric 0.20.1.jar")
+
+# 两个实例是可选的：把它们删掉的人只想保留一个 26.1 —— 这时跳过跨版本对比，
+# 但「依赖声明」部分仍然要跑（那部分不依赖实例）。
+if not (os.path.exists(MC11) and os.path.exists(MC12)):
+    print("SKIP 跨版本对比：找不到 26.1.1 / 26.1.2 的客户端 jar")
+    print("     期望位置：%s\n                %s" % (MC11, MC12))
+    print("     可用环境变量 MC_261_BASE 指定 .minecraft\\versions 目录")
+    SKIP_CROSS = True
+else:
+    SKIP_CROSS = False
 
 total = 0
 fail = 0
@@ -74,85 +84,82 @@ def utf8_constants(data):
     return out
 
 
-print("== 1. 两个客户端 jar 的差异 ==")
-h11, h12 = class_hashes(MC11), class_hashes(MC12)
-check("class 集合相同", set(h11) == set(h12),
-      "only11=%d only12=%d" % (len(set(h11) - set(h12)), len(set(h12) - set(h11))))
-changed = sorted(n for n in set(h11) & set(h12) if h11[n] != h12[n])
-print("     差异类 %d 个：%s" % (len(changed), ", ".join(os.path.basename(c).replace(".class", "") for c in changed)))
-
-# Meteor 的 mixin 目标
-targets = set()
-with zipfile.ZipFile(b.METEOR_JAR) as z:
-    for name in z.namelist():
-        if not name.endswith(".class") or "$" in name:
-            continue
-        data = z.read(name)
-        if b"Lorg/spongepowered/asm/mixin/Mixin;" not in data:
-            continue
-        for c in utf8_constants(data):
-            if "/" in c and c.replace(".", "/").endswith("Mixin") is False and c.count("/") >= 2:
-                targets.add(c.replace(".", "/"))
-hit = [c for c in changed if c[:-len(".class")] in targets]
-check("Meteor 的 mixin 不触碰这 8 个差异类", not hit, "冲突=%s" % hit)
-
-# 插件自己引用的类
 jar_out = os.path.join(ROOT, "dist", "meteor-zh-%s-mc26.1.x.jar" % b.VERSION)
 if not os.path.exists(jar_out):
     raise SystemExit("先跑 build_261.py，找不到 %s" % jar_out)
 
-print("\n== 2. 用 26.1.1 的客户端重新编译同一份源码 ==")
-if not os.path.exists(MC11):
-    raise SystemExit("找不到 26.1.1 客户端：%s" % MC11)
+if not SKIP_CROSS:
+    print("== 1. 两个客户端 jar 的差异 ==")
+    h11, h12 = class_hashes(MC11), class_hashes(MC12)
+    check("class 集合相同", set(h11) == set(h12),
+          "only11=%d only12=%d" % (len(set(h11) - set(h12)), len(set(h12) - set(h11))))
+    changed = sorted(n for n in set(h11) & set(h12) if h11[n] != h12[n])
+    print("     差异类 %d 个：%s" % (len(changed), ", ".join(os.path.basename(c).replace(".class", "") for c in changed)))
 
-cp12 = b.classpath()
-cp11 = cp12.replace(b.MC_JAR, MC11)
-check("classpath 里确实换成了 26.1.1 的 jar", MC11 in cp11 and MC12 not in cp11)
+    # Meteor 的 mixin 目标
+    targets = set()
+    with zipfile.ZipFile(b.METEOR_JAR) as z:
+        for name in z.namelist():
+            if not name.endswith(".class") or "$" in name:
+                continue
+            data = z.read(name)
+            if b"Lorg/spongepowered/asm/mixin/Mixin;" not in data:
+                continue
+            for c in utf8_constants(data):
+                if "/" in c and c.replace(".", "/").endswith("Mixin") is False and c.count("/") >= 2:
+                    targets.add(c.replace(".", "/"))
+    hit = [c for c in changed if c[:-len(".class")] in targets]
+    check("Meteor 的 mixin 不触碰这 8 个差异类", not hit, "冲突=%s" % hit)
 
-sources = []
-for base, _dirs, files in os.walk(os.path.join(ROOT, "src", "main", "java")):
-    for f in files:
-        if f.endswith(".java"):
-            # 用相对路径：本机用户名里带单引号（wang'xiao'ya），javac 的 argfile 会把 ' 当引号吃掉
-            sources.append(os.path.relpath(os.path.join(base, f), ROOT).replace(os.sep, "/"))
+    print("\n== 2. 用 26.1.1 的客户端重新编译同一份源码 ==")
+    cp12 = b.classpath()
+    cp11 = cp12.replace(b.MC_JAR, MC11)
+    check("classpath 里确实换成了 26.1.1 的 jar", MC11 in cp11 and MC12 not in cp11)
 
-tmpdir = os.path.join(ROOT, "build-261", "cross-classes")
-if os.path.isdir(tmpdir):
-    import shutil
-    shutil.rmtree(tmpdir, ignore_errors=True)
-os.makedirs(tmpdir, exist_ok=True)
-args = ["-encoding", "UTF-8", "--release", "25", "-nowarn",
-        "-d", os.path.relpath(tmpdir, ROOT).replace(os.sep, "/")] + sources
-argfile = os.path.join(ROOT, "build-261", "cross-args.txt")
-io.open(argfile, "w", encoding="utf-8").write("\n".join(args))
-env = dict(os.environ)
-env["CLASSPATH"] = cp11
-r = subprocess.run([b.JAVAC, "@" + argfile], env=env, cwd=ROOT,
-                   capture_output=True, text=True, encoding="utf-8", errors="replace")
-check("在 26.1.1 的 classpath 下编译通过", r.returncode == 0,
-      (r.stdout or "")[-400:] + (r.stderr or "")[-400:])
-
-if r.returncode == 0:
-    h_a = {}
-    for base, _dirs, files in os.walk(tmpdir):
+    sources = []
+    for base, _dirs, files in os.walk(os.path.join(ROOT, "src", "main", "java")):
         for f in files:
-            if f.endswith(".class"):
-                p = os.path.join(base, f)
-                rel = os.path.relpath(p, tmpdir).replace(os.sep, "/")
-                h_a[rel] = hashlib.sha256(open(p, "rb").read()).hexdigest()
-    # build-261/classes 是目录，逐文件算 hash
-    h_b = {}
-    for base, _dirs, files in os.walk(os.path.join(ROOT, "build-261", "classes")):
-        for f in files:
-            if f.endswith(".class"):
-                p = os.path.join(base, f)
-                rel = os.path.relpath(p, os.path.join(ROOT, "build-261", "classes")).replace(os.sep, "/")
-                h_b[rel] = hashlib.sha256(open(p, "rb").read()).hexdigest()
-    diff = sorted(n for n in set(h_a) & set(h_b) if h_a[n] != h_b[n])
-    check("26.1.1 与 26.1.2 两套 classpath 编译结果逐字节相同", not diff,
-          "不同=%s" % diff[:6])
-    check("两套编译产出的 class 数量一致", len(h_a) == len(h_b) and len(h_a) > 0,
-          "%d vs %d" % (len(h_a), len(h_b)))
+            if f.endswith(".java"):
+                # 用相对路径：本机用户名里带单引号（wang'xiao'ya），javac 的 argfile 会把 ' 当引号吃掉
+                sources.append(os.path.relpath(os.path.join(base, f), ROOT).replace(os.sep, "/"))
+
+    tmpdir = os.path.join(ROOT, "build-261", "cross-classes")
+    if os.path.isdir(tmpdir):
+        import shutil
+        shutil.rmtree(tmpdir, ignore_errors=True)
+    os.makedirs(tmpdir, exist_ok=True)
+    args = ["-encoding", "UTF-8", "--release", "25", "-nowarn",
+            "-d", os.path.relpath(tmpdir, ROOT).replace(os.sep, "/")] + sources
+    argfile = os.path.join(ROOT, "build-261", "cross-args.txt")
+    io.open(argfile, "w", encoding="utf-8").write("\n".join(args))
+    env = dict(os.environ)
+    env["CLASSPATH"] = cp11
+    r = subprocess.run([b.JAVAC, "@" + argfile], env=env, cwd=ROOT,
+                       capture_output=True, text=True, encoding="utf-8", errors="replace")
+    check("在 26.1.1 的 classpath 下编译通过", r.returncode == 0,
+          (r.stdout or "")[-400:] + (r.stderr or "")[-400:])
+
+    if r.returncode == 0:
+        h_a = {}
+        for base, _dirs, files in os.walk(tmpdir):
+            for f in files:
+                if f.endswith(".class"):
+                    p = os.path.join(base, f)
+                    rel = os.path.relpath(p, tmpdir).replace(os.sep, "/")
+                    h_a[rel] = hashlib.sha256(open(p, "rb").read()).hexdigest()
+        # build-261/classes 是目录，逐文件算 hash
+        h_b = {}
+        for base, _dirs, files in os.walk(os.path.join(ROOT, "build-261", "classes")):
+            for f in files:
+                if f.endswith(".class"):
+                    p = os.path.join(base, f)
+                    rel = os.path.relpath(p, os.path.join(ROOT, "build-261", "classes")).replace(os.sep, "/")
+                    h_b[rel] = hashlib.sha256(open(p, "rb").read()).hexdigest()
+        diff = sorted(n for n in set(h_a) & set(h_b) if h_a[n] != h_b[n])
+        check("26.1.1 与 26.1.2 两套 classpath 编译结果逐字节相同", not diff,
+              "不同=%s" % diff[:6])
+        check("两套编译产出的 class 数量一致", len(h_a) == len(h_b) and len(h_a) > 0,
+              "%d vs %d" % (len(h_a), len(h_b)))
 
 print("\n== 3. jar 里的依赖声明 ==")
 with zipfile.ZipFile(jar_out) as z:

@@ -10,6 +10,10 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
+# 同目录的 _jarcheck（产物自检，两条构建线共用）
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _jarcheck import validate  # noqa: E402
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MIKU = os.path.abspath(os.path.join(ROOT, "..", "miku-villager-mover"))
 BO = os.path.join(MIKU, "build-offline")
@@ -21,9 +25,69 @@ BUILD = os.path.join(ROOT, "build")
 CLASSES = os.path.join(BUILD, "classes")
 DIST = os.path.join(ROOT, "dist")
 MOD_ID = "meteor-zh"
-VERSION = "1.4.3"
-# 两条线共用一份源码，靠文件名区分：1.21.11 线 -mc1.21.11.jar，26.1 线 -mc26.1.jar。
+
+
+def _read_props():
+    """读 ``gradle.properties`` —— 两条线版本号与依赖表达式的单一事实来源。
+
+    以前 ``VERSION`` 在这里和 ``build_261.py`` 各写一份，发版时两处必须手动对齐，
+    出现过「dist 里是 1.4.7、脚本里写 1.4.3」的情况。现在两边都从这里读。
+    """
+    path = os.path.join(ROOT, "gradle.properties")
+    props = {}
+    if os.path.exists(path):
+        with io.open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, value = line.split("=", 1)
+                props[key.strip()] = value.strip()
+    return props
+
+
+PROPS = _read_props()
+
+# 1.21.11 线的版本号。26.1 线用 mod_version_261，见 build_261.py。
+VERSION = PROPS.get("mod_version") or "0.0.0"
+# 两条线共用一份源码，靠文件名区分：1.21.11 线 -mc1.21.11.jar，26.1 线 -mc26.1.x.jar。
 MC_VERSION = "1.21.11"
+
+# fabric.mod.json 与 meteor-zh.mixins.json 里的 depends / compatibilityLevel 都只写占位符，
+# 两条构建路径各自展开（Gradle 走 processResources.expand，这里走 expand()）。
+DEPS = {
+    "version": VERSION,
+    "minecraft_dep": "~" + MC_VERSION,
+    "java_dep": ">=" + (PROPS.get("java_level") or "21"),
+    # 注意 ">=1.21.11-0" 而不是 ">=1.21.11"：Fabric 的 semver 把 meteor-client 的
+    # "1.21.11-86" 当成 1.21.11 的预发布版，预发布版 < 正式版，于是 ">=1.21.11"
+    # 反而不满足，启动时报 HARD_DEP_NO_CANDIDATE。加 -0 后正好落在区间内。
+    "meteor_client_dep": ">=" + MC_VERSION + "-0",
+    # MC 1.21.11 的 class 是 major 65（Java 21），Mixin 按 JAVA_21 解析。
+    "compatibility_level": "JAVA_21",
+}
+
+# 产物里必须存在的东西（少一条说明资源复制或编译某步静默失败了）。
+REQUIRED_ENTRIES = (
+    "fabric.mod.json",
+    "meteor-zh.mixins.json",
+    "assets/meteorzh/lang/zh.json",
+    "assets/meteorzh/lang/chat.json",
+    "assets/meteorzh/lang/words.json",
+    "assets/meteorzh/icon.png",
+    "com/meteorzh/MeteorZh.class",
+    "com/meteorzh/FontFixer.class",
+    "com/meteorzh/Translator.class",
+    "com/meteorzh/ZhDict.class",
+    "com/meteorzh/ChatDict.class",
+    "com/meteorzh/Dumper.class",
+    "com/meteorzh/AboutModule.class",
+    "com/meteorzh/UpdateChecker.class",
+    "com/meteorzh/ZhCommand.class",
+    "com/meteorzh/WordTranslator.class",
+    "com/meteorzh/mixin/GuiRendererMixin.class",
+    "com/meteorzh/mixin/ChatUtilsMixin.class",
+)
 
 
 def read_classpath():
@@ -123,13 +187,22 @@ def compile_java():
     print("compiled %d sources" % len(files))
 
 
-def copy_resources():
-    """Copy resources into the class output dir.
+def expand(text):
+    """把资源里的 ${placeholder} 展开成实际值。
 
-    ``fabric.mod.json`` declares ``"version": "${version}"`` so that the Gradle build can
-    expand it through processResources. This offline build has no Gradle, so substitute the
-    same placeholder here — the two build paths then produce identical metadata.
+    源文件只写占位符，Gradle 与离线脚本各自展开 —— 两条构建路径因此产出同一份语义。
+    以前是「匹配到某个精确字面量再 replace」，源文件一改格式（重排、加空格）替换就
+    静默失效，而产物校验又只看 JSON 能否解析，于是 Gradle 产物缺 java/meteor-client
+    依赖也一直没人发现。
     """
+    out = text
+    for key, value in DEPS.items():
+        out = out.replace("${%s}" % key, value)
+    return out
+
+
+def copy_resources():
+    """Copy resources into the class output dir, expanding placeholders."""
     res = os.path.join(ROOT, "src", "main", "resources")
     for base, _, files in os.walk(res):
         for name in files:
@@ -137,24 +210,13 @@ def copy_resources():
             rel = os.path.relpath(src, res)
             dst = os.path.join(CLASSES, rel)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
-            if name == "fabric.mod.json":
+            if name.endswith(".json"):
                 with io.open(src, "r", encoding="utf-8") as f:
-                    text = f.read().replace("${version}", VERSION)
-                # 补上 java / meteor-client 依赖：缺了不会崩（Meteor 不在时 addon 入口
-                # 不会被实例化），但装错环境时 Fabric 会给出一条清楚的报错。
-                extra = []
-                if '"java"' not in text:
-                    extra.append('"java": ">=21"')
-                if '"meteor-client"' not in text:
-                    # 注意是 ">=1.21.11-0" 而不是 ">=1.21.11"：Fabric 的 semver 把
-                    # meteor-client 的 "1.21.11-86" 当成 1.21.11 的预发布版，按规则
-                    # 预发布版 < 正式版，于是 ">=1.21.11" 反而不满足，启动时报
-                    # HARD_DEP_NO_CANDIDATE。加 -0 后 "1.21.11-86" 正好落在区间内。
-                    extra.append('"meteor-client": ">=1.21.11-0"')
-                if extra:
-                    text = text.replace(
-                        '"minecraft": "~1.21.11"',
-                        '"minecraft": "~1.21.11",\n    ' + ",\n    ".join(extra))
+                    text = expand(f.read())
+                left = text.find("${")
+                if left >= 0:
+                    raise SystemExit("资源里还有未展开的占位符：%s -> %s"
+                                     % (rel, text[left:left + 40]))
                 with io.open(dst, "w", encoding="utf-8", newline="\n") as f:
                     f.write(text)
             else:
@@ -215,6 +277,11 @@ def main():
     final = os.path.join(DIST, "%s-%s-mc%s.jar" % (MOD_ID, VERSION, MC_VERSION))
     shutil.copy2(inter_jar, final)
     print("output: %s (%d bytes)" % (final, os.path.getsize(final)))
+
+    # 产物自检（与 26.1 线共用 scripts/_jarcheck.py）。MC 1.21.11 的 class 是 major 65。
+    validate(final, version=VERSION, minecraft_dep=DEPS["minecraft_dep"],
+             compatibility_level=DEPS["compatibility_level"], expect_major=65,
+             required_entries=REQUIRED_ENTRIES)
 
 
 if __name__ == "__main__":

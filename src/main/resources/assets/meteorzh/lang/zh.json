@@ -20,27 +20,6 @@
    "title": "装饰物透视",
    "desc": "高亮显示地图画和旗帜"
   },
-  "acceleration": {
-   "title": "加速"
-  },
-  "acceleration-start": {
-   "title": "加速开始"
-  },
-  "acceleration-step": {
-   "title": "加速步长"
-  },
-  "accent-color": {
-   "title": "强调色"
-  },
-  "add-waypoints": {
-   "title": "添加路径点"
-  },
-  "add-y": {
-   "title": "添加 Y 坐标"
-  },
-  "aim-above": {
-   "title": "瞄准上方"
-  },
   "air-jump": {
    "title": "空中跳跃",
    "desc": "让你在空中跳跃."
@@ -48,9 +27,6 @@
   "air-place": {
    "title": "空中放置",
    "desc": "在你的准星指向的地方放置一个方块."
-  },
-  "alignment": {
-   "title": "对齐方式"
   },
   "ambience": {
    "title": "氛围",
@@ -79,9 +55,6 @@
    "title": "反床",
    "desc": "放置绳索来防止在你身上放置床."
   },
-  "anti-crash": {
-   "title": "防崩溃"
-  },
   "anti-hunger": {
    "title": "反饥饿",
    "desc": "减少（不是移除）饥饿消耗."
@@ -94,21 +67,9 @@
    "title": "防虚空",
    "desc": "尝试防止你掉入虚空."
   },
-  "arrival-range": {
-   "title": "抵达范围"
-  },
-  "arrive-distance": {
-   "title": "抵达距离"
-  },
-  "arrive-height": {
-   "title": "抵达高度"
-  },
   "arrow-dodge": {
    "title": "箭矢躲避",
    "desc": "尝试躲避朝你飞来的箭矢."
-  },
-  "ascii-only": {
-   "title": "仅限ASCII"
   },
   "attribute-swap": {
    "title": "快切",
@@ -149,9 +110,6 @@
   "auto-exp-plus": {
    "title": "自动修复+",
    "desc": "在PVP中自动修复你的盔甲和工具。"
-  },
-  "auto-firework": {
-   "title": "自动烟花"
   },
   "auto-fish": {
    "title": "自动钓鱼",
@@ -241,21 +199,6 @@
    "title": "自动蜘蛛网",
    "desc": "自动在其他玩家身上放置蜘蛛网."
   },
-  "background": {
-   "title": "背景"
-  },
-  "beam-color": {
-   "title": "光束颜色"
-  },
-  "beam-max-y": {
-   "title": "光束最大 Y"
-  },
-  "beam-min-y": {
-   "title": "光束最小 Y"
-  },
-  "beam-width": {
-   "title": "光束宽度"
-  },
   "bed-aura": {
    "title": "床光环",
    "desc": "在下界和末地自动放置和引爆床."
@@ -284,9 +227,6 @@
    "title": "闪现",
    "desc": "允许你在暂停运动更新的同时基本上进行传送（其实就是停止向服务器发送移动数据包）."
   },
-  "block-break-particles": {
-   "title": "方块破坏粒子"
-  },
   "block-esp": {
    "title": "方块透视",
    "desc": "可以让你隔着墙看到特定的方块"
@@ -307,9 +247,6 @@
    "title": "书籍机器人",
    "desc": "自动在书中写字."
   },
-  "border": {
-   "title": "边距"
-  },
   "boss-stack": {
    "title": "更好的boss条",
    "desc": "堆叠boss条,使你的HUD更清爽."
@@ -321,9 +258,6 @@
   "bow-spam": {
    "title": "弓箭连射",
    "desc": "连射箭矢."
-  },
-  "box-name": {
-   "title": "方框名称"
   },
   "breadcrumbs": {
    "title": "足迹",
@@ -337,15 +271,6 @@
    "title": "破坏进度条",
    "desc": "渲染一个方块被破坏的进度."
   },
-  "break-line-color": {
-   "title": "破坏线颜色"
-  },
-  "break-mode": {
-   "title": "破坏模式"
-  },
-  "break-side-color": {
-   "title": "破坏侧颜色"
-  },
   "build-height": {
    "title": "建筑高度",
    "desc": "允许你在建筑限制处与物体互动."
@@ -358,24 +283,9 @@
    "title": "相机微调",
    "desc": "允许修改第三人称相机."
   },
-  "category-icons": {
-   "title": "类别图标"
-  },
-  "center-x": {
-   "title": "中心 X"
-  },
-  "center-z": {
-   "title": "中心 Z"
-  },
   "chams": {
    "title": "变色渲染",
    "desc": "调整实体的渲染."
-  },
-  "chat-feedback": {
-   "title": "聊天反馈"
-  },
-  "checkbox-color": {
-   "title": "复选框的颜色"
   },
   "chest-index": {
    "title": "箱子索引",
@@ -385,18 +295,9 @@
    "title": "胸甲切换",
    "desc": "自动在胸甲和鞘翅之间切换."
   },
-  "city-color": {
-   "title": "城市颜色"
-  },
   "city-esp": {
    "title": "挖脚-ESP",
    "desc": "显示可以被破坏另一个玩家脚底的方块."
-  },
-  "clear-cache": {
-   "title": "清除缓存"
-  },
-  "clear-waypoints": {
-   "title": "清除路径点"
   },
   "click-tp": {
    "title": "点击传送",
@@ -406,15 +307,6 @@
    "title": "碰撞",
    "desc": "给某些方块/区域添加碰撞箱."
   },
-  "condition": {
-   "title": "条件"
-  },
-  "corridor-width-w": {
-   "title": "走廊宽度 W"
-  },
-  "count-color": {
-   "title": "计数颜色"
-  },
   "criticals": {
    "title": "刀爆",
    "desc": "当你击中目标时执行暴击攻击."
@@ -422,27 +314,6 @@
   "crystal-aura": {
    "title": "水晶光环",
    "desc": "自动放置和攻击水晶."
-  },
-  "custom-font": {
-   "title": "自定义字体"
-  },
-  "custom-path": {
-   "title": "自定义路径"
-  },
-  "custom-scale": {
-   "title": "自定义缩放"
-  },
-  "custom-window-title": {
-   "title": "自定义窗口标题"
-  },
-  "delete-chat-feedback": {
-   "title": "删除聊天反馈"
-  },
-  "descend-height": {
-   "title": "下降高度"
-  },
-  "descend-radius": {
-   "title": "下降半径"
   },
   "discord-notifs": {
    "title": "Discord通知",
@@ -452,21 +323,6 @@
    "title": "discord状态显示",
    "desc": "在Discord上显示Meteor作为你的状态."
   },
-  "dive-angle": {
-   "title": "俯冲角度"
-  },
-  "dive-target-speed": {
-   "title": "俯冲目标速度"
-  },
-  "dive-transition-speed": {
-   "title": "俯冲转换速度"
-  },
-  "do-crash": {
-   "title": "崩溃"
-  },
-  "done-early": {
-   "title": "提前结束"
-  },
   "echest-farmer": {
    "title": "末影箱农场",
    "desc": "放置和破坏末影箱来挖掘黑曜石."
@@ -475,30 +331,9 @@
    "title": "鞘翅助推",
    "desc": "增强你的鞘翅,就像你使用了烟花一样."
   },
-  "elytra-finder": {
-   "title": "鞘翅搜寻器"
-  },
   "elytra-fly": {
    "title": "鞘翅飞行",
    "desc": "让你对鞘翅有更多的控制."
-  },
-  "elytra-infinite-flight": {
-   "title": "鞘翅无限飞行"
-  },
-  "enable-fd": {
-   "title": "启用食物"
-  },
-  "enable-fw": {
-   "title": "启用烟花"
-  },
-  "enable-rp": {
-   "title": "启用修复"
-  },
-  "enable-tt": {
-   "title": "启用图腾"
-  },
-  "end-color": {
-   "title": "结束破坏方块的颜色"
   },
   "enderman-look": {
    "title": "末影人观察",
@@ -538,34 +373,13 @@
    "title": "快速使用",
    "desc": "允许你以非常高的速度使用物品."
   },
-  "favorite-color": {
-   "title": "选中收藏按钮的颜色"
-  },
-  "fd-supply": {
-   "title": "食物补给"
-  },
-  "find-brewing-stand": {
-   "title": "搜寻酿造台"
-  },
-  "firework-interval": {
-   "title": "烟花间隔"
-  },
   "flamethrower": {
    "title": "火焰喷射器",
    "desc": "点燃每一只活着的食物."
   },
-  "flat-color": {
-   "title": "平摊颜色"
-  },
   "flight": {
    "title": "飞行",
    "desc": "飞吧！建议与此模块一起使用无坠落."
-  },
-  "font": {
-   "title": "字体"
-  },
-  "frame-color": {
-   "title": "展示框颜色"
   },
   "free-look": {
    "title": "自由视角",
@@ -575,15 +389,9 @@
    "title": "自由视角",
    "desc": "让摄像机从玩家分离."
   },
-  "friend-color": {
-   "title": "朋友颜色"
-  },
   "fullbright": {
    "title": "全亮",
    "desc": "照亮你的世界！"
-  },
-  "fw-supply": {
-   "title": "烟花补给"
   },
   "ghost-hand": {
    "title": "幽灵手",
@@ -605,12 +413,6 @@
    "title": "手部视图",
    "desc": "改变你手中物品的渲染方式."
   },
-  "hidden-modules": {
-   "title": "隐藏模块"
-  },
-  "hide-in-menus": {
-   "title": "在菜单隐藏"
-  },
   "high-jump": {
    "title": "高跳",
    "desc": "让你比正常跳得更高."
@@ -627,9 +429,6 @@
    "title": "碰撞箱",
    "desc": "拓展实体碰撞箱的大小."
   },
-  "hold-ticks": {
-   "title": "保持tick数"
-  },
   "hole-esp": {
    "title": "洞穴ESP",
    "desc": "显示你会受到更少伤害的洞穴."
@@ -637,21 +436,6 @@
   "hole-filler": {
    "title": "填洞高手",
    "desc": "用指定的方块填充洞."
-  },
-  "hovered-background-color": {
-   "title": "鼠标悬浮背景颜色"
-  },
-  "hovered-outline-color": {
-   "title": "悬浮外框颜色"
-  },
-  "hovered-scrollbar-color": {
-   "title": "悬停滚动条颜色"
-  },
-  "hovered-slider-handle-color": {
-   "title": "悬停滑块手柄颜色"
-  },
-  "include-empty": {
-   "title": "包含空槽位"
   },
   "infinity-miner": {
    "title": "无限矿工"
@@ -663,9 +447,6 @@
   "inventory-tweaks": {
    "title": "物品栏调整",
    "desc": "各种与物品栏相关的实用工具."
-  },
-  "item-frame-search": {
-   "title": "物品展示框搜寻"
   },
   "item-highlight": {
    "title": "物品高亮",
@@ -683,12 +464,6 @@
    "title": "杀戮光环",
    "desc": "攻击你周围的指定实体."
   },
-  "ladder-finder": {
-   "title": "梯子搜寻器"
-  },
-  "lead-step-multiplier": {
-   "title": "引导步长倍数"
-  },
   "light-overlay": {
    "title": "光照覆盖",
    "desc": "显示怪物可以生成的方块."
@@ -701,18 +476,6 @@
    "title": "液体交互",
    "desc": "允许你与液体交互."
   },
-  "lock-end": {
-   "title": "锁定终点"
-  },
-  "lock-pitch": {
-   "title": "锁定俯仰角"
-  },
-  "lock-start": {
-   "title": "锁定起点"
-  },
-  "logged-in-text-color": {
-   "title": "登录账户名称的颜色"
-  },
   "logout-spots": {
    "title": "登出点",
    "desc": "在其他玩家登出的位置显示标记框。"
@@ -721,18 +484,9 @@
    "title": "远跳",
    "desc": "让你跳得比正常更远."
   },
-  "lookahead-l": {
-   "title": "前瞻长度 L"
-  },
   "marker": {
    "title": "标记",
    "desc": "渲染形状.适用于大规模的项目"
-  },
-  "max-advance-steps": {
-   "title": "最大前进步数"
-  },
-  "max-yaw-rate-deg-per-tick": {
-   "title": "每tick最大偏航速率"
   },
   "message-aura": {
    "title": "消息灵光",
@@ -741,48 +495,6 @@
   "middle-click-extra": {
    "title": "中键额外动作",
    "desc": "当你中键点击时,执行各种动作."
-  },
-  "middle-click-open": {
-   "title": "中键点击打开"
-  },
-  "min-dur": {
-   "title": "最低耐久度"
-  },
-  "min-fd": {
-   "title": "最少食物"
-  },
-  "min-fw": {
-   "title": "最少烟花"
-  },
-  "min-height-log": {
-   "title": "最低高度记录"
-  },
-  "min-length": {
-   "title": "最小长度"
-  },
-  "min-totem": {
-   "title": "最少图腾"
-  },
-  "min-y": {
-   "title": "最小 Y"
-  },
-  "minus-color": {
-   "title": "减号按钮的颜色"
-  },
-  "module-alignment": {
-   "title": "模块对齐"
-  },
-  "module-background-color": {
-   "title": "模块背景色"
-  },
-  "module-info": {
-   "title": "模块信息"
-  },
-  "module-info-color": {
-   "title": "模块信息颜色"
-  },
-  "module-search-count": {
-   "title": "模块搜索数量"
   },
   "mount-bypass": {
    "title": "坐骑绕过",
@@ -799,9 +511,6 @@
   "nametags": {
    "title": "姓名标签",
    "desc": "在玩家上方显示可定制的名称标签."
-  },
-  "nearest-samples": {
-   "title": "最近采样数"
   },
   "no-fall": {
    "title": "无摔伤",
@@ -863,12 +572,6 @@
    "title": "旧区块通知",
    "desc": "检测到旧区块时发送网络钩子消息，并可选择@提醒你。"
   },
-  "outline-color": {
-   "title": "外边框颜色"
-  },
-  "outlines": {
-   "title": "外轮廓线"
-  },
   "packet-canceller": {
    "title": "数据包取消器",
    "desc": "让你可以取消某些数据包."
@@ -885,27 +588,6 @@
    "title": "跑酷",
    "desc": "在方块的边缘自动跳跃."
   },
-  "pitch40-rotate-speed": {
-   "title": "pitch40-旋转速度"
-  },
-  "place-line-color": {
-   "title": "放置线颜色"
-  },
-  "place-mode": {
-   "title": "放置模式"
-  },
-  "place-side-color": {
-   "title": "放置侧颜色"
-  },
-  "placeholder-color": {
-   "title": "占位符文本的颜色"
-  },
-  "placement-positions": {
-   "title": "放置位置"
-  },
-  "plus-color": {
-   "title": "加号按钮的颜色"
-  },
   "pop-chams": {
    "title": "图腾幽灵",
    "desc": "在玩家爆图腾的地方渲染幽灵."
@@ -918,79 +600,13 @@
    "title": "药水冻结",
    "desc": "当你站着不动时停止药水效果的计时."
   },
-  "pressed-background-color": {
-   "title": "按下时的背景颜色"
-  },
-  "pressed-outline-color": {
-   "title": "按下外框颜色"
-  },
-  "pressed-scrollbar-color": {
-   "title": "按下滚动条颜色"
-  },
-  "pressed-slider-handle-color": {
-   "title": "按下滑块手柄颜色"
-  },
-  "prune-by-latency": {
-   "title": "按延迟清理"
-  },
-  "prune-dead": {
-   "title": "清理死亡代理"
-  },
-  "prune-to-count": {
-   "title": "清理至数量"
-  },
-  "pull-up-angle": {
-   "title": "拉升角度"
-  },
-  "pull-up-stall-speed": {
-   "title": "拉升失速速度"
-  },
-  "pull-up-transition-speed": {
-   "title": "拉升转换速度"
-  },
   "quiver": {
    "title": "射箭",
    "desc": "给自己射箭."
   },
-  "rainbow-brightness": {
-   "title": "彩虹亮度"
-  },
-  "rainbow-saturation": {
-   "title": "彩虹饱和度"
-  },
-  "rainbow-speed": {
-   "title": "彩虹速度"
-  },
-  "rainbow-spread": {
-   "title": "彩虹分布"
-  },
   "reach": {
    "title": "长臂猿",
    "desc": "赋予你超长的手臂."
-  },
-  "read-xaero": {
-   "title": "读取 Xaero"
-  },
-  "refine-iters": {
-   "title": "细化迭代次数"
-  },
-  "render-box-size": {
-   "title": "渲染框大小"
-  },
-  "render-chunks": {
-   "title": "渲染区块数"
-  },
-  "render-trail": {
-   "title": "渲染轨迹"
-  },
-  "report-short": {
-   "title": "简短报告"
-  },
-  "require-ship": {
-   "title": "需要船只"
-  },
-  "retries-on-timeout": {
-   "title": "超时重试次数"
   },
   "reverse-step": {
    "title": "反向步行",
@@ -1000,38 +616,17 @@
    "title": "旋转",
    "desc": "改变/锁定你的偏航和俯仰."
   },
-  "rotation-hold": {
-   "title": "旋转保持"
-  },
-  "rotation-mode": {
-   "title": "旋转模式"
-  },
   "safe-walk": {
    "title": "安全行走",
    "desc": "防止你从方块上走下来."
-  },
-  "save-to-file": {
-   "title": "保存到文件"
   },
   "scaffold": {
    "title": "脚手架",
    "desc": "自动在你下方放置方块."
   },
-  "scrollbar-color": {
-   "title": "滑块颜色"
-  },
   "search-area": {
    "title": "区域搜索",
    "desc": "从你所在位置以矩形加载区块到某一点，或围绕你无限螺旋加载。适用于物资库查找器或其他地图保存模组。"
-  },
-  "search-module-aliases": {
-   "title": "搜索模块别名"
-  },
-  "search-now": {
-   "title": "立即搜索"
-  },
-  "search-window-rad": {
-   "title": "搜索窗口半径"
   },
   "self-anvil": {
    "title": "自动铁砧",
@@ -1045,80 +640,17 @@
    "title": "自我网",
    "desc": "自动在你身上放置网."
   },
-  "separator-center-color": {
-   "title": "分隔符中心颜色"
-  },
-  "separator-edges-color": {
-   "title": "分隔符边缘颜色"
-  },
-  "separator-text-color": {
-   "title": "分隔符文本颜色"
-  },
   "server-spoof": {
    "title": "服务器欺骗",
    "desc": "欺骗客户端版本、资源包和频道."
-  },
-  "shadow": {
-   "title": "阴影"
-  },
-  "ship-color": {
-   "title": "船只颜色"
-  },
-  "short-color": {
-   "title": "短途颜色"
-  },
-  "show-beam": {
-   "title": "显示光束"
-  },
-  "show-keybind": {
-   "title": "显示按键绑定"
-  },
-  "show-render": {
-   "title": "显示渲染"
-  },
-  "show-route": {
-   "title": "显示路线"
-  },
-  "show-slot-type": {
-   "title": "显示槽位类型"
-  },
-  "show-ui": {
-   "title": "显示界面"
-  },
-  "shown": {
-   "title": "时机"
-  },
-  "skylight-updates": {
-   "title": "天光更新"
-  },
-  "slider-handle-color": {
-   "title": "滑块手柄颜色"
-  },
-  "slider-left-color": {
-   "title": "滑块左侧颜色"
-  },
-  "slider-right-color": {
-   "title": "滑块右侧颜色"
   },
   "slippy": {
    "title": "滑溜溜",
    "desc": "改变方块的基础摩擦水平."
   },
-  "snap-to-player": {
-   "title": "对齐到玩家"
-  },
-  "snapping-range": {
-   "title": "自动吸附范围"
-  },
   "sneak": {
    "title": "潜行",
    "desc": "为你潜行."
-  },
-  "sort": {
-   "title": "排序方式"
-  },
-  "sort-by-latency": {
-   "title": "按延迟排序"
   },
   "sound-blocker": {
    "title": "声音屏蔽器",
@@ -1144,45 +676,9 @@
    "title": "蜘蛛",
    "desc": "让你像蜘蛛一样爬墙."
   },
-  "spiral-flight": {
-   "title": "螺旋飞行"
-  },
   "sprint": {
    "title": "冲刺",
    "desc": "自动冲刺."
-  },
-  "starscript-accessed-objects-color": {
-   "title": "Star script访问对象颜色"
-  },
-  "starscript-braces-color": {
-   "title": "Star script大括号颜色"
-  },
-  "starscript-commas-color": {
-   "title": "Star script逗号颜色"
-  },
-  "starscript-dots-color": {
-   "title": "Star script点号颜色"
-  },
-  "starscript-keywords-color": {
-   "title": "Star script关键字颜色"
-  },
-  "starscript-numbers-color": {
-   "title": "Star script数字颜色"
-  },
-  "starscript-operators-color": {
-   "title": "Star script运算符颜色"
-  },
-  "starscript-parenthesis-color": {
-   "title": "Star script圆括号颜色"
-  },
-  "starscript-strings-color": {
-   "title": "Star script字符串颜色"
-  },
-  "starscript-text-color": {
-   "title": "Star script文本颜色"
-  },
-  "start-color": {
-   "title": "为破坏的方块的颜色"
   },
   "stash-finder": {
    "title": "储藏点寻找器",
@@ -1196,15 +692,6 @@
    "title": "存储ESP",
    "desc": "渲染所有指定的存储方块."
   },
-  "store-resupply": {
-   "title": "仓储补给"
-  },
-  "stow-delay": {
-   "title": "收纳延迟"
-  },
-  "stow-elytra": {
-   "title": "收纳鞘翅"
-  },
   "surround": {
    "title": "包围",
    "desc": "用方块包围你,以防止水晶造成巨大的伤害."
@@ -1213,58 +700,13 @@
    "title": "远程控制",
    "desc": "让你从一个中心主机控制多个Meteor实例."
   },
-  "sync-list-setting-widths": {
-   "title": "同步列表设置宽度"
-  },
-  "target-height": {
-   "title": "目标高度"
-  },
-  "text-color": {
-   "title": "文本的颜色"
-  },
-  "text-colors": {
-   "title": "文字颜色"
-  },
-  "text-highlight-color": {
-   "title": "文本高亮的颜色"
-  },
-  "text-scale": {
-   "title": "文字缩放比"
-  },
-  "text-secondary-text-color": {
-   "title": "次要文本的颜色"
-  },
-  "threads": {
-   "title": "线程数"
-  },
-  "tick-interval": {
-   "title": "间隔刻"
-  },
   "time-changer": {
    "title": "时间改变",
    "desc": "让你能够设置自定义时间."
   },
-  "timeout": {
-   "title": "超时"
-  },
   "timer": {
    "title": "变速齿轮",
    "desc": "改变你游戏中所有事物的速度."
-  },
-  "title-color": {
-   "title": "标题颜色"
-  },
-  "title-screen-credits": {
-   "title": "标题屏幕信用"
-  },
-  "title-screen-splashes": {
-   "title": "标题屏幕闪屏"
-  },
-  "title-text-color": {
-   "title": "标题文本的颜色"
-  },
-  "totem-supply": {
-   "title": "图腾补给"
   },
   "tracers": {
    "title": "追踪线",
@@ -1274,21 +716,9 @@
    "title": "拖尾",
    "desc": "在你的玩家后面渲染一个可自定义的拖尾."
   },
-  "trail-color": {
-   "title": "轨迹颜色"
-  },
   "trail-maker": {
    "title": "按标记追踪",
    "desc": "允许你在地图上标记Xaero区块高亮，然后按顺序追踪它们。"
-  },
-  "trail-max-points": {
-   "title": "轨迹最大点数"
-  },
-  "trail-spacing": {
-   "title": "轨迹间距"
-  },
-  "trail-width": {
-   "title": "轨迹宽度"
   },
   "trajectories": {
    "title": "轨迹",
@@ -1301,21 +731,6 @@
   "tunnel-esp": {
    "title": "隧道esp",
    "desc": "高亮隧道."
-  },
-  "undefined": {
-   "title": "未定义"
-  },
-  "update-delay": {
-   "title": "更新延迟"
-  },
-  "use-custom-path": {
-   "title": "使用自定义路径"
-  },
-  "use-fixed-center": {
-   "title": "使用固定中心"
-  },
-  "use-team-color": {
-   "title": "使用队伍颜色"
   },
   "vein-miner": {
    "title": "脉冲挖掘",
@@ -1333,33 +748,12 @@
    "title": "透视墙壁",
    "desc": "使方块半透明."
   },
-  "waypoint-lock": {
-   "title": "路径点锁定"
-  },
-  "waypoint-reader": {
-   "title": "路径点读取"
-  },
   "waypoints": {
    "title": "创建路标",
    "desc": "允许你创建路标."
   },
   "weather-changer": {
    "title": "天气修改器"
-  },
-  "window-title-text": {
-   "title": "窗口标题文本"
-  },
-  "world-origin": {
-   "title": "世界原点"
-  },
-  "world-seed": {
-   "title": "世界种子"
-  },
-  "xp-delay": {
-   "title": "经验瓶延迟"
-  },
-  "xp-supply": {
-   "title": "经验瓶补给"
   },
   "xray": {
    "title": "透视",
@@ -1454,6 +848,9 @@
   "advanced-logging": {
    "title": "高级记录",
    "desc": "会记录更多信息，包括每种容器的发现数量。"
+  },
+  "afkvanillafly": {
+   "title": "AFK原版飞行"
   },
   "ahead-distance": {
    "title": "前方距离",
@@ -1702,6 +1099,9 @@
   "auto-exp": {
    "title": "自动经验"
   },
+  "auto-exp-plus": {
+   "title": "自动修复+"
+  },
   "auto-firework": {
    "title": "自动烟花",
    "desc": "当速度过低时自动使用烟花火箭。"
@@ -1722,6 +1122,9 @@
   },
   "auto-log": {
    "title": "自动断开"
+  },
+  "auto-log-plus": {
+   "title": "自动断线+"
   },
   "auto-mend": {
    "title": "自动修复"
@@ -1747,6 +1150,9 @@
   "auto-play": {
    "title": "自动播放",
    "desc": "自动播放随机歌曲"
+  },
+  "auto-portal": {
+   "title": "自动下界门"
   },
   "auto-reconnect": {
    "title": "自动重连"
@@ -1930,6 +1336,9 @@
   },
   "better-chat": {
    "title": "更好的聊天"
+  },
+  "better-stash-finder": {
+   "title": "仓库寻找器"
   },
   "better-tab": {
    "title": "更好的tablist"
@@ -2340,6 +1749,9 @@
    "title": "箱子",
    "desc": "箱子的颜色."
   },
+  "chest-index": {
+   "title": "箱子索引"
+  },
   "chest-swap": {
    "title": "胸甲切换",
    "desc": "在切换这个模块时,启用胸甲切换."
@@ -2379,6 +1791,9 @@
   "cinematic": {
    "title": "电影模式",
    "desc": "启用电影模式摄像机."
+  },
+  "circling-degrees-per-tick": {
+   "title": "盘旋每刻度数"
   },
   "city-color": {
    "title": "城市颜色"
@@ -2760,6 +2175,12 @@
    "title": "Discord ID",
    "desc": "你的Discord ID"
   },
+  "discord-id": {
+   "title": "Discord ID"
+  },
+  "discord-notifs": {
+   "title": "Discord通知"
+  },
   "discord-presence": {
    "title": "discord状态显示"
   },
@@ -2917,6 +2338,9 @@
   "elytra-replace": {
    "title": "鞘翅替换",
    "desc": "用新的鞘翅替换破损的鞘翅."
+  },
+  "elytraflyplusplus": {
+   "title": "鞘翅飞行++"
   },
   "enable-fd": {
    "title": "启用食物"
@@ -3377,6 +2801,9 @@
    "title": "发光",
    "desc": "禁用发光效果的渲染."
   },
+  "goto-position": {
+   "title": "前往坐标"
+  },
   "gradient": {
    "title": "渐变色",
    "desc": "启用垂直渐变色。"
@@ -3392,6 +2819,9 @@
   "grass-color": {
    "title": "草色",
    "desc": "草的颜色."
+  },
+  "grim-air-place": {
+   "title": "Grim隔空放置"
   },
   "grim-bypass": {
    "title": "格林绕过",
@@ -3484,6 +2914,9 @@
   "highlight-friends": {
    "title": "高亮好友",
    "desc": "在Tab列表中高亮好友."
+  },
+  "highlight-old-lava": {
+   "title": "高亮旧岩浆"
   },
   "highlight-searched-blocks": {
    "title": "高亮搜索的方块"
@@ -4414,6 +3847,9 @@
   "no-interact": {
    "title": "无交互"
   },
+  "no-jump-delay": {
+   "title": "无跳跃延迟"
+  },
   "no-mining-trace": {
    "title": "不挖掘痕迹"
   },
@@ -4540,6 +3976,9 @@
   "old-animations": {
    "title": "旧动画",
    "desc": "将击打动画改为类似1.8的动画"
+  },
+  "old-chunk-notifier": {
+   "title": "旧区块通知"
   },
   "on-ground": {
    "title": "在地面上",
@@ -4832,6 +4271,9 @@
   "pitch40-upper-bounds": {
    "title": "pitch40-上界界限",
    "desc": "pitch40的上界界限."
+  },
+  "pitch40util": {
+   "title": "Pitch40工具"
   },
   "place": {
    "title": "放置",
@@ -5468,6 +4910,9 @@
   "search-above": {
    "title": "向上搜索",
    "desc": "向上查看的Y值"
+  },
+  "search-area": {
+   "title": "区域搜索"
   },
   "search-ender-chest": {
    "title": "搜索末影箱",
@@ -6485,6 +5930,9 @@
    "title": "轨迹结束偏航角",
    "desc": "放弃轨迹后行进的方向。"
   },
+  "trail-maker": {
+   "title": "按标记追踪"
+  },
   "trail-max-points": {
    "title": "轨迹最大点数"
   },
@@ -6497,6 +5945,9 @@
   },
   "trail-width": {
    "title": "轨迹宽度"
+  },
+  "trailfollower": {
+   "title": "轨迹追踪"
   },
   "trajectories": {
    "title": "轨迹"
@@ -6625,6 +6076,9 @@
   "vanilla-speed": {
    "title": "原版速度",
    "desc": "以每秒方块数为单位的速度."
+  },
+  "vanityesp": {
+   "title": "装饰物透视"
   },
   "vehicles": {
    "title": "载具",
@@ -6912,6 +6366,7 @@
   "Ping": "延迟",
   "Pitch": "俯仰",
   "Place": "放置",
+  "Player": "玩家",
   "Players": "玩家",
   "Position": "位置",
   "Potions": "药水",
@@ -7162,6 +6617,7 @@
   "Ping": "延迟",
   "Pitch": "俯仰",
   "Place": "放置",
+  "Player": "玩家",
   "Players": "玩家",
   "Please select the account to log into in your browser.": "请在浏览器中选择要登录的账号。",
   "Pos: ": "坐标: ",

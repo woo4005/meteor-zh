@@ -76,7 +76,9 @@ base {
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:1.21.11"
+    // 版本号来自 gradle.properties 的 minecraft_version（与 fabric.mod.json 的
+    // ${minecraft_dep} 同源，改一处即可）
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
     // ⚠️ 必须 mojmap（见文件头第一节）：yarn 会让源码全部编译不过
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:0.19.3"
@@ -86,11 +88,27 @@ dependencies {
 }
 
 processResources {
-    // fabric.mod.json 里写 "version": "${version}"，构建时用 Gradle 的 version 展开，
-    // 避免手工在多处维护版本号（漏展开时 loader 会报版本解析失败）
-    inputs.property "version", project.version
-    filesMatching('fabric.mod.json') {
-        expand "version": project.version
+    // fabric.mod.json 与 meteor-zh.mixins.json 的源文件只写占位符：
+    //   ${version}                 版本号（gradle.properties 的 mod_version）
+    //   ${minecraft_dep}           depends.minecraft
+    //   ${java_dep}                depends.java
+    //   ${meteor_client_dep}       depends.meteor-client
+    //   ${compatibility_level}     Mixin 的 compatibilityLevel
+    // 离线脚本（scripts/build.py）用同一套占位符展开同样的值，所以两条构建路径产出的
+    // 元数据语义一致 —— 以前 Gradle 只 expand ${version}，产物里缺 java/meteor-client，
+    // 和发布出去（离线构建）的 jar 不是一回事。
+    def expandProps = [
+        version             : project.version,
+        minecraft_dep       : "~${minecraft_version}",
+        java_dep            : ">=${java_level}",
+        // 注意 ">=1.21.11-0" 而不是 ">=1.21.11"：Fabric 的 semver 把 meteor-client 的
+        // "1.21.11-86" 当成 1.21.11 的预发布版，而预发布版 < 正式版。
+        meteor_client_dep   : ">=${minecraft_version}-0",
+        compatibility_level : "${mixin_compatibility_level}",
+    ]
+    inputs.properties(expandProps)
+    filesMatching(['fabric.mod.json', 'meteor-zh.mixins.json']) {
+        expand expandProps
     }
 }
 

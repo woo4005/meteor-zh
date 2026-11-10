@@ -169,8 +169,11 @@ def convert_addons(modules, settings):
         elif n in real_set:
             settings.setdefault(n, {}).setdefault("title", value)
         else:
+            # 认不出来的标识符只放进 settings 表。外部词典里绝大多数是设置名，
+            # 早前「同时写进 modules 和 settings」让 modules 表混进几百个设置名
+            # （issue #1 的 P3-2：modules 虚高到 376，真实模块只有 169 个）。
+            # 万一某个确实是 addon 的模块名，WordTranslator 的词法兜底还会给它合成中文。
             settings.setdefault(n, {}).setdefault("title", value)
-            modules.setdefault(n, {}).setdefault("title", value)
 
     for text, value in (addons.get("descs") or {}).items():
         if value and value != text:

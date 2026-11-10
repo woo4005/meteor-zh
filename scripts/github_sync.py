@@ -34,9 +34,9 @@ import github_publish_ip as ghp  # noqa: E402
 ROOT = ghp.ROOT
 REPO = "meteor-zh"
 #: 本次要发的版本线。1.4.3 = 1.21.11 线。
-VERSION = "1.4.7"
+VERSION = "1.4.8"
 #: 另一条线（26.1）的版本号，用来写在 release 正文的下载表里
-VERSION_261 = "1.5.7"
+VERSION_261 = "1.5.8"
 #: 兼容旧名字（正文模板里还在用 {ver1211}）
 VERSION_1211 = VERSION
 BRANCH = "main"
@@ -248,7 +248,63 @@ def ensure_release(token):
 
     body = """Meteor Client 全界面简体中文汉化 v{ver}
 
-## 本版更新（1.4.7 / 1.5.7）
+## 本版更新（1.4.8 / 1.5.8）
+
+这一版来自一次「自己给自己做代码评审」：仓库 [issue #1](https://github.com/woo4005/meteor-zh/issues/1)
+列了 10 条可复现问题，另有一份针对更新器的供应链安全评审。两边都处理了。
+
+### 安全 · 更新器的完整性校验
+
+1.5.7 及更早的更新器只检查「下载的文件大于 1 KB」就把 jar 覆盖进 `mods/`——没有哈希、没有域名限制、
+没有备份。只要 release 资产被替换（账号被盗、资产被改、可信证书代理），就能在你的客户端执行任意代码，
+全程无提示。现在补了四层：
+
+1. **域名白名单**：重定向自己跟（最多 3 跳），每跳都要求主机是 `github.com` /
+   `api.github.com` / `objects.githubusercontent.com` / `release-assets.githubusercontent.com`
+   或它们的子域名。`github.com.evil.example` 这类后缀欺骗会被拒绝。
+2. **大小校验**：下载字节数必须等于 GitHub API 给的 `size`。
+3. **sha256 校验**：必须等于 API 给的 `digest`。
+4. **拿不到 `digest` 就不自动替换**：只下载，提示手动安装。宁可少一个自动化，也不做没有校验的执行。
+
+另外：替换前备份 `.bak`、失败自动回滚（重试 60 次）、批处理 `start "" /min "<脚本>"` 补了空标题参数
+（原先 `%TEMP%` 路径含空格时会把脚本路径当窗口标题，什么都不执行）、`SystemToast.add` 改到渲染线程、
+动态文本一律 `ChatUtils.info("%s", text)`（`info` 内部会 `String.format`，URL 里的 `%20` 会抛异常）。
+
+`SECURITY.md` 整份重写——上一版还写着「无网络通信、不检查更新」，那是 1.4.0 之前的状态。
+
+### 修复
+
+- **左侧分类漏了 `Player`**：补 `Player`→玩家，不再出现英文分类名。
+- **`Category.name` 不再被反射改写**：改名会污染 `Category.toString()`、`.zh dump` 和按名字比较分类的 addon；
+  分类显示改由渲染层替换。
+- **词表重建会静默丢词**：`build_words.py` 跑一次就把 `words.json` 从 1069 条打成 798 条。现在改成
+  「外部词 + 现有产物 + W」三源合并，断言现有键一条不少、总数 ≥ 1000。
+- **词法回归指标不再虚高**：旧判据只看字符集合（`强调色→强调色颜色` 也算命中），对外称 83.6%。
+  改成编辑距离后真实数字是 exact **30.4%**。这不是功能退化，是把尺子修对了——词法引擎的目标是
+  覆盖新 addon，不是复现已有译名。
+- **模块表不再混入设置名**：疑似设置名的外部标识符原先同时写进 `modules` 和 `settings`，模块表虚高到 395。
+  现在只写 `settings`，模块表回到 **193**（169 本体 + addon/官方译文）。
+- **`modsDirectory()` 分支恒真**：`mods/` 不存在时会返回不存在的路径，报错信息误导。
+
+### 构建与验证
+
+- 源 `fabric.mod.json` / `meteor-zh.mixins.json` 的 `depends` 与 `compatibilityLevel` 全改占位符，
+  与离线脚本各自展开——以前 Gradle 产物缺 `java`/`meteor-client`，和发布出去的 jar 不是一回事。
+- 版本号单点：`gradle.properties` 的 `mod_version` / `mod_version_261`。
+- 新增 `scripts/_jarcheck.py`（两条线共用的产物自检）与 `scripts/verify_update_integrity.py`
+  （21 项断言：sha256 标准向量、digest 解析、域名白名单、版本表达式）。
+
+离线验证全部通过：`verify_dict` 15 项、`verify_lexical` 9 项、`verify_chat` 9 项、
+`verify_261` 22 项、`verify_update_integrity` 21 项。
+
+### 下载
+
+| 游戏版本 | 文件 |
+| --- | --- |
+| Minecraft 26.1 / 26.1.1 / 26.1.2 | `meteor-zh-1.5.8-mc26.1.x.jar` |
+| Minecraft 1.21.11 | `meteor-zh-1.4.8-mc1.21.11.jar` |
+
+## 上一版（1.4.7 / 1.5.7）的更新
 
 ### 修掉「未找到适配 26.1.1 的发布版本」
 
@@ -271,21 +327,14 @@ if (!name.endsWith(targetSuffix)) continue;
 | `26.1~26.1.2` | 区间，含两端 | `26.1` 到 `26.1.2` |
 | `26.1.x` | 等价 `26.1` | 整条线 |
 
-资产名也跟着改成 `meteor-zh-1.5.7-mc26.1.x.jar`——文件名本身就说明覆盖哪几个小版本。
+资产名也跟着改成 `meteor-zh-1.5.8-mc26.1.x.jar`——文件名本身就说明覆盖哪几个小版本。
 
 ### 顺带
 
 - 词表补 `CowBell` → 牛铃、`Didgeridoo` → 迪吉里杜管、`Chime` → 管钟（原版音符盒乐器名之前显示英文）。
 - `Test261` 增加 8 条更新器匹配断言，其中「`26.1~26.1.2` 不匹配 `26.1.3`」确保区间有上界。
 
-### 下载
-
-| 游戏版本 | 文件 |
-| --- | --- |
-| Minecraft 26.1 / 26.1.1 / 26.1.2 | `meteor-zh-1.5.7-mc26.1.x.jar` |
-| Minecraft 1.21.11 | `meteor-zh-1.4.7-mc1.21.11.jar` |
-
-## 上一版（1.4.6 / 1.5.6）的更新
+## 更早（1.4.6 / 1.5.6）的更新
 
 ### 新增 `.zh dump`：导出模块与设置清单
 

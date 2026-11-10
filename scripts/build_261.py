@@ -31,13 +31,74 @@ import zipfile
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VERSION = "1.5.7"
-MOD_ID = "meteor-zh"
+# 同目录的 _jarcheck（产物自检，两条构建线共用）。脚本可能从任意 cwd 启动，
+# 所以把 scripts/ 插进 sys.path 再 import。
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _jarcheck import validate  # noqa: E402
 
-DEFAULT_INSTANCE = r"E:\pcl\.minecraft\versions\zh插件制作版本\versions\26.1.2-Fabric 0.20.1"
-INSTANCE = os.environ.get("MC_INSTANCE") or DEFAULT_INSTANCE
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def _read_props():
+    """读 ``gradle.properties`` —— 两条线版本号与依赖表达式的单一事实来源。"""
+    path = os.path.join(ROOT, "gradle.properties")
+    props = {}
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, value = line.split("=", 1)
+                props[key.strip()] = value.strip()
+    return props
+
+
+PROPS = _read_props()
+VERSION = PROPS.get("mod_version_261") or "0.0.0"
+MOD_ID = "meteor-zh"
+MC_VERSION = "26.1"
+MC_VERSIONS_DEP = "~26.1"
+
+# fabric.mod.json / mixins.json 里能出现的全部占位符（源文件只写占位符）。
+DEPS = {
+    "version": VERSION,
+    "minecraft_dep": MC_VERSIONS_DEP,
+    "java_dep": ">=" + (PROPS.get("java_level_261") or "25"),
+    "meteor_client_dep": ">=" + MC_VERSION,
+    # MC 26.x 的 class 是 Java 25（major 69）编的，Mixin 必须按 JAVA_25 解析；
+    # 1.21.11 线走 build.py，那边是 JAVA_21。
+    "compatibility_level": "JAVA_25",
+}
+
+
+def expand(text):
+    """展开资源里的 ${placeholder}（两条构建路径语义一致，不再靠字符串 replace 猜格式）。"""
+    out = text
+    for key, value in DEPS.items():
+        out = out.replace("${%s}" % key, value)
+    return out
+
+
+DEFAULT_INSTANCE = os.environ.get("MC_INSTANCE") or r"E:\pcl\.minecraft\versions\26.1-Fabric 0.20.1"
+INSTANCE = DEFAULT_INSTANCE
 LIB_ROOT = os.environ.get("MC_LIB_ROOT") or r"E:\pcl\.minecraft\libraries"
+
+
+def _require_instance(path):
+    """实例目录不存在时给出可操作的报错，而不是一句 FileNotFoundError。"""
+    if os.path.isdir(path):
+        return path
+    parent = os.path.dirname(path.rstrip("\\/"))
+    known = []
+    if os.path.isdir(parent):
+        known = sorted(d for d in os.listdir(parent) if os.path.isdir(os.path.join(parent, d)))
+    raise SystemExit(
+        "26.1 实例目录不存在：%s\n该目录下的实例有：%s\n用环境变量 MC_INSTANCE 指定一个。"
+        % (path, ", ".join(known) or "(空)"))
+
+
+INSTANCE = _require_instance(INSTANCE)
 
 
 def _instance_file(ext):
@@ -237,34 +298,15 @@ def copy_resources():
             rel = os.path.relpath(src, RES)
             dst = os.path.join(STAGE, rel)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
-            if rel.replace(os.sep, "/") == "fabric.mod.json":
+            if f.endswith(".json"):
                 with open(src, encoding="utf-8") as fh:
                     text = fh.read()
-                text = text.replace("${version}", VERSION)
-                text = text.replace('"minecraft": "~1.21.11"', '"minecraft": "~26.1"')
-                text = text.replace('"minecraft": ">=1.21.9"', '"minecraft": "~26.1"')
-                # MC 26.x 的 class 是 Java 25 编的，必须声明 java 依赖，否则低版本 JVM 会拿到
-                # UnsupportedClassVersionError 而不是一条清楚的「需要 Java 25」。
-                # 缺这两个依赖本身不会崩（Meteor 不在时 addon 入口根本不会被实例化），
-                # 但装错环境时 Fabric 至少能给出一条清楚的报错而不是静默无翻译。
-                extra = []
-                if '"java"' not in text:
-                    extra.append('"java": ">=25"')
-                if '"meteor-client"' not in text:
-                    extra.append('"meteor-client": ">=26.1"')
-                if extra:
-                    text = text.replace('"minecraft": "~26.1"',
-                                        '"minecraft": "~26.1",\n    ' + ",\n    ".join(extra))
-                with open(dst, "w", encoding="utf-8") as fh:
-                    fh.write(text)
-            elif rel.replace(os.sep, "/") == "meteor-zh.mixins.json":
-                with open(src, encoding="utf-8") as fh:
-                    text = fh.read()
-                # MC 26.1 的 class 是 Java 25（major 69），Mixin 必须按 JAVA_25 解析；
-                # 1.21.11 线走 build.py，那边保留 JAVA_21。
-                text = text.replace('"compatibilityLevel": "JAVA_21"',
-                                    '"compatibilityLevel": "JAVA_25"')
-                with open(dst, "w", encoding="utf-8") as fh:
+                text = expand(text)
+                left = text.find("${")
+                if left >= 0:
+                    raise SystemExit("资源里还有未展开的占位符：%s -> %s"
+                                     % (rel, text[left:left + 40]))
+                with open(dst, "w", encoding="utf-8", newline="\n") as fh:
                     fh.write(text)
             else:
                 shutil.copy2(src, dst)
@@ -318,42 +360,15 @@ REQUIRED_ENTRIES = (
 )
 
 
-def validate_jar(path, expect_major):
-    """打包后自检：JSON 可解析、class 版本正确、必需条目齐全。任何一项失败都非 0 退出。"""
-    problems = []
-    with zipfile.ZipFile(path) as z:
-        names = set(z.namelist())
+def validate_jar(path):
+    """打包后自检：条目齐全、JSON 可解析、版本与依赖正确、class 版本是 Java 25。
 
-        for rel in REQUIRED_ENTRIES:
-            if rel not in names:
-                problems.append("缺少条目 " + rel)
-
-        for rel in ("fabric.mod.json", "meteor-zh.mixins.json"):
-            if rel in names:
-                try:
-                    json.loads(z.read(rel).decode("utf-8"))
-                except Exception as exc:
-                    problems.append("%s 不是合法 JSON: %s" % (rel, exc))
-
-        classes = 0
-        for n in names:
-            if not n.endswith(".class"):
-                continue
-            head = z.read(n)[:8]
-            if len(head) < 8 or head[:4] != b"\xca\xfe\xba\xbe":
-                problems.append(n + " 不是 class 文件")
-                continue
-            major = int.from_bytes(head[6:8], "big")
-            classes += 1
-            if major != expect_major:
-                problems.append("%s 的 class major=%d，应为 %d" % (n, major, expect_major))
-
-    if problems:
-        for p in problems:
-            print("  [FAIL] " + p)
-        raise SystemExit("jar 校验失败：" + path)
-
-    print("  validated: %d entries, %d classes @ major %d" % (len(names), classes, expect_major))
+    具体规则在 _jarcheck 里，两条构建线共用 —— 以前这里只查「条目 + class major」，
+    depends / compatibilityLevel 漂了也不会失败（issue #1 的 P2-2）。
+    """
+    validate(path, version=VERSION, minecraft_dep=DEPS["minecraft_dep"],
+             compatibility_level=DEPS["compatibility_level"], expect_major=69,
+             required_entries=REQUIRED_ENTRIES)
 
 
 def main():
@@ -361,7 +376,7 @@ def main():
     compile_java()
     copy_resources()
     out = pack()
-    validate_jar(out, 69)
+    validate_jar(out)
     with zipfile.ZipFile(out) as z:
         names = z.namelist()
     print("\n%d entries:" % len(names))

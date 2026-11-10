@@ -45,20 +45,28 @@ import java.util.Set;
  * configs stay compatible:
  *   - Module.title / Module.description   (serialised by `name`, safe)
  *   - Setting.title / Setting.description (serialised by `name`, safe)
- *   - Category.name                       (never serialised, safe)
  *   - HudElementInfo.title / description  (HUD saved by `name`, safe)
- *   - HudGroup.title                      (record component, never serialised, safe)
+ *   - Tab.name                            (never serialised, safe)
  *
  * SettingGroup.name is deliberately NOT modified: Settings#fromTag looks groups up
  * by name, so rewriting it would orphan every saved group. Group headings are
  * translated in the render layer instead (see GuiRendererMixin).
+ *
+ * Category.name is also left alone. It used to be rewritten, which worked
+ * day-to-day but had three sharp edges: `Category.toString()`, the `category`
+ * field of `.zh dump` output, and any third-party addon that compares categories
+ * by name all started seeing Chinese, and after the rename
+ * `nameHash != name.hashCode()` (the hash is frozen at construction and is what
+ * equals/hashCode use, so maps stay correct but the inconsistency is a trap).
+ * The left-hand category tabs are translated in the render layer instead, via
+ * the `ui`/`groups` dictionary entries for Combat / Player / Movement / Render /
+ * World / Misc.
  */
 public final class Translator {
     private static Field fModuleTitle;
     private static Field fModuleDesc;
     private static Field fSettingTitle;
     private static Field fSettingDesc;
-    private static Field fCategoryName;
     private static Field fHudTitle;
     private static Field fHudDesc;
 
@@ -76,7 +84,6 @@ public final class Translator {
         fModuleDesc = field(Module.class, "description");
         fSettingTitle = field(Setting.class, "title");
         fSettingDesc = field(Setting.class, "description");
-        fCategoryName = field(Category.class, "name");
         fHudTitle = field(HudElementInfo.class, "title");
         fHudDesc = field(HudElementInfo.class, "description");
         fTabName = field(Tab.class, "name");
@@ -91,7 +98,6 @@ public final class Translator {
         Modules modules = Modules.get();
         if (modules != null) {
             count += translateModules(modules);
-            count += translateCategories();
         }
 
         count += translateTabs();
@@ -117,24 +123,6 @@ public final class Translator {
                     if (replace(fSettingTitle, setting, ZhDict.settingTitle(setting.name, setting.title))) count++;
                     if (replace(fSettingDesc, setting, ZhDict.settingDesc(setting.name, setting.description))) count++;
                 }
-            }
-        }
-
-        return count;
-    }
-
-    private static int translateCategories() {
-        int count = 0;
-        Iterable<Category> categories = Modules.loopCategories();
-        if (categories == null) return 0;
-
-        for (Category category : categories) {
-            String original = category.name;
-            if (original == null || original.isEmpty()) continue;
-
-            String translated = ZhDict.groupTitle(original);
-            if (translated != null && !translated.equals(original)) {
-                if (replace(fCategoryName, category, translated)) count++;
             }
         }
 
