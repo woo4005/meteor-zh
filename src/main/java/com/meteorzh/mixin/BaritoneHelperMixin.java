@@ -3,7 +3,6 @@
  */
 package com.meteorzh.mixin;
 
-import baritone.api.utils.Helper;
 import com.meteorzh.ChatDict;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,6 +22,9 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
  *
  * <p>三个设计取舍：
  * <ul>
+ *   <li><b>用 {@code targets} 字符串而不是 {@code Helper.class}</b>：这样编译期不需要
+ *       Baritone 的 jar（Gradle 与离线脚本都不用额外准备依赖），而且目标类缺失时的
+ *       行为完全由 {@code require = 0} 决定——没装 Baritone 就整份跳过。</li>
  *   <li>{@code remap = false}：目标类 {@code Helper} 与目标方法 {@code logDirect} 都是
  *       Baritone 的，不是 Minecraft 的，不能被我们的 remap 映射表处理。</li>
  *   <li>{@code method = "logDirect"} 不带描述符：{@code logDirect} 有 7 个重载，
@@ -35,7 +37,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
  * <p>另外 {@code ChatFormatting} 为 {@code RED} 的错误消息也走这条路径，所以错误提示
  * 同样会被翻译；{@code logNotification} / {@code logDebug} 也经 {@code logDirect} 落地。
  */
-@Mixin(value = Helper.class, remap = false)
+@Mixin(targets = "baritone.api.utils.Helper", remap = false)
 public abstract class BaritoneHelperMixin {
     @ModifyVariable(method = "logDirect", at = @At("HEAD"), argsOnly = true,
                     ordinal = 0, require = 0, remap = false)
