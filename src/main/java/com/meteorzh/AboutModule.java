@@ -195,8 +195,7 @@ public class AboutModule extends Module {
         try {
             Minecraft mc = Minecraft.getInstance();
             if (mc == null) return;
-            SystemToast.add(mc.getToastManager(), new SystemToast.SystemToastId(6000L),
-                Component.literal(title), Component.literal(subtitle));
+            Compat.toast(new SystemToast.SystemToastId(6000L), title, subtitle);
         } catch (Throwable t) {
             MeteorZh.LOG.warn("Meteor-zh: failed to show toast", t);
         }

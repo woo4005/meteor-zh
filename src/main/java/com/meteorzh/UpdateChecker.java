@@ -744,8 +744,7 @@ public final class UpdateChecker {
             // 必须回主线程，否则就是跨线程改共享状态。
             mc.execute(() -> {
                 try {
-                    SystemToast.add(mc.getToastManager(), TOAST_ID,
-                        Component.literal(title), Component.literal(subtitle));
+                    Compat.toast(TOAST_ID, title, subtitle);
                 } catch (Throwable t) {
                     MeteorZh.LOG.warn("Meteor-zh: failed to show toast", t);
                 }

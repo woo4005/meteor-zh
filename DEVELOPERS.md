@@ -558,6 +558,43 @@ HTTPS 传输上。现在补了四层：域名白名单 → 大小 → sha256 →
 `Config.moduleAliases` 打开时才看 aliases，默认关。真要做就得连那个配置一起动，属于「改用户行为」，
 不是修 bug。已写进 README 的已知边界，留给用户决定。
 
+### 阶段 16 · 2.0.0：26.2 线（2026-11-17）
+
+**目标**：把汉化带到 Minecraft 26.2，并为「老版本还值不值得维护」给出一个制度化答案。
+
+**两个技术发现**
+
+1. **26.2 与 26.1 的 Meteor API 几乎一致**。对比两个 jar：26.1 有 1347 个类、26.2 有 1340 个，
+   增删集中在 mixin 与内部类。插件依赖的 `Module` / `Setting` / `SettingGroup` / `Category` /
+   `GuiRenderer` / `ChatUtils` / `Commands` 签名均未变化，`Category(String, Supplier<ItemStack>)`
+   还是同一个构造器，`ChatUtils.formatMsg(String, ChatFormatting)` 也还在（聊天翻译的注入点安全）。
+2. **唯一真正断裂的是 Toast**。`Minecraft#getToastManager()` 在 26.2 被搬到了
+   `Minecraft#gui` 的 `Gui#toastManager()`。处理办法不是条件编译，而是新增
+   `Compat#toastManager()`：先试 `gui.toastManager()`，失败再试 `getToastManager()`，
+   两边都拿不到就静默降级。这样一个源文件能同时满足两条线，也不会在某一版上抛
+   `NoSuchMethodError`。**业务代码里不要再直接写 `mc.getToastManager()`。**
+
+**快速侦察手法（值得复用）**
+
+不确定新版本能不能编时，先别写新脚本：把 `MC_INSTANCE` 环境变量指向新实例，
+直接跑现有的 `build_261.py`。编译会在真正的 API 断点上停住（这次正好只报了 2 个错，
+都是 `getToastManager`），比逐个 `javap` 对比签名快得多。
+
+**版本规则的由来**
+
+用户的原话是「1.5 线发个声明说暂停非必要维护，日常小更新用 1.5.8.001 递增」。
+落地时补了两点：
+
+- 四段编号 `X.Y.Z.NNN` **只用于维护补丁**，功能版本仍是三段 —— 否则大版本会被
+  `2.0.0.001` 稀释，玩家看不出「这是新能力还是修了个错字」。
+- 三条线共用同一份源码与同一份词典，但**版本号各走各的**。词典更新会同时打进所有 jar，
+  所以老版本的翻译质量仍会变好，只是代码层不再动。
+
+**顺带修正的**
+
+- `fabric.mod.json` 的 description 从「双线」改为三线（26.2 / 26.1 / 1.21.11）。
+- `gradle.properties` 增加 `mod_version_262` 与 `java_level_262`，三条线的版本号仍在同一处。
+
 ## 4. AI 没有做到的事（承认局限）
 
 | 事情 | 为什么没做 |
@@ -721,7 +758,8 @@ mapping（无混淆 / mojmap）、产物文件名都不同。用户明确要求�
 
 ---
 
-最后更新：2026-11-05 · 对应版本 **1.4.7（Minecraft 1.21.11 线）** 与 **1.5.7（Minecraft 26.1 线）**
+最后更新：2026-11-17 · 对应版本 **2.0.0（Minecraft 26.2 线）**、**1.5.8（26.1 线）** 与 **1.4.8（1.21.11 线）**
 
-> 两条线共用同一份 `src/`，但版本号各自独立：1.21.11 线发 1.4.x，26.1 线发 1.5.x。
-> 本文描述的是两条线共同的技术实现，差异只在构建脚本（`scripts/build.py` vs `scripts/build_261.py`）。
+> 三条线共用同一份 `src/`，但版本号各自独立：26.2 线发 2.x（主力），26.1 线只发 1.5.8.NNN，
+> 1.21.11 线只发 1.4.8.NNN（两者都进入维护模式）。本文描述的是三条线共同的技术实现，
+> 差异只在构建脚本：`scripts/build_262.py` / `build_261.py` / `build.py`。

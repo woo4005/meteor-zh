@@ -33,20 +33,26 @@ import github_publish_ip as ghp  # noqa: E402
 
 ROOT = ghp.ROOT
 REPO = "meteor-zh"
-#: 本次要发的版本线。1.4.3 = 1.21.11 线。
-VERSION = "1.4.8"
-#: 另一条线（26.1）的版本号，用来写在 release 正文的下载表里
+#: 本次要发的版本线。2.0.0 = 26.2 线。
+VERSION = "2.0.0"
+#: 26.2 线的版本号（与 VERSION 相同，保留单独的名字给正文模板用）
+VERSION_262 = "2.0.0"
+#: 26.1 线的版本号（维护模式，只发 1.5.8.NNN）
 VERSION_261 = "1.5.8"
-#: 兼容旧名字（正文模板里还在用 {ver1211}）
-VERSION_1211 = VERSION
+#: 1.21.11 线的版本号（维护模式，只发 1.4.8.NNN）
+#: 注意：这里不能再写 VERSION_1211 = VERSION —— 本次 VERSION 走的是 26.2 线。
+VERSION_1211 = "1.4.8"
 BRANCH = "main"
 
-#: 两条构建线的产物（一个 jar 覆盖 26.1 / 26.1.1 / 26.1.2）——见同一个仓库的 dist/ 白名单
-JARS_ALL = ["meteor-zh-%s-mc1.21.11.jar" % VERSION_1211, "meteor-zh-%s-mc26.1.x.jar" % VERSION_261]
+#: 三条构建线的产物（26.1 线的 jar 覆盖 26.1 / 26.1.1 / 26.1.2）——见同一个仓库的 dist/ 白名单
+JARS_ALL = [
+    "meteor-zh-%s-mc26.2.jar" % VERSION_262,
+    "meteor-zh-%s-mc26.1.x.jar" % VERSION_261,
+    "meteor-zh-%s-mc1.21.11.jar" % VERSION_1211,
+]
 
 #: 本次 release 应附上的 jar：只放属于本版本线的产物。
-#: 1.5.0 是 26.1 线，所以只上传 -mc26.1 那个；1.21.11 的 1.4.0 jar 归 v1.4.0 release。
-JARS_RELEASE = ["meteor-zh-%s-mc1.21.11.jar" % VERSION]
+JARS_RELEASE = ["meteor-zh-%s-mc26.2.jar" % VERSION]
 
 UPLOAD_IPS = ["20.27.177.119", "140.82.112.9", "140.82.113.9", "140.82.114.9"]
 BLOB_CACHE = os.path.join(os.environ.get("TEMP", "."), "meteor_zh_blobs.json")
@@ -248,7 +254,49 @@ def ensure_release(token):
 
     body = """Meteor Client 全界面简体中文汉化 v{ver}
 
-## 本版更新（1.4.8 / 1.5.8）
+## 本版更新（2.0.0）
+
+**首个 Minecraft 26.2 版本**，也是新版本策略的起点：**新版本适配优先，老版本进入维护模式**。
+
+### 支持 Minecraft 26.2
+
+Meteor Client 在 26.2 上的 API 与 26.1 几乎一致——对比两个 jar，26.1 有 1347 个类、26.2 有 1340 个，
+增删集中在 mixin 与内部类；插件依赖的 `Module` / `Setting` / `SettingGroup` / `Category` /
+`GuiRenderer` / `ChatUtils` / `Commands` 签名全部未变，`ChatUtils.formatMsg` 这个聊天翻译的注入点也还在。
+
+唯一的断裂点是 **Toast**：`Minecraft#getToastManager()` 在 26.2 被移到了 `Minecraft#gui` 的
+`Gui#toastManager()`。处理办法不是条件编译，而是新增兼容层 `Compat`，用反射同时支持两版
+（先试 `gui.toastManager()`，失败再试 `getToastManager()`，都拿不到就静默降级）——
+这样一个源文件能同时满足两条线，也不会在某一版上抛 `NoSuchMethodError`。
+
+### 📌 版本线调整说明（重要）
+
+| 版本线 | 状态 | 编号方式 |
+| --- | --- | --- |
+| **2.x（Minecraft 26.2）** | **主力开发** | `2.0.0` → `2.0.1` → …… |
+| 1.5.x（Minecraft 26.1 系列） | 维护模式 | 只发 `1.5.8.NNN`，`NNN` 从 `001` 递增 |
+| 1.4.x（Minecraft 1.21.11） | 维护模式 | 只发 `1.4.8.NNN`，`NNN` 从 `001` 递增 |
+
+从这一版起：
+
+- **新版本优先**。往后的主要精力放在新 Minecraft 版本适配与 Meteor 新 API 的跟进上。
+- **老版本进入维护模式**。1.5.x 与 1.4.x 不再追加新功能，只在出现漏洞、崩溃、明显错译或
+  兼容性断裂时发补丁。日常更新用四段编号（`1.5.8.001`、`1.5.8.002`……），不会覆盖 `1.5.8` 本身。
+- **想要新功能，请升级到 2.x**。
+- 三条线共用同一份词典，所以老版本的中文翻译质量仍会随词典更新变好，只是代码层不再动。
+
+> 坦白说：一个人维护三条版本线精力不够，与其三条都半死不活，不如把新版本做扎实，
+> 老版本保证「不崩、能看懂」就够了。
+
+### 下载
+
+| 游戏版本 | 文件 |
+| --- | --- |
+| **Minecraft 26.2** | **`meteor-zh-2.0.0-mc26.2.jar`** |
+| Minecraft 26.1 / 26.1.1 / 26.1.2 | `meteor-zh-1.5.8-mc26.1.x.jar`（维护模式） |
+| Minecraft 1.21.11 | `meteor-zh-1.4.8-mc1.21.11.jar`（维护模式） |
+
+## 上一版（1.4.8 / 1.5.8）的更新
 
 这一版来自一次「自己给自己做代码评审」：仓库 [issue #1](https://github.com/woo4005/meteor-zh/issues/1)
 列了 10 条可复现问题，另有一份针对更新器的供应链安全评审。两边都处理了。

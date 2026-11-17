@@ -10,6 +10,33 @@
 
 ## [未发布]
 
+## [2.0.0] - 2026-11-17
+
+首个 **Minecraft 26.2** 线版本，也是新版本策略的起点：**新版本适配优先，老版本进入维护模式**。
+
+### 新增
+
+- 支持 **Minecraft 26.2**（Meteor `26.2-35`），产物 `meteor-zh-2.0.0-mc26.2.jar`。
+- 新增 `scripts/build_262.py`：26.2 线的独立构建路径。与 26.1 线不同，Meteor 的 jar
+  直接从实例 `mods/` 目录读取，不需要再手工准备一份到构建目录。
+
+### 修复
+
+- **26.2 的 Toast API 变更**。`Minecraft#getToastManager()` 在 26.2 被移动到
+  `Minecraft#gui` 上的 `Gui#toastManager()`，直接调用会让 26.2 编译失败、运行期
+  `NoSuchMethodError`。新增 `com.meteorzh.Compat`，用反射同时支持两版
+  （先试 `gui.toastManager()`，再试 `getToastManager()`，都拿不到则静默降级），
+  `AboutModule` 与 `UpdateChecker` 全部改走它。
+
+### 版本规则（自本版起生效）
+
+- **功能版本**：`X.Y.Z`，用于新增能力或适配新的 Minecraft 版本。
+- **维护补丁**：`X.Y.Z.NNN`，`NNN` 从 `001` 递增，只修 Bug、漏洞、错译。
+- **1.5.x（26.1 系列）进入维护模式**：不再追加新功能，仅在出现漏洞、崩溃、明显错译、
+  兼容性断裂时发补丁，版本号走 `1.5.8.NNN`，不覆盖 `1.5.8` 本身。
+- 1.4.x（1.21.11）采用同一套规则，发 `1.4.8.NNN`。
+
+
 ## [1.5.8] / [1.4.8] - 2026-11-10
 
 一次「自己给自己做代码评审」的产物。仓库的 [issue #1](https://github.com/woo4005/meteor-zh/issues/1)
