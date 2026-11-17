@@ -63,7 +63,11 @@ DEPS = {
     "version": VERSION,
     "minecraft_dep": MC_VERSIONS_DEP,
     "java_dep": ">=" + (PROPS.get("java_level_262") or "25"),
-    "meteor_client_dep": ">=" + MC_VERSION,
+    #: meteor-client 的版本约束必须带 -0：
+    #  Meteor 的发布号形如 26.2-35，Fabric 的 semver 会把 26.2-35 判成「26.2 的预发布版」，
+    #  于是 26.2-35 < 26.2，写 >=26.2 会直接判定不满足（1.21.11 线当年就栽在这上面）。
+    #  >=26.2-0 同时接受 26.2-35 与将来真正的 26.2 正式版。
+    "meteor_client_dep": ">=" + MC_VERSION + "-0",
     "compatibility_level": "JAVA_25",
 }
 
