@@ -10,6 +10,33 @@
 
 ## [未发布]
 
+## [1.6.2] - 2026-11-17
+
+### 新增
+
+- **聊天模板 200 → 335 条。** 按实机录像与 jar 常量池重扫后，补齐「模块名已译、正文仍是英文」的那批消息：
+  `Already burrowed, disabling.`、`Couldn't find a target, disabling.`、
+  `You can't blow up beds in this dimension, disabling.`、`No valid targets.`、
+  `Could not find a usable mending pickaxe.`、`No Nametag in Hotbar.`、
+  `Found none of the chosen blocks in hotbar.` 等。
+- **Baritone 命令列表**：`All Baritone commands (clickable):`、
+  `Unable to find any path to ...`、`Warning: Chat commands will no longer work...` 等 50 条。
+
+### 变更
+
+- **1.21.11 线（1.4.x）归档。** 自本版起不再维护，停在 `1.4.8`。
+  README 新增「1.4.x 归档声明」，`meteor-addon-list.json` 的 `supported_versions` 收为 `["26.2","26.1"]`。
+  `v1.4.8` 的 release 与文件继续保留。
+
+### 同步下放
+
+- `1.5.8.002`：纯数据补丁，聊天模板与 1.6.2 相同，代码未动。
+
+## [1.5.8.002] - 2026-11-17
+
+- 维护补丁：聊天模板 200 → 335 条（与 1.6.2 同一份数据）。
+- 26.1 线的代码、注入点、依赖约束均未变化。
+
 ## [1.6.1] - 2026-11-17
 
 ### 新增
