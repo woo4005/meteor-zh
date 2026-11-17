@@ -4,6 +4,7 @@
   "package": "com.meteorzh.mixin",
   "compatibilityLevel": "${compatibility_level}",
   "client": [
+    "BaritoneHelperMixin",
     "ChatUtilsMixin",
     "GuiRendererMixin"
   ],

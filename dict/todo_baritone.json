@@ -1,0 +1,1888 @@
+[
+ {
+  "en": "Failed to compute a walking path to a spot to jump off from. Consider starting from a higher location, near an overhang. Or, you can disable elytraAutoJump and just manually begin gliding.",
+  "where": [
+   "ElytraProcess.class"
+  ]
+ },
+ {
+  "en": "Baritone Elytra is predicting terrain assuming that \u0001 is the correct seed. Change that with \u0001set elytraNetherSeed seedgoeshere, or disable it with \u0001set elytraPredictTerrain false",
+  "where": [
+   "ElytraCommand.class"
+  ]
+ },
+ {
+  "en": "Within a few hundred blocks of spawn/axis/highways/etc, the terrain is too fragmented to be predictable. Baritone Elytra will still work, just with backtracking. ",
+  "where": [
+   "ElytraCommand.class"
+  ]
+ },
+ {
+  "en": "Warning: Prefixed commands will no longer work. If you want to revert this change, use chat control (if enabled) or click the old value listed above.",
+  "where": [
+   "SetCommand.class"
+  ]
+ },
+ {
+  "en": "Warning: Chat commands will no longer work. If you want to revert this change, use prefix control (if enabled) or click the old value listed above.",
+  "where": [
+   "SetCommand.class"
+  ]
+ },
+ {
+  "en": "An unhandled exception occurred. The error is in your game's log, please report this at https://github.com/cabaletta/baritone/issues",
+  "where": [
+   "Helper.class"
+  ]
+ },
+ {
+  "en": "Not taking off, because elytra durability or fireworks are so low that I would immediately emergency land anyway.",
+  "where": [
+   "ElytraProcess.class"
+  ]
+ },
+ {
+  "en": "While going to a block this command blacklists the closest block so that Baritone won't attempt to get to it.",
+  "where": [
+   "BlacklistCommand.class"
+  ]
+ },
+ {
+  "en": "Player is near the segment start, therefore repeating this calculation is pointless. Marking as complete",
+  "where": [
+   "ElytraBehavior$PathManager.c"
+  ]
+ },
+ {
+  "en": "If 'invert' is specified, the chunks listed will be considered NOT explored, rather than explored.",
+  "where": [
+   "ExploreFilterCommand.class"
+  ]
+ },
+ {
+  "en": "Baritone doesn't know the seed of your world. Set it with: \u0001set elytraNetherSeed seedgoeshere\n",
+  "where": [
+   "ElytraCommand.class"
+  ]
+ },
+ {
+  "en": "Exception while reading Baritone settings, some settings may be reset to default values!",
+  "where": [
+   "SettingsUtil.class"
+  ]
+ },
+ {
+  "en": "Unable to find any path to \u0001, blacklisting presumably unreachable closest instances...",
+  "where": [
+   "GetToBlockProcess.class"
+  ]
+ },
+ {
+  "en": "Unable to find any path to \u0001, blacklisting presumably unreachable closest instance...",
+  "where": [
+   "MineProcess.class"
+  ]
+ },
+ {
+  "en": "Unable to mine when allowBreak is false and target block is not in allowBreakAnyway!",
+  "where": [
+   "MineProcess.class"
+  ]
+ },
+ {
+  "en": "Couldn't load the schematic. Either your schematic is corrupt or this is a bug.",
+  "where": [
+   "BuildCommand.class"
+  ]
+ },
+ {
+  "en": "Poor little kitten forgot to set a selection while BuildOnlySelection is true",
+  "where": [
+   "BuilderProcess.class"
+  ]
+ },
+ {
+  "en": "However, once you get more than a few thousand blocks out, you should try ",
+  "where": [
+   "ElytraCommand.class"
+  ]
+ },
+ {
+  "en": "Removing chunk \u0001,\u0001 because it was cached \u0001 seconds ago, and max age is \u0001",
+  "where": [
+   "CachedRegion.class"
+  ]
+ },
+ {
+  "en": "Nether pathfinder max height is below world build limit, cannot proceed",
+  "where": [
+   "BuildLimitPathFinder.class"
+  ]
+ },
+ {
+  "en": "Class: %s\nPriority: %f\nTemporary: %b\nDisplay name: %s\nLast command: %s",
+  "where": [
+   "ProcCommand.class"
+  ]
+ },
+ {
+  "en": "Even with a cost coefficient of \u0001, I couldn't get more than \u0001 blocks",
+  "where": [
+   "AbstractNodeCostSearch.class"
+  ]
+ },
+ {
+  "en": "Warning: cost coefficient is greater than three! Probably means that",
+  "where": [
+   "AbstractNodeCostSearch.class"
+  ]
+ },
+ {
+  "en": "FAR AWAY FROM PATH FOR \u0001 TICKS. Current distance: \u0001. Threshold: 2.0",
+  "where": [
+   "PathExecutor.class"
+  ]
+ },
+ {
+  "en": "Specify a setting name instead of 'all' to only reset one setting",
+  "where": [
+   "SetCommand.class"
+  ]
+ },
+ {
+  "en": "Warning: PathingBehaivor illegal state! Discarding invalid path!",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "To disable this message, enable the setting elytraTermsAccepted\n",
+  "where": [
+   "ElytraCommand.class"
+  ]
+ },
+ {
+  "en": "That waypoint has successfully been deleted, click to restore it",
+  "where": [
+   "WaypointsCommand.class"
+  ]
+ },
+ {
+  "en": "Emergency landing - almost out of elytra durability or fireworks",
+  "where": [
+   "ElytraProcess.class"
+  ]
+ },
+ {
+  "en": "Landed, but still moving, waiting for velocity to die down... ",
+  "where": [
+   "ElytraProcess.class"
+  ]
+ },
+ {
+  "en": "Exploring around \u0001, distance completed \u0001, currently going to \u0001",
+  "where": [
+   "ExploreProcess.class"
+  ]
+ },
+ {
+  "en": "Discarding earliest segment movements, length cut from \u0001 to \u0001",
+  "where": [
+   "PathExecutor.class"
+  ]
+ },
+ {
+  "en": "Discarding next path as it does not contain current position",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "Warning: discarding orphan next segment with incorrect start",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "Warning: discarding orphan path segment with incorrect start",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "Unable to do it. Pausing. resume to resume, cancel to cancel",
+  "where": [
+   "BuilderProcess.class"
+  ]
+ },
+ {
+  "en": "BlockStateInterface must be constructed on the main thread",
+  "where": [
+   "BlockStateInterface.class"
+  ]
+ },
+ {
+  "en": "Path destination is not equal to the movement destination",
+  "where": [
+   "IPath.class"
+  ]
+ },
+ {
+  "en": "Next segment: %.1fs (%.0f ticks)\nGoal: %.1fs (%.0f ticks)",
+  "where": [
+   "ETACommand.class"
+  ]
+ },
+ {
+  "en": "Doing this would mutate the client's REAL loaded chunks?!",
+  "where": [
+   "MixinChunkArray.class"
+  ]
+ },
+ {
+  "en": "Repack chunks around you. This basically re-caches them.",
+  "where": [
+   "RepackCommand.class"
+  ]
+ },
+ {
+  "en": "Finished finding a path from \u0001 to \u0001. \u0001 nodes considered",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "Found path segment from \u0001 towards \u0001. \u0001 nodes considered",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "World seems to be a replay. Not loading Baritone cache.",
+  "where": [
+   "WorldProvider.class"
+  ]
+ },
+ {
+  "en": "No positions known, are you sure the blocks are cached?",
+  "where": [
+   "FindCommand.class"
+  ]
+ },
+ {
+  "en": "Also see the legitMine settings (see #set l legitMine).",
+  "where": [
+   "MineCommand.class"
+  ]
+ },
+ {
+  "en": "Inventory move requested but delaying until stationary",
+  "where": [
+   "InventoryBehavior.class"
+  ]
+ },
+ {
+  "en": "Be aware that the ETA to your goal is really unprecise",
+  "where": [
+   "ETACommand.class"
+  ]
+ },
+ {
+  "en": "Recalculated segment since no path points were visible",
+  "where": [
+   "ElytraBehavior$PathManager.c"
+  ]
+ },
+ {
+  "en": "BufferBuilder must not be null if setupRender is false",
+  "where": [
+   "PathRenderer.class"
+  ]
+ },
+ {
+  "en": "No remaining bytes in BlockData for complete schematic",
+  "where": [
+   "SpongeSchematic.class"
+  ]
+ },
+ {
+  "en": "Successfully loaded schematic for building\nOrigin: %s",
+  "where": [
+   "BuildCommand.class"
+  ]
+ },
+ {
+  "en": "Pausing since destination is at edge of loaded chunks",
+  "where": [
+   "PathExecutor.class"
+  ]
+ },
+ {
+  "en": "All settings have been reset to their default values",
+  "where": [
+   "SetCommand.class"
+  ]
+ },
+ {
+  "en": "Too far away from path for too long, cancelling path",
+  "where": [
+   "PathExecutor.class"
+  ]
+ },
+ {
+  "en": "Recalculating segment, no progress in last 100 ticks",
+  "where": [
+   "ElytraBehavior$PathManager.c"
+  ]
+ },
+ {
+  "en": "Must be called with synchronization on pathCalcLock",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "Movement became impossible during calculation \u0001 \u0001 \u0001",
+  "where": [
+   "Path.class"
+  ]
+ },
+ {
+  "en": "Movements with dynamic offset must override `apply`",
+  "where": [
+   "Moves.class"
+  ]
+ },
+ {
+  "en": "Computed segment (Next %.1f blocks in %.4f seconds)",
+  "where": [
+   "ElytraBehavior$PathManager.c"
+  ]
+ },
+ {
+  "en": "Builds the schematic currently open in Schematica.",
+  "where": [
+   "SchematicaCommand.class"
+  ]
+ },
+ {
+  "en": "Null version (this is normal in a dev environment)",
+  "where": [
+   "VersionCommand.class"
+  ]
+ },
+ {
+  "en": "Unable to find any path to \u0001, canceling GetToBlock",
+  "where": [
+   "GetToBlockProcess.class"
+  ]
+ },
+ {
+  "en": "Click to show a command to recreate this waypoint",
+  "where": [
+   "WaypointsCommand.class"
+  ]
+ },
+ {
+  "en": "Timestamp was specified but no waypoint was found",
+  "where": [
+   "WaypointsCommand.class"
+  ]
+ },
+ {
+  "en": "Path complete, searching for safe landing spot...",
+  "where": [
+   "ElytraProcess.class"
+  ]
+ },
+ {
+  "en": "Exception thrown while saving Baritone settings!",
+  "where": [
+   "SettingsUtil.class"
+  ]
+ },
+ {
+  "en": "PalettedContainer may not access its own field?!",
+  "where": [
+   "MixinPalettedContainer.class"
+  ]
+ },
+ {
+  "en": "Skipping layer that I cannot construct! Layer #\u0001",
+  "where": [
+   "BuilderProcess.class"
+  ]
+ },
+ {
+  "en": "Exploring randomly to find \u0001, no known locations",
+  "where": [
+   "GetToBlockProcess.class"
+  ]
+ },
+ {
+  "en": "Path source is not equal to the movement source",
+  "where": [
+   "IPath.class"
+  ]
+ },
+ {
+  "en": "Build a schematic currently open in Litematica.",
+  "where": [
+   "LitematicaCommand.class"
+  ]
+ },
+ {
+  "en": "PalettedContainer has more than one Data field.",
+  "where": [
+   "MixinPalettedContainer.class"
+  ]
+ },
+ {
+  "en": "Paths to be spliced are overlapping incorrectly",
+  "where": [
+   "SplicedPath.class"
+  ]
+ },
+ {
+  "en": "Not saving to disk; chunk caching is disabled.",
+  "where": [
+   "CachedWorld.class"
+  ]
+ },
+ {
+  "en": "Set a goal to tunnel in your current direction",
+  "where": [
+   "TunnelCommand.class"
+  ]
+ },
+ {
+  "en": "Pausing since current best path is a backtrack",
+  "where": [
+   "PathExecutor.class"
+  ]
+ },
+ {
+  "en": "Backfill cannot be used with allowParkour true",
+  "where": [
+   "BackfillProcess.class"
+  ]
+ },
+ {
+  "en": "No known locations of \u0001, canceling GetToBlock",
+  "where": [
+   "GetToBlockProcess.class"
+  ]
+ },
+ {
+  "en": "Start node does not equal first path element",
+  "where": [
+   "IPath.class"
+  ]
+ },
+ {
+  "en": "Positions to run away from must not be empty",
+  "where": [
+   "GoalRunAway.class"
+  ]
+ },
+ {
+  "en": "Baritone settings file not found, resetting.",
+  "where": [
+   "SettingsUtil.class"
+  ]
+ },
+ {
+  "en": "Remembering to move \u0001 \u0001 from a previous tick",
+  "where": [
+   "InventoryBehavior.class"
+  ]
+ },
+ {
+  "en": "Repeating build in vector \u0001, new origin is \u0001",
+  "where": [
+   "BuilderProcess.class"
+  ]
+ },
+ {
+  "en": "Unable to find any path to \u0001, canceling mine",
+  "where": [
+   "MineProcess.class"
+  ]
+ },
+ {
+  "en": "Unsuported Version of a Litematica Schematic",
+  "where": [
+   "DefaultSchematicFormats$3.cl"
+  ]
+ },
+ {
+  "en": "Click to set the setting back to this value",
+  "where": [
+   "SetCommand.class"
+  ]
+ },
+ {
+  "en": "But I'm going to do it anyway, because yolo",
+  "where": [
+   "AbstractNodeCostSearch.class"
+  ]
+ },
+ {
+  "en": "Original cost \u0001 current cost \u0001. Cancelling.",
+  "where": [
+   "PathExecutor.class"
+  ]
+ },
+ {
+  "en": "Too far to the side to safely sprint ascend",
+  "where": [
+   "PathExecutor.class"
+  ]
+ },
+ {
+  "en": "Computed path (%.1f blocks in %.4f seconds)",
+  "where": [
+   "ElytraBehavior$PathManager.c"
+  ]
+ },
+ {
+  "en": "Called repackChunks() on NullElytraBehavior",
+  "where": [
+   "NullElytraProcess.class"
+  ]
+ },
+ {
+  "en": "Path doubles back on itself, making a loop",
+  "where": [
+   "IPath.class"
+  ]
+ },
+ {
+  "en": "View all commands or help on specific ones",
+  "where": [
+   "HelpCommand.class"
+  ]
+ },
+ {
+  "en": "End node does not equal last path element",
+  "where": [
+   "IPath.class"
+  ]
+ },
+ {
+  "en": "Inventory move requested but delaying \u0001 \u0001",
+  "where": [
+   "InventoryBehavior.class"
+  ]
+ },
+ {
+  "en": "GetToBlockProcess is not currently active",
+  "where": [
+   "BlacklistCommand.class"
+  ]
+ },
+ {
+  "en": "Reset state but still flying to same goal",
+  "where": [
+   "ElytraCommand.class"
+  ]
+ },
+ {
+  "en": "Cutting off path at edge of loaded chunks",
+  "where": [
+   "AbstractNodeCostSearch.class"
+  ]
+ },
+ {
+  "en": "Movements must override `cost` or `apply`",
+  "where": [
+   "Moves.class"
+  ]
+ },
+ {
+  "en": "Offset %s %s has distance %s, expected %s",
+  "where": [
+   "ExploreProcess.class"
+  ]
+ },
+ {
+  "en": "Unsupported Version of a Sponge Schematic",
+  "where": [
+   "DefaultSchematicFormats$2.cl"
+  ]
+ },
+ {
+  "en": "Splicing into planned next path early...",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "Started saving the world in a new thread",
+  "where": [
+   "WorldData.class"
+  ]
+ },
+ {
+  "en": "Simplifying \u0001 to GoalXZ due to distance",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "Starting to search for path from \u0001 to \u0001",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "No known locations, unable to blacklist",
+  "where": [
+   "BlacklistCommand.class"
+  ]
+ },
+ {
+  "en": "Cancel what Baritone is currently doing",
+  "where": [
+   "ExecutionControlCommands$5.c"
+  ]
+ },
+ {
+  "en": "Reloads Baritone's cache for this world",
+  "where": [
+   "ReloadAllCommand.class"
+  ]
+ },
+ {
+  "en": "Failed to update elytra goal because: \u0001",
+  "where": [
+   "CustomGoalProcess.class"
+  ]
+ },
+ {
+  "en": "Nether seed changed, recalculating path",
+  "where": [
+   "ElytraProcess.class"
+  ]
+ },
+ {
+  "en": "Queued all loaded chunks for repacking",
+  "where": [
+   "ElytraCommand.class"
+  ]
+ },
+ {
+  "en": "Arrived but failed to right click open",
+  "where": [
+   "GetToBlockProcess.class"
+  ]
+ },
+ {
+  "en": "NetherPathfinderContext cannot be null",
+  "where": [
+   "BuildLimitPathFinder.class"
+  ]
+ },
+ {
+  "en": "Saves Baritone's cache for this world",
+  "where": [
+   "SaveAllCommand.class"
+  ]
+ },
+ {
+  "en": "Click to return to the waypoints list",
+  "where": [
+   "WaypointsCommand.class"
+  ]
+ },
+ {
+  "en": "JankyComposite Primary: \u0001 Fallback: \u0001",
+  "where": [
+   "BuilderProcess$JankyGoalComp"
+  ]
+ },
+ {
+  "en": "Failed to compute path to destination",
+  "where": [
+   "ElytraBehavior$PathManager.c"
+  ]
+ },
+ {
+  "en": "Called pathTo() on NullElytraBehavior",
+  "where": [
+   "NullElytraProcess.class"
+  ]
+ },
+ {
+  "en": "Improper context thread safety level",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "Pauses Baritone until you use resume",
+  "where": [
+   "ExecutionControlCommands$2.c"
+  ]
+ },
+ {
+  "en": "Used to get out of caves, mines, ...",
+  "where": [
+   "SurfaceCommand.class"
+  ]
+ },
+ {
+  "en": "PalettedContainer has no Data field.",
+  "where": [
+   "MixinPalettedContainer.class"
+  ]
+ },
+ {
+  "en": "Skipping traverse to straight ascend",
+  "where": [
+   "PathExecutor.class"
+  ]
+ },
+ {
+  "en": "Blacklisting unreachable locations \u0001",
+  "where": [
+   "GetToBlockProcess.class"
+  ]
+ },
+ {
+  "en": "No locations for \u0001 known, cancelling",
+  "where": [
+   "MineProcess.class"
+  ]
+ },
+ {
+  "en": "Selection made! For usage: \u0001help sel",
+  "where": [
+   "GuiClick.class"
+  ]
+ },
+ {
+  "en": "Path almost over. Planning ahead...",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "Mixin \u0001 is not in the mixin package",
+  "where": [
+   "FabricMixinPlugin.class"
+  ]
+ },
+ {
+  "en": "Skipping descend to straight ascend",
+  "where": [
+   "PathExecutor.class"
+  ]
+ },
+ {
+  "en": "Considering relevant height %s - %s",
+  "where": [
+   "BuilderProcess.class"
+  ]
+ },
+ {
+  "en": "Continuing on to planned next path",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "Click to set goal to this position",
+  "where": [
+   "FindCommand.class"
+  ]
+ },
+ {
+  "en": "Following these types of entities:",
+  "where": [
+   "FollowCommand.class"
+  ]
+ },
+ {
+  "en": "All Baritone commands (clickable):",
+  "where": [
+   "HelpCommand.class"
+  ]
+ },
+ {
+  "en": "You need to copy a selection first",
+  "where": [
+   "SelCommand.class"
+  ]
+ },
+ {
+  "en": "Click to set goal to this waypoint",
+  "where": [
+   "WaypointsCommand.class"
+  ]
+ },
+ {
+  "en": "Unreplaceable liquids at at least:",
+  "where": [
+   "BuilderProcess.class"
+  ]
+ },
+ {
+  "en": "Above the landing spot, landing...",
+  "where": [
+   "ElytraProcess.class"
+  ]
+ },
+ {
+  "en": "Called onTick on NullElytraProcess",
+  "where": [
+   "NullElytraProcess.class"
+  ]
+ },
+ {
+  "en": "Invalid syntax in setting file: \u0001",
+  "where": [
+   "SettingsUtil.class"
+  ]
+ },
+ {
+  "en": "BitSet of invalid length provided",
+  "where": [
+   "CachedChunk.class"
+  ]
+ },
+ {
+  "en": "Loaded region successfully in \u0001ms",
+  "where": [
+   "CachedRegion.class"
+  ]
+ },
+ {
+  "en": "Start heading towards your camera",
+  "where": [
+   "ComeCommand.class"
+  ]
+ },
+ {
+  "en": "Find positions of a certain block",
+  "where": [
+   "FindCommand.class"
+  ]
+ },
+ {
+  "en": "Unable to deserialize palette tag",
+  "where": [
+   "SpongeSchematic.class"
+  ]
+ },
+ {
+  "en": "VarInt size cannot exceed 5 bytes",
+  "where": [
+   "VarInt.class"
+  ]
+ },
+ {
+  "en": "Failed to log message to chat: \u0001",
+  "where": [
+   "Settings.class"
+  ]
+ },
+ {
+  "en": "Size of path array is unexpected",
+  "where": [
+   "IPath.class"
+  ]
+ },
+ {
+  "en": "Click to return to the help menu",
+  "where": [
+   "HelpCommand.class"
+  ]
+ },
+ {
+  "en": "Set pos1 first before using pos2",
+  "where": [
+   "SelCommand.class"
+  ]
+ },
+ {
+  "en": "Travel in your current direction",
+  "where": [
+   "ThisWayCommand.class"
+  ]
+ },
+ {
+  "en": "Took \u0001ms, \u0001 movements considered",
+  "where": [
+   "AStarPathFinder.class"
+  ]
+ },
+ {
+  "en": "Path has wrong size after cutoff",
+  "where": [
+   "Path.class"
+  ]
+ },
+ {
+  "en": "Expected %s, but got %s instead",
+  "where": [
+   "CommandInvalidTypeException."
+  ]
+ },
+ {
+  "en": "Deleting cached region from ram",
+  "where": [
+   "CachedWorld.class"
+  ]
+ },
+ {
+  "en": "Retrying to load Baritone cache",
+  "where": [
+   "WorldProvider.class"
+  ]
+ },
+ {
+  "en": "Baritone Elytra for use in the ",
+  "where": [
+   "ElytraCommand.class"
+  ]
+ },
+ {
+  "en": "Tells you if Baritone is paused",
+  "where": [
+   "ExecutionControlCommands$4.c"
+  ]
+ },
+ {
+  "en": "Like cancel, but more forceful.",
+  "where": [
+   "ForceCancelCommand.class"
+  ]
+ },
+ {
+  "en": "Path must not be verified twice",
+  "where": [
+   "Path.class"
+  ]
+ },
+ {
+  "en": "Missing materials for at least:",
+  "where": [
+   "BuilderProcess.class"
+  ]
+ },
+ {
+  "en": "Loading region \u0001,\u0001 from disk \u0001",
+  "where": [
+   "CachedRegion.class"
+  ]
+ },
+ {
+  "en": "Build a schematic from a file.",
+  "where": [
+   "BuildCommand.class"
+  ]
+ },
+ {
+  "en": "Reset all settings or just one",
+  "where": [
+   "DefaultCommands.class"
+  ]
+ },
+ {
+  "en": "Defaulting to the newer seed. ",
+  "where": [
+   "ElytraCommand.class"
+  ]
+ },
+ {
+  "en": "You are using the newer seed. ",
+  "where": [
+   "ElytraCommand.class"
+  ]
+ },
+ {
+  "en": "You are using the older seed. ",
+  "where": [
+   "ElytraCommand.class"
+  ]
+ },
+ {
+  "en": "Resumes Baritone after a pause",
+  "where": [
+   "ExecutionControlCommands$3.c"
+  ]
+ },
+ {
+  "en": "Run away from the current goal",
+  "where": [
+   "InvertCommand.class"
+  ]
+ },
+ {
+  "en": "Start heading towards the goal",
+  "where": [
+   "PathCommand.class"
+  ]
+ },
+ {
+  "en": "View process state information",
+  "where": [
+   "ProcCommand.class"
+  ]
+ },
+ {
+  "en": "Multiple waypoints were found:",
+  "where": [
+   "WaypointsCommand.class"
+  ]
+ },
+ {
+  "en": "No waypoints found by that tag",
+  "where": [
+   "WaypointsCommand.class"
+  ]
+ },
+ {
+  "en": "Path ends within loaded chunks",
+  "where": [
+   "AbstractNodeCostSearch.class"
+  ]
+ },
+ {
+  "en": "Skipping forward \u0001 steps, to \u0001",
+  "where": [
+   "PathExecutor.class"
+  ]
+ },
+ {
+  "en": "Failed to compute next segment",
+  "where": [
+   "ElytraBehavior$PathManager.c"
+  ]
+ },
+ {
+  "en": "Blacklisted closest instances",
+  "where": [
+   "BlacklistCommand.class"
+  ]
+ },
+ {
+  "en": "Multiple waypoints were found",
+  "where": [
+   "FarmCommand.class"
+  ]
+ },
+ {
+  "en": "Click to delete this waypoint",
+  "where": [
+   "WaypointsCommand.class"
+  ]
+ },
+ {
+  "en": "Cannot remove from empty heap",
+  "where": [
+   "AStarPathFinder.class"
+  ]
+ },
+ {
+  "en": "Path finder cannot be reused!",
+  "where": [
+   "AbstractNodeCostSearch.class"
+  ]
+ },
+ {
+  "en": "Found potential landing spot.",
+  "where": [
+   "ElytraProcess.class"
+  ]
+ },
+ {
+  "en": "IPlayerContext cannot be null",
+  "where": [
+   "BuildLimitPathFinder.class"
+  ]
+ },
+ {
+  "en": "Invalid value for property \u0001",
+  "where": [
+   "LitematicaSchematic.class",
+   "SpongeSchematic$SerializedBl"
+  ]
+ },
+ {
+  "en": "Click to view previous page",
+  "where": [
+   "Paginator.class"
+  ]
+ },
+ {
+  "en": "SystemTray is not supported",
+  "where": [
+   "NotificationHelper.class"
+  ]
+ },
+ {
+  "en": "[Baritone] Arrived at goal!",
+  "where": [
+   "CustomGoalProcess.class",
+   "ElytraProcess.class",
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "Saving region \u0001,\u0001 to disk \u0001",
+  "where": [
+   "CachedRegion.class"
+  ]
+ },
+ {
+  "en": "No valid entities in range!",
+  "where": [
+   "FollowCommand$NoEntitiesExce"
+  ]
+ },
+ {
+  "en": "Go to a coordinate or block",
+  "where": [
+   "GotoCommand.class"
+  ]
+ },
+ {
+  "en": "Builds the loaded schematic",
+  "where": [
+   "LitematicaCommand.class",
+   "SchematicaCommand.class"
+  ]
+ },
+ {
+  "en": "No schematic currently open",
+  "where": [
+   "BuilderProcess.class"
+  ]
+ },
+ {
+  "en": "Get To \u0001, \u0001 known locations",
+  "where": [
+   "GetToBlockProcess.class"
+  ]
+ },
+ {
+  "en": "Failed to recompute segment",
+  "where": [
+   "ElytraBehavior$PathManager.c"
+  ]
+ },
+ {
+  "en": "Unable to parse palette tag",
+  "where": [
+   "SpongeSchematic.class"
+  ]
+ },
+ {
+  "en": "Baritone world data dir: \u0001",
+  "where": [
+   "WorldProvider.class"
+  ]
+ },
+ {
+  "en": "Path to your home waypoint",
+  "where": [
+   "DefaultCommands.class"
+  ]
+ },
+ {
+  "en": "Explore chunks from a json",
+  "where": [
+   "ExploreFilterCommand.class"
+  ]
+ },
+ {
+  "en": "There was no goal to clear",
+  "where": [
+   "GoalCommand.class"
+  ]
+ },
+ {
+  "en": "Error at argument #%s: %s",
+  "where": [
+   "CommandInvalidArgumentExcept"
+  ]
+ },
+ {
+  "en": "Saved region successfully",
+  "where": [
+   "CachedRegion.class"
+  ]
+ },
+ {
+  "en": "Cached world directory: \u0001",
+  "where": [
+   "CachedWorld.class"
+  ]
+ },
+ {
+  "en": "Would save waypoints to \u0001",
+  "where": [
+   "WaypointCollection.class"
+  ]
+ },
+ {
+  "en": "Following these entities:",
+  "where": [
+   "FollowCommand.class"
+  ]
+ },
+ {
+  "en": "View the Baritone version",
+  "where": [
+   "VersionCommand.class"
+  ]
+ },
+ {
+  "en": "Movement returns status \u0001",
+  "where": [
+   "PathExecutor.class"
+  ]
+ },
+ {
+  "en": "Sprinting would be unsafe",
+  "where": [
+   "PathExecutor.class"
+  ]
+ },
+ {
+  "en": "Litematica is not present",
+  "where": [
+   "BuilderProcess.class"
+  ]
+ },
+ {
+  "en": "Schematica is not present",
+  "where": [
+   "BuilderProcess.class"
+  ]
+ },
+ {
+  "en": "Unexpected command type \u0001",
+  "where": [
+   "PathingControlManager.class"
+  ]
+ },
+ {
+  "en": "No item found by that id",
+  "where": [
+   "ItemById.class"
+  ]
+ },
+ {
+  "en": "Settings reloaded from \u0001",
+  "where": [
+   "SetCommand.class"
+  ]
+ },
+ {
+  "en": "No higher location found",
+  "where": [
+   "SurfaceCommand.class"
+  ]
+ },
+ {
+  "en": "Finding spot to jump off",
+  "where": [
+   "ElytraProcess$State.class"
+  ]
+ },
+ {
+  "en": "Click to view next page",
+  "where": [
+   "Paginator.class"
+  ]
+ },
+ {
+  "en": "No setting by that name",
+  "where": [
+   "SettingsUtil.class"
+  ]
+ },
+ {
+  "en": "Blacklist closest block",
+  "where": [
+   "BlacklistCommand.class"
+  ]
+ },
+ {
+  "en": "Sets your home waypoint",
+  "where": [
+   "DefaultCommands.class"
+  ]
+ },
+ {
+  "en": "Picking up these items:",
+  "where": [
+   "PickupCommand.class"
+  ]
+ },
+ {
+  "en": "Position 1 has been set",
+  "where": [
+   "SelCommand.class"
+  ]
+ },
+ {
+  "en": "WorldEdit-like commands",
+  "where": [
+   "SelCommand.class"
+  ]
+ },
+ {
+  "en": "View or change settings",
+  "where": [
+   "SetCommand.class"
+  ]
+ },
+ {
+  "en": "Waiting for elytra path",
+  "where": [
+   "ElytraProcess$State.class"
+  ]
+ },
+ {
+  "en": "Path calculation failed",
+  "where": [
+   "NetherPathfinderContext.clas"
+  ]
+ },
+ {
+  "en": "Invalid Palette Index \u0001",
+  "where": [
+   "SpongeSchematic.class"
+  ]
+ },
+ {
+  "en": "Duplicate setting name",
+  "where": [
+   "Settings.class"
+  ]
+ },
+ {
+  "en": "Unable to parse line \u0001",
+  "where": [
+   "SettingsUtil.class"
+  ]
+ },
+ {
+  "en": "Click to rerun command",
+  "where": [
+   "ExampleBaritoneControl.class"
+  ]
+ },
+ {
+  "en": "Set a goal to the axes",
+  "where": [
+   "AxisCommand.class"
+  ]
+ },
+ {
+  "en": "List modified settings",
+  "where": [
+   "DefaultCommands.class"
+  ]
+ },
+ {
+  "en": "Invalid transform type",
+  "where": [
+   "SelCommand.class"
+  ]
+ },
+ {
+  "en": "Path goes for \u0001 blocks",
+  "where": [
+   "AbstractNodeCostSearch.class"
+  ]
+ },
+ {
+  "en": "Path must not be empty",
+  "where": [
+   "Path.class"
+  ]
+ },
+ {
+  "en": "Death position saved.",
+  "where": [
+   "WaypointBehavior.class"
+  ]
+ },
+ {
+  "en": "No process in control",
+  "where": [
+   "ETACommand.class",
+   "ProcCommand.class"
+  ]
+ },
+ {
+  "en": "Pause/Resume Commands",
+  "where": [
+   "ExecutionControlCommands$1.c"
+  ]
+ },
+ {
+  "en": "Set or clear the goal",
+  "where": [
+   "GoalCommand.class"
+  ]
+ },
+ {
+  "en": "A* cost coefficient \u0001",
+  "where": [
+   "AbstractNodeCostSearch.class"
+  ]
+ },
+ {
+  "en": "Length decreased by \u0001",
+  "where": [
+   "AbstractNodeCostSearch.class"
+  ]
+ },
+ {
+  "en": "Path not yet verified",
+  "where": [
+   "Path.class"
+  ]
+ },
+ {
+  "en": "Right click timed out",
+  "where": [
+   "GetToBlockProcess.class"
+  ]
+ },
+ {
+  "en": "View the current ETA",
+  "where": [
+   "ETACommand.class"
+  ]
+ },
+ {
+  "en": "No goal has been set",
+  "where": [
+   "ElytraCommand.class"
+  ]
+ },
+ {
+  "en": "Follow entity things",
+  "where": [
+   "FollowCommand.class"
+  ]
+ },
+ {
+  "en": "Picking up all items",
+  "where": [
+   "PickupCommand.class"
+  ]
+ },
+ {
+  "en": "PathNode map size: \u0001",
+  "where": [
+   "AStarPathFinder.class"
+  ]
+ },
+ {
+  "en": "Pathing exception: \u0001",
+  "where": [
+   "AbstractNodeCostSearch.class"
+  ]
+ },
+ {
+  "en": "Static cutoff \u0001 to \u0001",
+  "where": [
+   "AbstractNodeCostSearch.class"
+  ]
+ },
+ {
+  "en": "In movement traverse",
+  "where": [
+   "MovementTraverse.class"
+  ]
+ },
+ {
+  "en": "Click to goto death",
+  "where": [
+   "WaypointBehavior.class"
+  ]
+ },
+ {
+  "en": "World load took \u0001ms",
+  "where": [
+   "CachedWorld.class"
+  ]
+ },
+ {
+  "en": "World save took \u0001ms",
+  "where": [
+   "CachedWorld.class"
+  ]
+ },
+ {
+  "en": "Invalid JSON syntax",
+  "where": [
+   "ExploreFilterCommand.class"
+  ]
+ },
+ {
+  "en": "Fix glitched chunks",
+  "where": [
+   "RenderCommand.class"
+  ]
+ },
+ {
+  "en": "No selections found",
+  "where": [
+   "SelCommand.class"
+  ]
+ },
+ {
+  "en": "Unexpected value: \u0001",
+  "where": [
+   "TunnelCommand.class"
+  ]
+ },
+ {
+  "en": "Explored all chunks",
+  "where": [
+   "ExploreProcess.class"
+  ]
+ },
+ {
+  "en": "No waypoints found",
+  "where": [
+   "FarmCommand.class",
+   "WaypointsCommand.class"
+  ]
+ },
+ {
+  "en": "Calls System.gc().",
+  "where": [
+   "GcCommand.class"
+  ]
+ },
+ {
+  "en": "Already at surface",
+  "where": [
+   "SurfaceCommand.class"
+  ]
+ },
+ {
+  "en": "Wrong Y coordinate",
+  "where": [
+   "MovementTraverse.class"
+  ]
+ },
+ {
+  "en": "Unexpected state \u0001",
+  "where": [
+   "CustomGoalProcess.class"
+  ]
+ },
+ {
+  "en": "Walking to takeoff",
+  "where": [
+   "ElytraProcess$State.class"
+  ]
+ },
+ {
+  "en": "Loaded \u0001 positions",
+  "where": [
+   "ExploreProcess$JsonChunkFilt"
+  ]
+ },
+ {
+  "en": "Exploration failed",
+  "where": [
+   "ExploreProcess.class"
+  ]
+ },
+ {
+  "en": "Have \u0001 valid items",
+  "where": [
+   "MineProcess.class"
+  ]
+ },
+ {
+  "en": "Bad Direction.Axis",
+  "where": [
+   "Selection.class"
+  ]
+ },
+ {
+  "en": "Baritone message.",
+  "where": [
+   "Helper.class"
+  ]
+ },
+ {
+  "en": "Bad magic value \u0001",
+  "where": [
+   "CachedRegion.class",
+   "WaypointCollection.class"
+  ]
+ },
+ {
+  "en": "Build a schematic",
+  "where": [
+   "BuildCommand.class"
+  ]
+ },
+ {
+  "en": "Farm nearby crops",
+  "where": [
+   "FarmCommand.class"
+  ]
+ },
+ {
+  "en": "Unexpected side \u0001",
+  "where": [
+   "BuilderProcess.class"
+  ]
+ },
+ {
+  "en": "Bad array lengths",
+  "where": [
+   "NetherPathfinderContext.clas"
+  ]
+ },
+ {
+  "en": "Unknown rotation",
+  "where": [
+   "RotatedSchematic.class"
+  ]
+ },
+ {
+  "en": "Yaw: \u0001, Pitch: \u0001",
+  "where": [
+   "Rotation.class"
+  ]
+ },
+ {
+  "en": "Already doing it",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "Malformed stream",
+  "where": [
+   "CachedRegion.class"
+  ]
+ },
+ {
+  "en": "Opens click dude",
+  "where": [
+   "ClickCommand.class"
+  ]
+ },
+ {
+  "en": "Call System.gc()",
+  "where": [
+   "GcCommand.class"
+  ]
+ },
+ {
+  "en": "Mine some blocks",
+  "where": [
+   "MineCommand.class"
+  ]
+ },
+ {
+  "en": "Nothing to undo!",
+  "where": [
+   "SelCommand.class"
+  ]
+ },
+ {
+  "en": "Selection copied",
+  "where": [
+   "SelCommand.class"
+  ]
+ },
+ {
+  "en": "Invalid tag, \"\u0001\"",
+  "where": [
+   "WaypointsCommand.class"
+  ]
+ },
+ {
+  "en": "Manage waypoints",
+  "where": [
+   "WaypointsCommand.class"
+  ]
+ },
+ {
+  "en": "Waypoint added: ",
+  "where": [
+   "WaypointsCommand.class"
+  ]
+ },
+ {
+  "en": "Open set size: \u0001",
+  "where": [
+   "AStarPathFinder.class"
+  ]
+ },
+ {
+  "en": "No path found =(",
+  "where": [
+   "AbstractNodeCostSearch.class"
+  ]
+ },
+ {
+  "en": "Starting layer \u0001",
+  "where": [
+   "BuilderProcess.class"
+  ]
+ },
+ {
+  "en": "Pathing complete",
+  "where": [
+   "CustomGoalProcess.class",
+   "ElytraProcess.class"
+  ]
+ },
+ {
+  "en": "Favoring size: \u0001",
+  "where": [
+   "Favoring.class"
+  ]
+ },
+ {
+  "en": "Re-cache chunks",
+  "where": [
+   "RepackCommand.class"
+  ]
+ },
+ {
+  "en": "Selection added",
+  "where": [
+   "SelCommand.class"
+  ]
+ },
+ {
+  "en": "Click to select",
+  "where": [
+   "WaypointsCommand.class"
+  ]
+ },
+ {
+  "en": "Baritone Render",
+  "where": [
+   "IRenderer.class"
+  ]
+ },
+ {
+  "en": "Unknown mirror",
+  "where": [
+   "MirroredSchematic.class"
+  ]
+ },
+ {
+  "en": "NULL SETTING?\u0001",
+  "where": [
+   "SettingsUtil.class"
+  ]
+ },
+ {
+  "en": "All done. At \u0001",
+  "where": [
+   "PathingBehavior.class"
+  ]
+ },
+ {
+  "en": "Invalid action",
+  "where": [
+   "ElytraCommand.class"
+  ]
+ },
+ {
+  "en": "Already paused",
+  "where": [
+   "ExecutionControlCommands$2.c"
+  ]
+ },
+ {
+  "en": "Explore things",
+  "where": [
+   "ExploreCommand.class"
+  ]
+ },
+ {
+  "en": "File not found",
+  "where": [
+   "ExploreFilterCommand.class"
+  ]
+ },
+ {
+  "en": "Settings saved",
+  "where": [
+   "SetCommand.class"
+  ]
+ },
+ {
+  "en": "All waypoints:",
+  "where": [
+   "WaypointsCommand.class"
+  ]
+ },
+ {
+  "en": "Builder Paused",
+  "where": [
+   "BuilderProcess.class"
+  ]
+ },
+ {
+  "en": "Cannot find \u0001",
+  "where": [
+   "BuildCommand.class"
+  ]
+ },
+ {
+  "en": "Done building",
+  "where": [
+   "BuilderProcess.class"
+  ]
+ },
+ {
+  "en": "Custom Goal \u0001",
+  "where": [
+   "CustomGoalProcess.class"
+  ]
+ },
+ {
+  "en": "Force cancel",
+  "where": [
+   "ForceCancelCommand.class"
+  ]
+ },
+ {
+  "en": "Cleared goal",
+  "where": [
+   "GoalCommand.class"
+  ]
+ },
+ {
+  "en": "Pickup items",
+  "where": [
+   "PickupCommand.class"
+  ]
+ },
+ {
+  "en": "Building now",
+  "where": [
+   "SelCommand.class"
+  ]
+ },
+ {
+  "en": "Begin flying",
+  "where": [
+   "ElytraProcess$State.class"
+  ]
+ }
+]

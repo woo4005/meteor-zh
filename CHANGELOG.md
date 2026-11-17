@@ -10,6 +10,35 @@
 
 ## [未发布]
 
+## [1.6.1] - 2026-11-17
+
+### 新增
+
+- **Baritone 提示汉化**。Baritone 不经过 Meteor 的 `ChatUtils`，它走自己的
+  `baritone.api.utils.Helper#logDirect`。这里拦的是那条链的最终汇聚点
+  `logDirect(boolean, Component...)`，因此 `logDirect` 的所有 String 重载、
+  `logNotification`、`logDebug` 以及错误红字都会被覆盖。
+  没装 Baritone 时整份 mixin 静默跳过（`required: false`），不会因为缺少这个模组而起不来。
+- 聊天模板从 **156 条扩到 200 条**。补了两类：
+  ①Meteor 本体「模块名已经汉化、正文没汉化」的消息，例如「埋身」的
+  `No burrow block found, disabling.`；②一批 Baritone 的高频运行时消息
+  （设置读写、寻路暂停/完成/取消、紧急降落、下界种子缺失、命令迁移警告等）。
+- **未知聊天消息收集**。词典没命中、但看起来像玩家可见消息的原文，会去重后追加到
+  `meteor-zh/unknown-chat.txt`（上限 500 条）。玩几天就能收集到真实语料，
+  之后一次性补进 `chat.json`。
+
+### 说明
+
+- Baritone 在退出游戏时报 `java.lang.Error: Watchdog (Client shutdown from post-main)`，
+  堆栈在 `baritone.cache.CachedWorld$PackerThread.run`：这是它在退出时写区块缓存被看门狗
+  判定卡死，与汉化插件无关。
+
+## [1.5.8.001] - 2026-11-17
+
+维护补丁。词典与聊天模板同 1.6.1（纯数据改动，代码未动）：新增 Baritone 消息 44 条，
+`chat.json` 从 156 条增至 200 条。版本号按维护模式规则递增为 `1.5.8.001`。
+
+
 ## [1.6.0] - 2026-11-17
 
 首个 **Minecraft 26.2** 线版本，也是新版本策略的起点：**新版本适配优先，老版本进入维护模式**。

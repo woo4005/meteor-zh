@@ -23,15 +23,22 @@ package com.meteorzh;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,6 +81,19 @@ public final class ChatDict {
     private static final Map<Character, List<Rule>> RULES = new HashMap<>();
 
     private static boolean loaded;
+
+    /**
+     * 词典没命中、但看起来像「聊天消息」的原文。
+     *
+     * <p>聊天消息的穷举是不可能做完的：每个 addon 都能自己拼字符串。所以这里把没翻出来的
+     * 记下来，玩家玩几天就能收集到真实的语料，之后一次性补进 {@code chat.json}。
+     * 只记内存 + 追加写盘，上限 {@link #UNKNOWN_LIMIT} 条，避免无限膨胀。
+     */
+    private static final Set<String> UNKNOWN = Collections.synchronizedSet(new LinkedHashSet<>());
+
+    private static final int UNKNOWN_LIMIT = 500;
+
+    private static Path unknownLog;
 
     private ChatDict() {}
 
@@ -161,7 +181,10 @@ public final class ChatDict {
         if (exact != null) return exact;
 
         List<Rule> bucket = RULES.get(message.charAt(0));
-        if (bucket == null) return null;
+        if (bucket == null) {
+            recordUnknown(message);
+            return null;
+        }
 
         for (Rule rule : bucket) {
             Matcher m = rule.pattern.matcher(message);
@@ -175,7 +198,53 @@ public final class ChatDict {
             }
         }
 
+        recordUnknown(message);
         return null;
+    }
+
+    /** 把没翻出来的原文记一笔，供后续补词条。 */
+    private static void recordUnknown(String message) {
+        if (message == null || message.isEmpty()) return;
+        if (UNKNOWN.size() >= UNKNOWN_LIMIT) return;
+        if (!looksLikeChatMessage(message)) return;
+        if (!UNKNOWN.add(message)) return;
+
+        try {
+            if (unknownLog == null) {
+                unknownLog = FabricLoader.getInstance().getGameDir()
+                    .resolve("meteor-zh").resolve("unknown-chat.txt");
+                Files.createDirectories(unknownLog.getParent());
+            }
+            Files.writeString(unknownLog,
+                message.replace("\r", "").replace("\n", "\\n") + System.lineSeparator(),
+                StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+        } catch (Throwable ignored) {
+            // 写不了就算了，翻译本身不该因为日志失败而受影响。
+        }
+    }
+
+    /**
+     * 粗略判断一段文本是不是「玩家会看到的消息」。
+     *
+     * <p>故意收得比较紧：调试串（{@code resolveArea:}、{@code GoalNear{...}}）、
+     * 资源路径、URL 都不记，否则日志会被噪音淹没。
+     */
+    private static boolean looksLikeChatMessage(String s) {
+        if (s.length() < 12 || s.length() > 240) return false;
+        if (s.indexOf(' ') < 0) return false;
+        if (s.indexOf('{') >= 0 || s.indexOf('}') >= 0) return false;
+        if (s.startsWith("http")) return false;
+
+        char c0 = s.charAt(0);
+        if (!Character.isUpperCase(c0) && c0 != '[' && c0 != '(') return false;
+
+        int words = 0;
+        for (String w : s.split("[^A-Za-z]+")) {
+            if (w.length() >= 3) words++;
+            if (words >= 2) return true;
+        }
+        return false;
     }
 
     /** 一条「英文模板 → 中文模板」的正则规则。 */

@@ -595,6 +595,45 @@ HTTPS 传输上。现在补了四层：域名白名单 → 大小 → sha256 →
 - `fabric.mod.json` 的 description 从「双线」改为三线（26.2 / 26.1 / 1.21.11）。
 - `gradle.properties` 增加 `mod_version_262` 与 `java_level_262`，三条线的版本号仍在同一处。
 
+### 阶段 17 · 1.6.1 / 1.5.8.001：聊天栏补完与 Baritone（2026-11-17）
+
+**为什么 Meteor 的注入点覆盖不到 Baritone**
+
+26.2 的 Baritone 已经被重构过：`baritone.utils.BaritoneChatControl` 这个类没了，
+`IBaritoneChatControl` 只剩一个常量，`IBaritone` 上也没有聊天方法。顺着字节码找，
+真正的出口是接口 `baritone.api.utils.Helper` 的 default 方法：
+
+```
+logDirect(String) → logDirect(String, boolean)
+  → logDirect(String, ChatFormatting, boolean)   // 按 \n 切段
+  → logDirect(boolean, Component...)             // 拼前缀 + 发聊天栏
+```
+
+所以只要拦最后一个 `logDirect(boolean, Component...)`，上面所有 String 重载
+（以及 `logNotification` / `logDebug` / 错误红字）就都覆盖了。比逐个拦 String 版本稳。
+
+**三个刻意的取舍**
+
+1. `remap = false`：`Helper` 与 `logDirect` 都是 Baritone 的符号，不是 Minecraft 的，
+   走 remap 反而会把它们改坏。
+2. 注解里不写方法描述符：`logDirect` 有 7 个重载，要用描述符定位就得把
+   `ChatFormatting` 的 intermediary 名（`class_124`）写死，而三条线不一定一致。
+   只写方法名 + `ordinal = 0` 足够定位 `Component[]`。
+3. `require = 0`：Baritone 换实现时，宁可漏翻也不能让游戏起不来。
+
+**编译期依赖 ≠ 运行期依赖**
+
+`BaritoneHelperMixin` 引用了 `baritone.api.utils.Helper`，所以三条构建脚本都要把
+Baritone 的 jar 放进**编译期 classpath**（从实例的 `mods/` 里 glob）。但产物里不含
+任何 Baritone 的类，运行时靠 mixin 的 `required: false` 降级。
+
+**未知消息收集**
+
+`ChatDict.recordUnknown()` 只在「词典未命中 + 长得像玩家可见消息」时才记，判据是：
+长度 12–240、含空格、不含 `{}`、不以 `http` 开头、首字符大写或 `[`/`(`、至少两个
+≥3 字母的英文单词。写进 `meteor-zh/unknown-chat.txt`，去重、上限 500 条。
+这是为了下一轮补词条有真实语料，而不是靠猜。
+
 ## 4. AI 没有做到的事（承认局限）
 
 | 事情 | 为什么没做 |
@@ -758,7 +797,7 @@ mapping（无混淆 / mojmap）、产物文件名都不同。用户明确要求�
 
 ---
 
-最后更新：2026-11-17 · 对应版本 **1.6.0（Minecraft 26.2 线）**、**1.5.8（26.1 线）** 与 **1.4.8（1.21.11 线）**
+最后更新：2026-11-17 · 对应版本 **1.6.1（Minecraft 26.2 线）**、**1.5.8.001（26.1 线）** 与 **1.4.8（1.21.11 线）**
 
 > 三条线共用同一份 `src/`，但版本号各自独立：26.2 线发 1.6.x（主力），26.1 线只发 1.5.8.NNN，
 > 1.21.11 线只发 1.4.8.NNN（两者都进入维护模式）。本文描述的是三条线共同的技术实现，

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Compile the addon against the offline mojmap classpath, remap to intermediary and package."""
+import glob
 import io
 import json
 import os
@@ -25,6 +26,9 @@ BUILD = os.path.join(ROOT, "build")
 CLASSES = os.path.join(BUILD, "classes")
 DIST = os.path.join(ROOT, "dist")
 MOD_ID = "meteor-zh"
+
+#: 1.21.11 线的游戏实例 —— 只用来取 Baritone 的 jar（编译期需要见到 Helper 接口）。
+INSTANCE_1211 = os.environ.get("MC_INSTANCE") or r"E:\pcl\.minecraft\versions\1.21.11-Fabric 0.19.3"
 
 
 def _read_props():
@@ -87,6 +91,7 @@ REQUIRED_ENTRIES = (
     "com/meteorzh/WordTranslator.class",
     "com/meteorzh/mixin/GuiRendererMixin.class",
     "com/meteorzh/mixin/ChatUtilsMixin.class",
+    "com/meteorzh/mixin/BaritoneHelperMixin.class",
 )
 
 
@@ -95,8 +100,24 @@ def read_classpath():
         lines = [l.strip() for l in f if l.strip()]
     for i, line in enumerate(lines):
         if line == "-cp" and i + 1 < len(lines):
-            return lines[i + 1]
+            return lines[i + 1] + os.pathsep + _baritone_jar()
     raise SystemExit("cannot find -cp in javac.args")
+
+
+def _baritone_jar():
+    """Baritone 只在**编译期**需要：`BaritoneHelperMixin` 引用 `baritone.api.utils.Helper`。
+
+    运行时是软依赖：没装 Baritone 时，mixin 配置的 `required: false` 会让整份 mixin
+    静默跳过，插件照常工作。所以只把 jar 加进 classpath，不会打进产物。
+    """
+    mods = os.path.join(INSTANCE_1211, "mods")
+    cands = [c for c in glob.glob(os.path.join(mods, "baritone*.jar"))
+             if not c.endswith("-sources.jar")]
+    if not cands:
+        raise SystemExit(
+            "找不到 Baritone 的 jar —— BaritoneHelperMixin 需要它在编译期可见。\n"
+            "请把 baritone-*.jar 放进 %s，或用 MC_INSTANCE 指向别的实例。" % mods)
+    return max(cands, key=os.path.getmtime)
 
 
 def run(cmd, **kw):

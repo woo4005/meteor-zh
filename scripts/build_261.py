@@ -205,8 +205,24 @@ def nested_jars():
     return out
 
 
+def _baritone_jar():
+    """Baritone 只在**编译期**需要：`BaritoneHelperMixin` 引用 `baritone.api.utils.Helper`。
+
+    运行时是软依赖：没装 Baritone 时，mixin 配置的 `required: false` 会让整份 mixin
+    静默跳过，插件照常工作。所以这里只把 jar 加进 classpath，不会打进产物。
+    """
+    mods = os.path.join(INSTANCE, "mods")
+    cands = [c for c in glob.glob(os.path.join(mods, "baritone*.jar"))
+             if not c.endswith("-sources.jar")]
+    if not cands:
+        raise SystemExit(
+            "找不到 Baritone 的 jar —— BaritoneHelperMixin 需要它在编译期可见。\n"
+            "请把 baritone-*.jar 放进 %s，或用 MC_INSTANCE 指向别的实例。" % mods)
+    return max(cands, key=os.path.getmtime)
+
+
 def classpath():
-    parts = [MC_JAR, METEOR_JAR] + library_jars() + nested_jars()
+    parts = [MC_JAR, METEOR_JAR] + library_jars() + nested_jars() + [_baritone_jar()]
     missing = [p for p in parts[:2] if not os.path.exists(p)]
     if missing:
         raise SystemExit("关键 jar 不存在: " + ", ".join(missing))
@@ -357,6 +373,7 @@ REQUIRED_ENTRIES = (
     "com/meteorzh/WordTranslator.class",
     "com/meteorzh/mixin/GuiRendererMixin.class",
     "com/meteorzh/mixin/ChatUtilsMixin.class",
+    "com/meteorzh/mixin/BaritoneHelperMixin.class",
 )
 
 
