@@ -34,11 +34,11 @@ import github_publish_ip as ghp  # noqa: E402
 ROOT = ghp.ROOT
 REPO = "meteor-zh"
 #: 本次要发的版本线。1.6.1 = 26.2 线。
-VERSION = "1.6.1"
+VERSION = "1.6.2"
 #: 26.2 线的版本号（与 VERSION 相同，保留单独的名字给正文模板用）
-VERSION_262 = "1.6.1"
+VERSION_262 = "1.6.2"
 #: 26.1 线的版本号（维护模式，只发 1.5.8.NNN）
-VERSION_261 = "1.5.8.001"
+VERSION_261 = "1.5.8.002"
 #: 1.21.11 线的版本号（维护模式，只发 1.4.8.NNN）
 #: 本次 1.21.11 线未重建（离线 mojmap 构建资产缺失），保持 1.4.8。
 VERSION_1211 = "1.4.8"
@@ -254,52 +254,30 @@ def ensure_release(token):
 
     body = """Meteor Client 全界面简体中文汉化 v{ver}
 
-## 本版更新（1.6.1）
+## 本版更新（1.6.2）
 
-### 聊天栏消息继续补完
+### 聊天栏又补了 135 条
 
-聊天模板从 156 条扩到 **200 条**，补了两类最常被看到的：
+按实机截图和 jar 里的字符串清单重新扫了一遍，把「模块名已经译了、正文还是英文」的那批补齐：
 
-- **Meteor 本体「模块名已汉化、正文没汉化」的消息**。例如「埋身」的
-  `No burrow block found, disabling.` —— 以前只有模块名是中文，正文还是英文。
-- **一批 Baritone 的高频运行时消息**：设置读写、寻路暂停/完成/取消、紧急降落、
-  下界种子缺失、命令迁移警告等。
+- **Meteor 本体**：`Already burrowed, disabling.`、`Couldn't find a target, disabling.`、
+  `You can't blow up beds in this dimension, disabling.`、`No valid targets.`、
+  `Could not find a usable mending pickaxe.`、`No Nametag in Hotbar` 等；
+- **Baritone**：`All Baritone commands (clickable):`、各类 `Unable to find any path to ...`、
+  `Warning: Chat commands will no longer work...` 等。
 
-### Baritone 的提示也汉化了
+聊天模板从 200 条增加到 **335 条**。
 
-Baritone 不经过 Meteor 的 `ChatUtils`，它走自己的 `baritone.api.utils.Helper#logDirect`。
-插件拦的是那条链的**最终汇聚点** `logDirect(boolean, Component...)`，所以
-`logDirect` 的全部 String 重载、`logNotification`、`logDebug` 与错误红字都会被覆盖。
+### 1.21.11 线（1.4.x）正式归档
 
-没装 Baritone 也不影响启动：mixin 声明为可选，找不到这个类时整份跳过。
+**从本版起，1.21.11 线不再维护，停在 `1.4.8`。** 原因写在 README 的「归档声明」里：
+每多维护一条线就要多核对一套 mappings 与兼容性，而 1.21.11 的使用者已经很少。
+`v1.4.8` 的 release 与文件继续保留，旧存档仍可正常使用。
 
-### 没翻出来的会被记下来
+### 1.5.x 同步下放
 
-词典不可能穷举所有 addon 的消息。插件会把「未命中、但看起来像玩家可见消息」的原文
-去重后写到 `<游戏目录>/meteor-zh/unknown-chat.txt`（上限 500 条）。
-玩几天把这个文件发出来，就能一次性补进词典。
+`1.5.8.002` 是纯数据补丁，只提升聊天模板，代码未动（Baritone 注入点仍在 1.6.x）。
 
-### 📌 版本线调整说明
-
-| 版本线 | 状态 | 编号方式 |
-| --- | --- | --- |
-| **1.6.x（Minecraft 26.2）** | **主力开发** | `1.6.1` → `1.6.2` → …… |
-| 1.5.x（Minecraft 26.1 系列） | 维护模式 | 只发 `1.5.8.NNN`，`NNN` 从 `001` 递增 |
-| 1.4.x（Minecraft 1.21.11） | 维护模式 | 只发 `1.4.8.NNN`，`NNN` 从 `001` 递增 |
-
-- **新版本优先**。往后主要精力放在新 Minecraft 版本适配与 Meteor 新 API 的跟进上。
-- **老版本进入维护模式**。不再追加新功能，只在出现漏洞、崩溃、明显错译或兼容性断裂时发补丁。
-- **想要新功能，请升级到 1.6.x**。
-
-**本版同步下放**：1.5.8.001 是纯数据维护补丁（同一份词典与聊天模板，代码未动）。
-
-### 下载
-
-| 游戏版本 | 文件 |
-| --- | --- |
-| **Minecraft 26.2** | **`meteor-zh-1.6.1-mc26.2.jar`** |
-| Minecraft 26.1 / 26.1.1 / 26.1.2 | `meteor-zh-1.5.8.001-mc26.1.x.jar`（维护补丁） |
-| Minecraft 1.21.11 | `meteor-zh-1.4.8-mc1.21.11.jar`（维护模式） |
 
 ## 上一版（1.6.0）：首个 Minecraft 26.2 版本
 
